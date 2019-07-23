@@ -1,5 +1,5 @@
-# kvproto
-Protocol buffer files for TiKV
+# silkproto
+Protocol buffer files for silk
 
 # Dependencies
 
