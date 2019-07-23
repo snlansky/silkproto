@@ -58,7 +58,7 @@ fn main() {
 }
 
 fn generate_protobuf_rs(mod_names: &[String]) {
-    let mut text = "use raft::eraftpb;\n\n".to_owned();
+    let mut text = String::new();
 
     for mod_name in mod_names {
         text.push_str("pub mod ");
