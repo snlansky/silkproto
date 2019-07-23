@@ -1,0 +1,25 @@
+syntax = "proto3";
+package proto;
+
+import "common.proto";
+
+
+message Message {
+    MsgType Type = 1;
+    string Chain = 2;
+    string Module = 3;
+    string Source = 4;
+    repeated string Target = 5;
+    bytes Payload = 6;
+}
+
+enum MsgType {
+    PING = 0;
+    PONG = 1;
+    DATA = 2;
+    INIT = 3;
+}
+
+service Network {
+    rpc Broadcast(Message) returns (ProposalResponse) {}
+}

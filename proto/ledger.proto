@@ -1,0 +1,12 @@
+syntax = "proto3";
+package proto;
+
+
+// Contains information about the blockchain ledger such as height, current
+// block hash, and previous block hash.
+message BlockchainInfo {
+    uint64 height = 1;
+    bytes currentBlockHash = 2;
+    bytes previousBlockHash = 3;
+
+}

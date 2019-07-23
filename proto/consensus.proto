@@ -1,0 +1,17 @@
+syntax = "proto3";
+package proto;
+
+import "common.proto";
+
+
+message BroadcastResponse {
+    // Status code, which may be used to programatically respond to success/failure
+    Status status = 1;
+    // Info string which may contain additional information about the status returned
+    string info = 2;
+}
+
+
+service AtomicBroadcast {
+    rpc Broadcast(stream ChannelHeader) returns (stream BroadcastResponse) {}
+}
