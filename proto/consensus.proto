@@ -4,8 +4,9 @@ package proto;
 import "common.proto";
 
 enum VariableType {
-    RaftProposeType = 0;
-    RaftRewType = 1;
+    RaftMasterProposeType = 0;
+    RaftStepMessageType = 1;
+    RaftConfigChangeType = 2;
 }
 
 message VariableMessage {

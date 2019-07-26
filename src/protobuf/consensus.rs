@@ -54,7 +54,7 @@ impl VariableMessage {
         self.vt
     }
     pub fn clear_vt(&mut self) {
-        self.vt = VariableType::RaftProposeType;
+        self.vt = VariableType::RaftMasterProposeType;
     }
 
     // Param is passed by value, moved
@@ -116,7 +116,7 @@ impl ::protobuf::Message for VariableMessage {
     #[allow(unused_variables)]
     fn compute_size(&self) -> u32 {
         let mut my_size = 0;
-        if self.vt != VariableType::RaftProposeType {
+        if self.vt != VariableType::RaftMasterProposeType {
             my_size += ::protobuf::rt::enum_size(1, self.vt);
         }
         if !self.payload.is_empty() {
@@ -128,7 +128,7 @@ impl ::protobuf::Message for VariableMessage {
     }
 
     fn write_to_with_cached_sizes(&self, os: &mut ::protobuf::CodedOutputStream) -> ::protobuf::ProtobufResult<()> {
-        if self.vt != VariableType::RaftProposeType {
+        if self.vt != VariableType::RaftMasterProposeType {
             os.write_enum(1, self.vt.value())?;
         }
         if !self.payload.is_empty() {
@@ -208,7 +208,7 @@ impl ::protobuf::Message for VariableMessage {
 
 impl ::protobuf::Clear for VariableMessage {
     fn clear(&mut self) {
-        self.vt = VariableType::RaftProposeType;
+        self.vt = VariableType::RaftMasterProposeType;
         self.payload.clear();
         self.unknown_fields.clear();
     }
@@ -428,8 +428,9 @@ impl ::protobuf::reflect::ProtobufValue for BroadcastResponse {
 
 #[derive(Clone,PartialEq,Eq,Debug,Hash)]
 pub enum VariableType {
-    RaftProposeType = 0,
-    RaftRewType = 1,
+    RaftMasterProposeType = 0,
+    RaftStepMessageType = 1,
+    RaftConfigChangeType = 2,
 }
 
 impl ::protobuf::ProtobufEnum for VariableType {
@@ -439,16 +440,18 @@ impl ::protobuf::ProtobufEnum for VariableType {
 
     fn from_i32(value: i32) -> ::std::option::Option<VariableType> {
         match value {
-            0 => ::std::option::Option::Some(VariableType::RaftProposeType),
-            1 => ::std::option::Option::Some(VariableType::RaftRewType),
+            0 => ::std::option::Option::Some(VariableType::RaftMasterProposeType),
+            1 => ::std::option::Option::Some(VariableType::RaftStepMessageType),
+            2 => ::std::option::Option::Some(VariableType::RaftConfigChangeType),
             _ => ::std::option::Option::None
         }
     }
 
     fn values() -> &'static [Self] {
         static values: &'static [VariableType] = &[
-            VariableType::RaftProposeType,
-            VariableType::RaftRewType,
+            VariableType::RaftMasterProposeType,
+            VariableType::RaftStepMessageType,
+            VariableType::RaftConfigChangeType,
         ];
         values
     }
@@ -471,7 +474,7 @@ impl ::std::marker::Copy for VariableType {
 
 impl ::std::default::Default for VariableType {
     fn default() -> Self {
-        VariableType::RaftProposeType
+        VariableType::RaftMasterProposeType
     }
 }
 
@@ -486,10 +489,11 @@ static file_descriptor_proto_data: &'static [u8] = b"\
     essage\x12#\n\x02vt\x18\x01\x20\x01(\x0e2\x13.proto.VariableTypeR\x02vt\
     \x12\x18\n\x07payload\x18\x02\x20\x01(\x0cR\x07payload\"N\n\x11Broadcast\
     Response\x12%\n\x06status\x18\x01\x20\x01(\x0e2\r.proto.StatusR\x06statu\
-    s\x12\x12\n\x04info\x18\x02\x20\x01(\tR\x04info*4\n\x0cVariableType\x12\
-    \x13\n\x0fRaftProposeType\x10\0\x12\x0f\n\x0bRaftRewType\x10\x012T\n\x0f\
-    AtomicBroadcast\x12A\n\tBroadcast\x12\x14.proto.ChannelHeader\x1a\x18.pr\
-    oto.BroadcastResponse\"\0(\x010\x01b\x06proto3\
+    s\x12\x12\n\x04info\x18\x02\x20\x01(\tR\x04info*\\\n\x0cVariableType\x12\
+    \x19\n\x15RaftMasterProposeType\x10\0\x12\x17\n\x13RaftStepMessageType\
+    \x10\x01\x12\x18\n\x14RaftConfigChangeType\x10\x022T\n\x0fAtomicBroadcas\
+    t\x12A\n\tBroadcast\x12\x14.proto.ChannelHeader\x1a\x18.proto.BroadcastR\
+    esponse\"\0(\x010\x01b\x06proto3\
 ";
 
 static mut file_descriptor_proto_lazy: ::protobuf::lazy::Lazy<::protobuf::descriptor::FileDescriptorProto> = ::protobuf::lazy::Lazy {
