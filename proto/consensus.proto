@@ -3,6 +3,15 @@ package proto;
 
 import "common.proto";
 
+enum VariableType {
+    RaftProposeType = 0;
+    RaftRewType = 1;
+}
+
+message VariableMessage {
+    VariableType vt =1;
+    bytes payload = 2;
+}
 
 message BroadcastResponse {
     // Status code, which may be used to programatically respond to success/failure
