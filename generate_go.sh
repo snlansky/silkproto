@@ -84,7 +84,7 @@ function gen() {
     cd ../../proto
 }
 
-gen ../include/eraftpb.proto
+#gen ../include/eraftpb.proto
 for file in `ls *.proto`
     do
     gen $file
