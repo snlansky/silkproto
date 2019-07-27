@@ -27,7 +27,7 @@ use protobuf::ProtobufEnum as ProtobufEnum_imported_for_functions;
 const _PROTOBUF_VERSION_CHECK: () = ::protobuf::VERSION_2_8_0;
 
 #[derive(PartialEq,Clone,Default)]
-pub struct VariableMessage {
+pub struct DynamicVariable {
     // message fields
     pub vt: VariableType,
     pub payload: ::std::vec::Vec<u8>,
@@ -36,14 +36,14 @@ pub struct VariableMessage {
     pub cached_size: ::protobuf::CachedSize,
 }
 
-impl<'a> ::std::default::Default for &'a VariableMessage {
-    fn default() -> &'a VariableMessage {
-        <VariableMessage as ::protobuf::Message>::default_instance()
+impl<'a> ::std::default::Default for &'a DynamicVariable {
+    fn default() -> &'a DynamicVariable {
+        <DynamicVariable as ::protobuf::Message>::default_instance()
     }
 }
 
-impl VariableMessage {
-    pub fn new() -> VariableMessage {
+impl DynamicVariable {
+    pub fn new() -> DynamicVariable {
         ::std::default::Default::default()
     }
 
@@ -89,7 +89,7 @@ impl VariableMessage {
     }
 }
 
-impl ::protobuf::Message for VariableMessage {
+impl ::protobuf::Message for DynamicVariable {
     fn is_initialized(&self) -> bool {
         true
     }
@@ -164,8 +164,8 @@ impl ::protobuf::Message for VariableMessage {
         Self::descriptor_static()
     }
 
-    fn new() -> VariableMessage {
-        VariableMessage::new()
+    fn new() -> DynamicVariable {
+        DynamicVariable::new()
     }
 
     fn descriptor_static() -> &'static ::protobuf::reflect::MessageDescriptor {
@@ -178,16 +178,16 @@ impl ::protobuf::Message for VariableMessage {
                 let mut fields = ::std::vec::Vec::new();
                 fields.push(::protobuf::reflect::accessor::make_simple_field_accessor::<_, ::protobuf::types::ProtobufTypeEnum<VariableType>>(
                     "vt",
-                    |m: &VariableMessage| { &m.vt },
-                    |m: &mut VariableMessage| { &mut m.vt },
+                    |m: &DynamicVariable| { &m.vt },
+                    |m: &mut DynamicVariable| { &mut m.vt },
                 ));
                 fields.push(::protobuf::reflect::accessor::make_simple_field_accessor::<_, ::protobuf::types::ProtobufTypeBytes>(
                     "payload",
-                    |m: &VariableMessage| { &m.payload },
-                    |m: &mut VariableMessage| { &mut m.payload },
+                    |m: &DynamicVariable| { &m.payload },
+                    |m: &mut DynamicVariable| { &mut m.payload },
                 ));
-                ::protobuf::reflect::MessageDescriptor::new::<VariableMessage>(
-                    "VariableMessage",
+                ::protobuf::reflect::MessageDescriptor::new::<DynamicVariable>(
+                    "DynamicVariable",
                     fields,
                     file_descriptor_proto()
                 )
@@ -195,18 +195,18 @@ impl ::protobuf::Message for VariableMessage {
         }
     }
 
-    fn default_instance() -> &'static VariableMessage {
-        static mut instance: ::protobuf::lazy::Lazy<VariableMessage> = ::protobuf::lazy::Lazy {
+    fn default_instance() -> &'static DynamicVariable {
+        static mut instance: ::protobuf::lazy::Lazy<DynamicVariable> = ::protobuf::lazy::Lazy {
             lock: ::protobuf::lazy::ONCE_INIT,
-            ptr: 0 as *const VariableMessage,
+            ptr: 0 as *const DynamicVariable,
         };
         unsafe {
-            instance.get(VariableMessage::new)
+            instance.get(DynamicVariable::new)
         }
     }
 }
 
-impl ::protobuf::Clear for VariableMessage {
+impl ::protobuf::Clear for DynamicVariable {
     fn clear(&mut self) {
         self.vt = VariableType::RaftMasterProposeType;
         self.payload.clear();
@@ -214,13 +214,13 @@ impl ::protobuf::Clear for VariableMessage {
     }
 }
 
-impl ::std::fmt::Debug for VariableMessage {
+impl ::std::fmt::Debug for DynamicVariable {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         ::protobuf::text_format::fmt(self, f)
     }
 }
 
-impl ::protobuf::reflect::ProtobufValue for VariableMessage {
+impl ::protobuf::reflect::ProtobufValue for DynamicVariable {
     fn as_ref(&self) -> ::protobuf::reflect::ProtobufValueRef {
         ::protobuf::reflect::ProtobufValueRef::Message(self)
     }
@@ -485,8 +485,8 @@ impl ::protobuf::reflect::ProtobufValue for VariableType {
 }
 
 static file_descriptor_proto_data: &'static [u8] = b"\
-    \n\x0fconsensus.proto\x12\x05proto\x1a\x0ccommon.proto\"P\n\x0fVariableM\
-    essage\x12#\n\x02vt\x18\x01\x20\x01(\x0e2\x13.proto.VariableTypeR\x02vt\
+    \n\x0fconsensus.proto\x12\x05proto\x1a\x0ccommon.proto\"P\n\x0fDynamicVa\
+    riable\x12#\n\x02vt\x18\x01\x20\x01(\x0e2\x13.proto.VariableTypeR\x02vt\
     \x12\x18\n\x07payload\x18\x02\x20\x01(\x0cR\x07payload\"N\n\x11Broadcast\
     Response\x12%\n\x06status\x18\x01\x20\x01(\x0e2\r.proto.StatusR\x06statu\
     s\x12\x12\n\x04info\x18\x02\x20\x01(\tR\x04info*\\\n\x0cVariableType\x12\

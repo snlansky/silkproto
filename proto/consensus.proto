@@ -9,7 +9,7 @@ enum VariableType {
     RaftConfigChangeType = 2;
 }
 
-message VariableMessage {
+message DynamicVariable {
     VariableType vt =1;
     bytes payload = 2;
 }
