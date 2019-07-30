@@ -35,23 +35,9 @@ enum Status {
 message ChannelHeader {
     // Header types 0-10000 are reserved and defined by HeaderType
     int32 type = 1;
-
-    // Version indicates message protocol version
     int32 version = 2;
-
-    // Timestamp is the local time when the message was created
-    // by the sender
     Timestamp timestamp = 3;
-
-    // Identifier of the channel this message is bound for
     string channel_id = 4;
-
-    // An unique identifier that is used end-to-end.
-    //  -  set by higher layers such as end user or SDK
-    //  -  passed to the endorser (which will check for uniqueness)
-    //  -  as the header is passed along unchanged, it will be
-    //     be retrieved by the committer (uniqueness check here as well)
-    //  -  to be stored in the ledger
     string tx_id = 5;
 
     // If mutual TLS is employed, this represents
@@ -64,16 +50,8 @@ message Proposal {
     bytes payload = 3;
 }
 
-message Payload {
-    bytes data = 1;
-}
-
-// Envelope wraps a Payload with a signature so that the message may be authenticated
 message Envelope {
-    // A marshaled Payload
     bytes payload = 1;
-
-    // A signature by the creator specified in the Payload header
     bytes signature = 2;
 }
 

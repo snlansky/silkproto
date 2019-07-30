@@ -21,7 +21,10 @@ message BroadcastResponse {
     string info = 2;
 }
 
-
 service AtomicBroadcast {
     rpc Broadcast(stream ChannelHeader) returns (stream BroadcastResponse) {}
+}
+
+service Consensus {
+    rpc Broadcast(Envelope) returns (Envelope) {}
 }

@@ -1,0 +1,40 @@
+syntax = "proto3";
+package proto;
+
+import "common.proto";
+
+// process message from client
+service Endorser {
+    rpc ProcessProposal (Proposal) returns (ProposalResponse) {
+    }
+}
+
+//service Contract {
+//    rpc Invoke (Proposal) returns (Empty) {
+//    }
+//}
+
+//
+service Peer {
+    rpc Deliver (Message) returns (Empty) {
+    }
+}
+
+// Information exchange between peer nodes
+service P2P {
+    rpc Connect (stream Envelope) returns (stream Envelope) {
+    }
+}
+
+message Message {
+    enum Type {
+        PING = 0;
+        PONG = 1;
+        DATA = 2;
+    }
+    Type type = 1;
+    string Chain = 2;
+    string from = 3;
+    repeated string Target = 4;
+    bytes Payload = 5;
+}

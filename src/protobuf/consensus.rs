@@ -493,7 +493,8 @@ static file_descriptor_proto_data: &'static [u8] = b"\
     \x19\n\x15RaftMasterProposeType\x10\0\x12\x17\n\x13RaftStepMessageType\
     \x10\x01\x12\x18\n\x14RaftConfigChangeType\x10\x022T\n\x0fAtomicBroadcas\
     t\x12A\n\tBroadcast\x12\x14.proto.ChannelHeader\x1a\x18.proto.BroadcastR\
-    esponse\"\0(\x010\x01b\x06proto3\
+    esponse\"\0(\x010\x012<\n\tConsensus\x12/\n\tBroadcast\x12\x0f.proto.Env\
+    elope\x1a\x0f.proto.Envelope\"\0b\x06proto3\
 ";
 
 static mut file_descriptor_proto_lazy: ::protobuf::lazy::Lazy<::protobuf::descriptor::FileDescriptorProto> = ::protobuf::lazy::Lazy {

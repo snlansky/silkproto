@@ -956,175 +956,6 @@ impl ::protobuf::reflect::ProtobufValue for Proposal {
 }
 
 #[derive(PartialEq,Clone,Default)]
-pub struct Payload {
-    // message fields
-    pub data: ::std::vec::Vec<u8>,
-    // special fields
-    pub unknown_fields: ::protobuf::UnknownFields,
-    pub cached_size: ::protobuf::CachedSize,
-}
-
-impl<'a> ::std::default::Default for &'a Payload {
-    fn default() -> &'a Payload {
-        <Payload as ::protobuf::Message>::default_instance()
-    }
-}
-
-impl Payload {
-    pub fn new() -> Payload {
-        ::std::default::Default::default()
-    }
-
-    // bytes data = 1;
-
-
-    pub fn get_data(&self) -> &[u8] {
-        &self.data
-    }
-    pub fn clear_data(&mut self) {
-        self.data.clear();
-    }
-
-    // Param is passed by value, moved
-    pub fn set_data(&mut self, v: ::std::vec::Vec<u8>) {
-        self.data = v;
-    }
-
-    // Mutable pointer to the field.
-    // If field is not initialized, it is initialized with default value first.
-    pub fn mut_data(&mut self) -> &mut ::std::vec::Vec<u8> {
-        &mut self.data
-    }
-
-    // Take field
-    pub fn take_data(&mut self) -> ::std::vec::Vec<u8> {
-        ::std::mem::replace(&mut self.data, ::std::vec::Vec::new())
-    }
-}
-
-impl ::protobuf::Message for Payload {
-    fn is_initialized(&self) -> bool {
-        true
-    }
-
-    fn merge_from(&mut self, is: &mut ::protobuf::CodedInputStream) -> ::protobuf::ProtobufResult<()> {
-        while !is.eof()? {
-            let (field_number, wire_type) = is.read_tag_unpack()?;
-            match field_number {
-                1 => {
-                    ::protobuf::rt::read_singular_proto3_bytes_into(wire_type, is, &mut self.data)?;
-                },
-                _ => {
-                    ::protobuf::rt::read_unknown_or_skip_group(field_number, wire_type, is, self.mut_unknown_fields())?;
-                },
-            };
-        }
-        ::std::result::Result::Ok(())
-    }
-
-    // Compute sizes of nested messages
-    #[allow(unused_variables)]
-    fn compute_size(&self) -> u32 {
-        let mut my_size = 0;
-        if !self.data.is_empty() {
-            my_size += ::protobuf::rt::bytes_size(1, &self.data);
-        }
-        my_size += ::protobuf::rt::unknown_fields_size(self.get_unknown_fields());
-        self.cached_size.set(my_size);
-        my_size
-    }
-
-    fn write_to_with_cached_sizes(&self, os: &mut ::protobuf::CodedOutputStream) -> ::protobuf::ProtobufResult<()> {
-        if !self.data.is_empty() {
-            os.write_bytes(1, &self.data)?;
-        }
-        os.write_unknown_fields(self.get_unknown_fields())?;
-        ::std::result::Result::Ok(())
-    }
-
-    fn get_cached_size(&self) -> u32 {
-        self.cached_size.get()
-    }
-
-    fn get_unknown_fields(&self) -> &::protobuf::UnknownFields {
-        &self.unknown_fields
-    }
-
-    fn mut_unknown_fields(&mut self) -> &mut ::protobuf::UnknownFields {
-        &mut self.unknown_fields
-    }
-
-    fn as_any(&self) -> &dyn (::std::any::Any) {
-        self as &dyn (::std::any::Any)
-    }
-    fn as_any_mut(&mut self) -> &mut dyn (::std::any::Any) {
-        self as &mut dyn (::std::any::Any)
-    }
-    fn into_any(self: Box<Self>) -> ::std::boxed::Box<dyn (::std::any::Any)> {
-        self
-    }
-
-    fn descriptor(&self) -> &'static ::protobuf::reflect::MessageDescriptor {
-        Self::descriptor_static()
-    }
-
-    fn new() -> Payload {
-        Payload::new()
-    }
-
-    fn descriptor_static() -> &'static ::protobuf::reflect::MessageDescriptor {
-        static mut descriptor: ::protobuf::lazy::Lazy<::protobuf::reflect::MessageDescriptor> = ::protobuf::lazy::Lazy {
-            lock: ::protobuf::lazy::ONCE_INIT,
-            ptr: 0 as *const ::protobuf::reflect::MessageDescriptor,
-        };
-        unsafe {
-            descriptor.get(|| {
-                let mut fields = ::std::vec::Vec::new();
-                fields.push(::protobuf::reflect::accessor::make_simple_field_accessor::<_, ::protobuf::types::ProtobufTypeBytes>(
-                    "data",
-                    |m: &Payload| { &m.data },
-                    |m: &mut Payload| { &mut m.data },
-                ));
-                ::protobuf::reflect::MessageDescriptor::new::<Payload>(
-                    "Payload",
-                    fields,
-                    file_descriptor_proto()
-                )
-            })
-        }
-    }
-
-    fn default_instance() -> &'static Payload {
-        static mut instance: ::protobuf::lazy::Lazy<Payload> = ::protobuf::lazy::Lazy {
-            lock: ::protobuf::lazy::ONCE_INIT,
-            ptr: 0 as *const Payload,
-        };
-        unsafe {
-            instance.get(Payload::new)
-        }
-    }
-}
-
-impl ::protobuf::Clear for Payload {
-    fn clear(&mut self) {
-        self.data.clear();
-        self.unknown_fields.clear();
-    }
-}
-
-impl ::std::fmt::Debug for Payload {
-    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        ::protobuf::text_format::fmt(self, f)
-    }
-}
-
-impl ::protobuf::reflect::ProtobufValue for Payload {
-    fn as_ref(&self) -> ::protobuf::reflect::ProtobufValueRef {
-        ::protobuf::reflect::ProtobufValueRef::Message(self)
-    }
-}
-
-#[derive(PartialEq,Clone,Default)]
 pub struct Envelope {
     // message fields
     pub payload: ::std::vec::Vec<u8>,
@@ -1667,17 +1498,17 @@ static file_descriptor_proto_data: &'static [u8] = b"\
     \x13\n\x05tx_id\x18\x05\x20\x01(\tR\x04txId\x12\"\n\rtls_cert_hash\x18\
     \x06\x20\x01(\x0cR\x0btlsCertHash\"R\n\x08Proposal\x12,\n\x06header\x18\
     \x02\x20\x01(\x0b2\x14.proto.ChannelHeaderR\x06header\x12\x18\n\x07paylo\
-    ad\x18\x03\x20\x01(\x0cR\x07payload\"\x1d\n\x07Payload\x12\x12\n\x04data\
-    \x18\x01\x20\x01(\x0cR\x04data\"B\n\x08Envelope\x12\x18\n\x07payload\x18\
-    \x01\x20\x01(\x0cR\x07payload\x12\x1c\n\tsignature\x18\x02\x20\x01(\x0cR\
-    \tsignature\"^\n\x10ProposalResponse\x12\x16\n\x06status\x18\x01\x20\x01\
-    (\x05R\x06status\x12\x18\n\x07message\x18\x02\x20\x01(\tR\x07message\x12\
-    \x18\n\x07payload\x18\x03\x20\x01(\x0cR\x07payload*\xc0\x01\n\x06Status\
-    \x12\x0b\n\x07UNKNOWN\x10\0\x12\x0c\n\x07SUCCESS\x10\xc8\x01\x12\x10\n\
-    \x0bBAD_REQUEST\x10\x90\x03\x12\x0e\n\tFORBIDDEN\x10\x93\x03\x12\x0e\n\t\
-    NOT_FOUND\x10\x94\x03\x12\x1d\n\x18REQUEST_ENTITY_TOO_LARGE\x10\x9d\x03\
-    \x12\x1a\n\x15INTERNAL_SERVER_ERROR\x10\xf4\x03\x12\x14\n\x0fNOT_IMPLEME\
-    NTED\x10\xf5\x03\x12\x18\n\x13SERVICE_UNAVAILABLE\x10\xf7\x03b\x06proto3\
+    ad\x18\x03\x20\x01(\x0cR\x07payload\"B\n\x08Envelope\x12\x18\n\x07payloa\
+    d\x18\x01\x20\x01(\x0cR\x07payload\x12\x1c\n\tsignature\x18\x02\x20\x01(\
+    \x0cR\tsignature\"^\n\x10ProposalResponse\x12\x16\n\x06status\x18\x01\
+    \x20\x01(\x05R\x06status\x12\x18\n\x07message\x18\x02\x20\x01(\tR\x07mes\
+    sage\x12\x18\n\x07payload\x18\x03\x20\x01(\x0cR\x07payload*\xc0\x01\n\
+    \x06Status\x12\x0b\n\x07UNKNOWN\x10\0\x12\x0c\n\x07SUCCESS\x10\xc8\x01\
+    \x12\x10\n\x0bBAD_REQUEST\x10\x90\x03\x12\x0e\n\tFORBIDDEN\x10\x93\x03\
+    \x12\x0e\n\tNOT_FOUND\x10\x94\x03\x12\x1d\n\x18REQUEST_ENTITY_TOO_LARGE\
+    \x10\x9d\x03\x12\x1a\n\x15INTERNAL_SERVER_ERROR\x10\xf4\x03\x12\x14\n\
+    \x0fNOT_IMPLEMENTED\x10\xf5\x03\x12\x18\n\x13SERVICE_UNAVAILABLE\x10\xf7\
+    \x03b\x06proto3\
 ";
 
 static mut file_descriptor_proto_lazy: ::protobuf::lazy::Lazy<::protobuf::descriptor::FileDescriptorProto> = ::protobuf::lazy::Lazy {
