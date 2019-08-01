@@ -22,8 +22,9 @@ service Peer {
 
 // Information exchange between peer nodes
 service P2P {
-    rpc Connect (stream Envelope) returns (stream Envelope) {
+    rpc Connect (Envelope) returns (stream Envelope) {
     }
+    rpc Step (Envelope) returns (Empty) {}
 }
 
 message Message {

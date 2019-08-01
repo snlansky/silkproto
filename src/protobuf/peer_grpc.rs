@@ -123,8 +123,15 @@ pub fn create_peer<S: Peer + Send + Clone + 'static>(s: S) -> ::grpcio::Service 
 }
 
 const METHOD_P2_P_CONNECT: ::grpcio::Method<super::common::Envelope, super::common::Envelope> = ::grpcio::Method {
-    ty: ::grpcio::MethodType::Duplex,
+    ty: ::grpcio::MethodType::ServerStreaming,
     name: "/proto.P2P/Connect",
+    req_mar: ::grpcio::Marshaller { ser: ::grpcio::pb_ser, de: ::grpcio::pb_de },
+    resp_mar: ::grpcio::Marshaller { ser: ::grpcio::pb_ser, de: ::grpcio::pb_de },
+};
+
+const METHOD_P2_P_STEP: ::grpcio::Method<super::common::Envelope, super::common::Empty> = ::grpcio::Method {
+    ty: ::grpcio::MethodType::Unary,
+    name: "/proto.P2P/Step",
     req_mar: ::grpcio::Marshaller { ser: ::grpcio::pb_ser, de: ::grpcio::pb_de },
     resp_mar: ::grpcio::Marshaller { ser: ::grpcio::pb_ser, de: ::grpcio::pb_de },
 };
@@ -141,12 +148,28 @@ impl P2PClient {
         }
     }
 
-    pub fn connect_opt(&self, opt: ::grpcio::CallOption) -> ::grpcio::Result<(::grpcio::ClientDuplexSender<super::common::Envelope>, ::grpcio::ClientDuplexReceiver<super::common::Envelope>)> {
-        self.client.duplex_streaming(&METHOD_P2_P_CONNECT, opt)
+    pub fn connect_opt(&self, req: &super::common::Envelope, opt: ::grpcio::CallOption) -> ::grpcio::Result<::grpcio::ClientSStreamReceiver<super::common::Envelope>> {
+        self.client.server_streaming(&METHOD_P2_P_CONNECT, req, opt)
     }
 
-    pub fn connect(&self) -> ::grpcio::Result<(::grpcio::ClientDuplexSender<super::common::Envelope>, ::grpcio::ClientDuplexReceiver<super::common::Envelope>)> {
-        self.connect_opt(::grpcio::CallOption::default())
+    pub fn connect(&self, req: &super::common::Envelope) -> ::grpcio::Result<::grpcio::ClientSStreamReceiver<super::common::Envelope>> {
+        self.connect_opt(req, ::grpcio::CallOption::default())
+    }
+
+    pub fn step_opt(&self, req: &super::common::Envelope, opt: ::grpcio::CallOption) -> ::grpcio::Result<super::common::Empty> {
+        self.client.unary_call(&METHOD_P2_P_STEP, req, opt)
+    }
+
+    pub fn step(&self, req: &super::common::Envelope) -> ::grpcio::Result<super::common::Empty> {
+        self.step_opt(req, ::grpcio::CallOption::default())
+    }
+
+    pub fn step_async_opt(&self, req: &super::common::Envelope, opt: ::grpcio::CallOption) -> ::grpcio::Result<::grpcio::ClientUnaryReceiver<super::common::Empty>> {
+        self.client.unary_call_async(&METHOD_P2_P_STEP, req, opt)
+    }
+
+    pub fn step_async(&self, req: &super::common::Envelope) -> ::grpcio::Result<::grpcio::ClientUnaryReceiver<super::common::Empty>> {
+        self.step_async_opt(req, ::grpcio::CallOption::default())
     }
     pub fn spawn<F>(&self, f: F) where F: ::futures::Future<Item = (), Error = ()> + Send + 'static {
         self.client.spawn(f)
@@ -154,14 +177,19 @@ impl P2PClient {
 }
 
 pub trait P2P {
-    fn connect(&mut self, ctx: ::grpcio::RpcContext, stream: ::grpcio::RequestStream<super::common::Envelope>, sink: ::grpcio::DuplexSink<super::common::Envelope>);
+    fn connect(&mut self, ctx: ::grpcio::RpcContext, req: super::common::Envelope, sink: ::grpcio::ServerStreamingSink<super::common::Envelope>);
+    fn step(&mut self, ctx: ::grpcio::RpcContext, req: super::common::Envelope, sink: ::grpcio::UnarySink<super::common::Empty>);
 }
 
 pub fn create_p2_p<S: P2P + Send + Clone + 'static>(s: S) -> ::grpcio::Service {
     let mut builder = ::grpcio::ServiceBuilder::new();
     let mut instance = s.clone();
-    builder = builder.add_duplex_streaming_handler(&METHOD_P2_P_CONNECT, move |ctx, req, resp| {
+    builder = builder.add_server_streaming_handler(&METHOD_P2_P_CONNECT, move |ctx, req, resp| {
         instance.connect(ctx, req, resp)
+    });
+    let mut instance = s.clone();
+    builder = builder.add_unary_handler(&METHOD_P2_P_STEP, move |ctx, req, resp| {
+        instance.step(ctx, req, resp)
     });
     builder.build()
 }

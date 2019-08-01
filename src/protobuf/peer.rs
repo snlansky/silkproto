@@ -418,8 +418,9 @@ static file_descriptor_proto_data: &'static [u8] = b"\
     \x12\x08\n\x04PING\x10\0\x12\x08\n\x04PONG\x10\x01\x12\x08\n\x04DATA\x10\
     \x022I\n\x08Endorser\x12=\n\x0fProcessProposal\x12\x0f.proto.Proposal\
     \x1a\x17.proto.ProposalResponse\"\021\n\x04Peer\x12)\n\x07Deliver\x12\
-    \x0e.proto.Message\x1a\x0c.proto.Empty\"\028\n\x03P2P\x121\n\x07Connect\
-    \x12\x0f.proto.Envelope\x1a\x0f.proto.Envelope\"\0(\x010\x01b\x06proto3\
+    \x0e.proto.Message\x1a\x0c.proto.Empty\"\02_\n\x03P2P\x12/\n\x07Connect\
+    \x12\x0f.proto.Envelope\x1a\x0f.proto.Envelope\"\00\x01\x12'\n\x04Step\
+    \x12\x0f.proto.Envelope\x1a\x0c.proto.Empty\"\0b\x06proto3\
 ";
 
 static mut file_descriptor_proto_lazy: ::protobuf::lazy::Lazy<::protobuf::descriptor::FileDescriptorProto> = ::protobuf::lazy::Lazy {
