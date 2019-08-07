@@ -21,7 +21,7 @@ service Network {
 
 message NetMessage {
     oneof Type {
-        bytes proposal = 1;
+        bytes data = 1;
         eraftpb.ConfChange config_change = 2;
         eraftpb.Message raft_message = 3;
     }

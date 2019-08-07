@@ -43,7 +43,7 @@ impl<'a> ::std::default::Default for &'a NetMessage {
 
 #[derive(Clone,PartialEq,Debug)]
 pub enum NetMessage_oneof_Type {
-    proposal(::std::vec::Vec<u8>),
+    data(::std::vec::Vec<u8>),
     config_change(super::eraftpb::ConfChange),
     raft_message(super::eraftpb::Message),
 }
@@ -53,48 +53,48 @@ impl NetMessage {
         ::std::default::Default::default()
     }
 
-    // bytes proposal = 1;
+    // bytes data = 1;
 
 
-    pub fn get_proposal(&self) -> &[u8] {
+    pub fn get_data(&self) -> &[u8] {
         match self.Type {
-            ::std::option::Option::Some(NetMessage_oneof_Type::proposal(ref v)) => v,
+            ::std::option::Option::Some(NetMessage_oneof_Type::data(ref v)) => v,
             _ => &[],
         }
     }
-    pub fn clear_proposal(&mut self) {
+    pub fn clear_data(&mut self) {
         self.Type = ::std::option::Option::None;
     }
 
-    pub fn has_proposal(&self) -> bool {
+    pub fn has_data(&self) -> bool {
         match self.Type {
-            ::std::option::Option::Some(NetMessage_oneof_Type::proposal(..)) => true,
+            ::std::option::Option::Some(NetMessage_oneof_Type::data(..)) => true,
             _ => false,
         }
     }
 
     // Param is passed by value, moved
-    pub fn set_proposal(&mut self, v: ::std::vec::Vec<u8>) {
-        self.Type = ::std::option::Option::Some(NetMessage_oneof_Type::proposal(v))
+    pub fn set_data(&mut self, v: ::std::vec::Vec<u8>) {
+        self.Type = ::std::option::Option::Some(NetMessage_oneof_Type::data(v))
     }
 
     // Mutable pointer to the field.
-    pub fn mut_proposal(&mut self) -> &mut ::std::vec::Vec<u8> {
-        if let ::std::option::Option::Some(NetMessage_oneof_Type::proposal(_)) = self.Type {
+    pub fn mut_data(&mut self) -> &mut ::std::vec::Vec<u8> {
+        if let ::std::option::Option::Some(NetMessage_oneof_Type::data(_)) = self.Type {
         } else {
-            self.Type = ::std::option::Option::Some(NetMessage_oneof_Type::proposal(::std::vec::Vec::new()));
+            self.Type = ::std::option::Option::Some(NetMessage_oneof_Type::data(::std::vec::Vec::new()));
         }
         match self.Type {
-            ::std::option::Option::Some(NetMessage_oneof_Type::proposal(ref mut v)) => v,
+            ::std::option::Option::Some(NetMessage_oneof_Type::data(ref mut v)) => v,
             _ => panic!(),
         }
     }
 
     // Take field
-    pub fn take_proposal(&mut self) -> ::std::vec::Vec<u8> {
-        if self.has_proposal() {
+    pub fn take_data(&mut self) -> ::std::vec::Vec<u8> {
+        if self.has_data() {
             match self.Type.take() {
-                ::std::option::Option::Some(NetMessage_oneof_Type::proposal(v)) => v,
+                ::std::option::Option::Some(NetMessage_oneof_Type::data(v)) => v,
                 _ => panic!(),
             }
         } else {
@@ -224,7 +224,7 @@ impl ::protobuf::Message for NetMessage {
                     if wire_type != ::protobuf::wire_format::WireTypeLengthDelimited {
                         return ::std::result::Result::Err(::protobuf::rt::unexpected_wire_type(wire_type));
                     }
-                    self.Type = ::std::option::Option::Some(NetMessage_oneof_Type::proposal(is.read_bytes()?));
+                    self.Type = ::std::option::Option::Some(NetMessage_oneof_Type::data(is.read_bytes()?));
                 },
                 2 => {
                     if wire_type != ::protobuf::wire_format::WireTypeLengthDelimited {
@@ -252,7 +252,7 @@ impl ::protobuf::Message for NetMessage {
         let mut my_size = 0;
         if let ::std::option::Option::Some(ref v) = self.Type {
             match v {
-                &NetMessage_oneof_Type::proposal(ref v) => {
+                &NetMessage_oneof_Type::data(ref v) => {
                     my_size += ::protobuf::rt::bytes_size(1, &v);
                 },
                 &NetMessage_oneof_Type::config_change(ref v) => {
@@ -273,7 +273,7 @@ impl ::protobuf::Message for NetMessage {
     fn write_to_with_cached_sizes(&self, os: &mut ::protobuf::CodedOutputStream) -> ::protobuf::ProtobufResult<()> {
         if let ::std::option::Option::Some(ref v) = self.Type {
             match v {
-                &NetMessage_oneof_Type::proposal(ref v) => {
+                &NetMessage_oneof_Type::data(ref v) => {
                     os.write_bytes(1, v)?;
                 },
                 &NetMessage_oneof_Type::config_change(ref v) => {
@@ -331,9 +331,9 @@ impl ::protobuf::Message for NetMessage {
             descriptor.get(|| {
                 let mut fields = ::std::vec::Vec::new();
                 fields.push(::protobuf::reflect::accessor::make_singular_bytes_accessor::<_>(
-                    "proposal",
-                    NetMessage::has_proposal,
-                    NetMessage::get_proposal,
+                    "data",
+                    NetMessage::has_data,
+                    NetMessage::get_data,
                 ));
                 fields.push(::protobuf::reflect::accessor::make_singular_message_accessor::<_, super::eraftpb::ConfChange>(
                     "config_change",
@@ -387,14 +387,14 @@ impl ::protobuf::reflect::ProtobufValue for NetMessage {
 }
 
 static file_descriptor_proto_data: &'static [u8] = b"\
-    \n\npeer.proto\x12\x05proto\x1a\x0ccommon.proto\x1a\reraftpb.proto\"\xa5\
-    \x01\n\nNetMessage\x12\x1c\n\x08proposal\x18\x01\x20\x01(\x0cH\0R\x08pro\
-    posal\x12:\n\rconfig_change\x18\x02\x20\x01(\x0b2\x13.eraftpb.ConfChange\
-    H\0R\x0cconfigChange\x125\n\x0craft_message\x18\x03\x20\x01(\x0b2\x10.er\
-    aftpb.MessageH\0R\x0braftMessageB\x06\n\x04Type2I\n\x08Endorser\x12=\n\
-    \x0fProcessProposal\x12\x0f.proto.Proposal\x1a\x17.proto.ProposalRespons\
-    e\"\027\n\x07Network\x12,\n\tBroadcast\x12\x0f.proto.Envelope\x1a\x0c.pr\
-    oto.Empty\"\0b\x06proto3\
+    \n\npeer.proto\x12\x05proto\x1a\x0ccommon.proto\x1a\reraftpb.proto\"\x9d\
+    \x01\n\nNetMessage\x12\x14\n\x04data\x18\x01\x20\x01(\x0cH\0R\x04data\
+    \x12:\n\rconfig_change\x18\x02\x20\x01(\x0b2\x13.eraftpb.ConfChangeH\0R\
+    \x0cconfigChange\x125\n\x0craft_message\x18\x03\x20\x01(\x0b2\x10.eraftp\
+    b.MessageH\0R\x0braftMessageB\x06\n\x04Type2I\n\x08Endorser\x12=\n\x0fPr\
+    ocessProposal\x12\x0f.proto.Proposal\x1a\x17.proto.ProposalResponse\"\02\
+    7\n\x07Network\x12,\n\tBroadcast\x12\x0f.proto.Envelope\x1a\x0c.proto.Em\
+    pty\"\0b\x06proto3\
 ";
 
 static mut file_descriptor_proto_lazy: ::protobuf::lazy::Lazy<::protobuf::descriptor::FileDescriptorProto> = ::protobuf::lazy::Lazy {
