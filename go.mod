@@ -1,4 +1,4 @@
-module github.com/pingcap/kvproto
+module github.com/snlansky/silkproto
 
 require (
 	github.com/gogo/protobuf v0.0.0-20180717141946-636bf0302bc9

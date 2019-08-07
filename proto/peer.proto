@@ -2,40 +2,36 @@ syntax = "proto3";
 package proto;
 
 import "common.proto";
+import "eraftpb.proto";
 
 // process message from client
 service Endorser {
-    rpc ProcessProposal (Proposal) returns (ProposalResponse) {
-    }
+    rpc ProcessProposal(Proposal) returns (ProposalResponse) {}
 }
 
-//service Contract {
-//    rpc Invoke (Proposal) returns (Empty) {
-//    }
-//}
 
-//
-service Peer {
-    rpc Deliver (Message) returns (Empty) {
-    }
+service Network {
+    rpc Connect (stream Envelope) returns (stream Envelope) {}
 }
 
-// Information exchange between peer nodes
-service P2P {
-    rpc Connect (Envelope) returns (stream Envelope) {
-    }
-    rpc Step (Envelope) returns (Empty) {}
+/*
+|\_ Envelope
+    \_ NetworkMessage
+        \_ TypeMessage
+        \_ eraftpb.ConfChange
+        \_ eraftpb.Message
+
+*/
+
+message TypeMessage {
+    int32 type = 1;
+    bytes data = 2;
 }
 
-message Message {
-    enum Type {
-        PING = 0;
-        PONG = 1;
-        DATA = 2;
+message NetMessage {
+    oneof Type {
+        TypeMessage tmsg = 1;
+        eraftpb.ConfChange cc = 2;
+        eraftpb.Message msg = 3;
     }
-    Type type = 1;
-    string Chain = 2;
-    string from = 3;
-    repeated string Target = 4;
-    bytes Payload = 5;
 }

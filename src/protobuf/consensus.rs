@@ -27,206 +27,6 @@ use protobuf::ProtobufEnum as ProtobufEnum_imported_for_functions;
 const _PROTOBUF_VERSION_CHECK: () = ::protobuf::VERSION_2_8_0;
 
 #[derive(PartialEq,Clone,Default)]
-pub struct DynamicVariable {
-    // message fields
-    pub vt: VariableType,
-    pub payload: ::std::vec::Vec<u8>,
-    // special fields
-    pub unknown_fields: ::protobuf::UnknownFields,
-    pub cached_size: ::protobuf::CachedSize,
-}
-
-impl<'a> ::std::default::Default for &'a DynamicVariable {
-    fn default() -> &'a DynamicVariable {
-        <DynamicVariable as ::protobuf::Message>::default_instance()
-    }
-}
-
-impl DynamicVariable {
-    pub fn new() -> DynamicVariable {
-        ::std::default::Default::default()
-    }
-
-    // .proto.VariableType vt = 1;
-
-
-    pub fn get_vt(&self) -> VariableType {
-        self.vt
-    }
-    pub fn clear_vt(&mut self) {
-        self.vt = VariableType::RaftMasterProposeType;
-    }
-
-    // Param is passed by value, moved
-    pub fn set_vt(&mut self, v: VariableType) {
-        self.vt = v;
-    }
-
-    // bytes payload = 2;
-
-
-    pub fn get_payload(&self) -> &[u8] {
-        &self.payload
-    }
-    pub fn clear_payload(&mut self) {
-        self.payload.clear();
-    }
-
-    // Param is passed by value, moved
-    pub fn set_payload(&mut self, v: ::std::vec::Vec<u8>) {
-        self.payload = v;
-    }
-
-    // Mutable pointer to the field.
-    // If field is not initialized, it is initialized with default value first.
-    pub fn mut_payload(&mut self) -> &mut ::std::vec::Vec<u8> {
-        &mut self.payload
-    }
-
-    // Take field
-    pub fn take_payload(&mut self) -> ::std::vec::Vec<u8> {
-        ::std::mem::replace(&mut self.payload, ::std::vec::Vec::new())
-    }
-}
-
-impl ::protobuf::Message for DynamicVariable {
-    fn is_initialized(&self) -> bool {
-        true
-    }
-
-    fn merge_from(&mut self, is: &mut ::protobuf::CodedInputStream) -> ::protobuf::ProtobufResult<()> {
-        while !is.eof()? {
-            let (field_number, wire_type) = is.read_tag_unpack()?;
-            match field_number {
-                1 => {
-                    if wire_type == ::protobuf::wire_format::WireTypeVarint {self.vt = is.read_enum()?;} else {return ::std::result::Result::Err(::protobuf::rt::unexpected_wire_type(wire_type));}
-                },
-                2 => {
-                    ::protobuf::rt::read_singular_proto3_bytes_into(wire_type, is, &mut self.payload)?;
-                },
-                _ => {
-                    ::protobuf::rt::read_unknown_or_skip_group(field_number, wire_type, is, self.mut_unknown_fields())?;
-                },
-            };
-        }
-        ::std::result::Result::Ok(())
-    }
-
-    // Compute sizes of nested messages
-    #[allow(unused_variables)]
-    fn compute_size(&self) -> u32 {
-        let mut my_size = 0;
-        if self.vt != VariableType::RaftMasterProposeType {
-            my_size += ::protobuf::rt::enum_size(1, self.vt);
-        }
-        if !self.payload.is_empty() {
-            my_size += ::protobuf::rt::bytes_size(2, &self.payload);
-        }
-        my_size += ::protobuf::rt::unknown_fields_size(self.get_unknown_fields());
-        self.cached_size.set(my_size);
-        my_size
-    }
-
-    fn write_to_with_cached_sizes(&self, os: &mut ::protobuf::CodedOutputStream) -> ::protobuf::ProtobufResult<()> {
-        if self.vt != VariableType::RaftMasterProposeType {
-            os.write_enum(1, self.vt.value())?;
-        }
-        if !self.payload.is_empty() {
-            os.write_bytes(2, &self.payload)?;
-        }
-        os.write_unknown_fields(self.get_unknown_fields())?;
-        ::std::result::Result::Ok(())
-    }
-
-    fn get_cached_size(&self) -> u32 {
-        self.cached_size.get()
-    }
-
-    fn get_unknown_fields(&self) -> &::protobuf::UnknownFields {
-        &self.unknown_fields
-    }
-
-    fn mut_unknown_fields(&mut self) -> &mut ::protobuf::UnknownFields {
-        &mut self.unknown_fields
-    }
-
-    fn as_any(&self) -> &dyn (::std::any::Any) {
-        self as &dyn (::std::any::Any)
-    }
-    fn as_any_mut(&mut self) -> &mut dyn (::std::any::Any) {
-        self as &mut dyn (::std::any::Any)
-    }
-    fn into_any(self: Box<Self>) -> ::std::boxed::Box<dyn (::std::any::Any)> {
-        self
-    }
-
-    fn descriptor(&self) -> &'static ::protobuf::reflect::MessageDescriptor {
-        Self::descriptor_static()
-    }
-
-    fn new() -> DynamicVariable {
-        DynamicVariable::new()
-    }
-
-    fn descriptor_static() -> &'static ::protobuf::reflect::MessageDescriptor {
-        static mut descriptor: ::protobuf::lazy::Lazy<::protobuf::reflect::MessageDescriptor> = ::protobuf::lazy::Lazy {
-            lock: ::protobuf::lazy::ONCE_INIT,
-            ptr: 0 as *const ::protobuf::reflect::MessageDescriptor,
-        };
-        unsafe {
-            descriptor.get(|| {
-                let mut fields = ::std::vec::Vec::new();
-                fields.push(::protobuf::reflect::accessor::make_simple_field_accessor::<_, ::protobuf::types::ProtobufTypeEnum<VariableType>>(
-                    "vt",
-                    |m: &DynamicVariable| { &m.vt },
-                    |m: &mut DynamicVariable| { &mut m.vt },
-                ));
-                fields.push(::protobuf::reflect::accessor::make_simple_field_accessor::<_, ::protobuf::types::ProtobufTypeBytes>(
-                    "payload",
-                    |m: &DynamicVariable| { &m.payload },
-                    |m: &mut DynamicVariable| { &mut m.payload },
-                ));
-                ::protobuf::reflect::MessageDescriptor::new::<DynamicVariable>(
-                    "DynamicVariable",
-                    fields,
-                    file_descriptor_proto()
-                )
-            })
-        }
-    }
-
-    fn default_instance() -> &'static DynamicVariable {
-        static mut instance: ::protobuf::lazy::Lazy<DynamicVariable> = ::protobuf::lazy::Lazy {
-            lock: ::protobuf::lazy::ONCE_INIT,
-            ptr: 0 as *const DynamicVariable,
-        };
-        unsafe {
-            instance.get(DynamicVariable::new)
-        }
-    }
-}
-
-impl ::protobuf::Clear for DynamicVariable {
-    fn clear(&mut self) {
-        self.vt = VariableType::RaftMasterProposeType;
-        self.payload.clear();
-        self.unknown_fields.clear();
-    }
-}
-
-impl ::std::fmt::Debug for DynamicVariable {
-    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        ::protobuf::text_format::fmt(self, f)
-    }
-}
-
-impl ::protobuf::reflect::ProtobufValue for DynamicVariable {
-    fn as_ref(&self) -> ::protobuf::reflect::ProtobufValueRef {
-        ::protobuf::reflect::ProtobufValueRef::Message(self)
-    }
-}
-
-#[derive(PartialEq,Clone,Default)]
 pub struct BroadcastResponse {
     // message fields
     pub status: super::common::Status,
@@ -426,75 +226,276 @@ impl ::protobuf::reflect::ProtobufValue for BroadcastResponse {
     }
 }
 
-#[derive(Clone,PartialEq,Eq,Debug,Hash)]
-pub enum VariableType {
-    RaftMasterProposeType = 0,
-    RaftStepMessageType = 1,
-    RaftConfigChangeType = 2,
+#[derive(PartialEq,Clone,Default)]
+pub struct DeliverResponse {
+    // message oneof groups
+    pub Type: ::std::option::Option<DeliverResponse_oneof_Type>,
+    // special fields
+    pub unknown_fields: ::protobuf::UnknownFields,
+    pub cached_size: ::protobuf::CachedSize,
 }
 
-impl ::protobuf::ProtobufEnum for VariableType {
-    fn value(&self) -> i32 {
-        *self as i32
+impl<'a> ::std::default::Default for &'a DeliverResponse {
+    fn default() -> &'a DeliverResponse {
+        <DeliverResponse as ::protobuf::Message>::default_instance()
+    }
+}
+
+#[derive(Clone,PartialEq,Debug)]
+pub enum DeliverResponse_oneof_Type {
+    status(super::common::Status),
+    block(super::block::Block),
+}
+
+impl DeliverResponse {
+    pub fn new() -> DeliverResponse {
+        ::std::default::Default::default()
     }
 
-    fn from_i32(value: i32) -> ::std::option::Option<VariableType> {
-        match value {
-            0 => ::std::option::Option::Some(VariableType::RaftMasterProposeType),
-            1 => ::std::option::Option::Some(VariableType::RaftStepMessageType),
-            2 => ::std::option::Option::Some(VariableType::RaftConfigChangeType),
-            _ => ::std::option::Option::None
+    // .proto.Status status = 1;
+
+
+    pub fn get_status(&self) -> super::common::Status {
+        match self.Type {
+            ::std::option::Option::Some(DeliverResponse_oneof_Type::status(v)) => v,
+            _ => super::common::Status::UNKNOWN,
+        }
+    }
+    pub fn clear_status(&mut self) {
+        self.Type = ::std::option::Option::None;
+    }
+
+    pub fn has_status(&self) -> bool {
+        match self.Type {
+            ::std::option::Option::Some(DeliverResponse_oneof_Type::status(..)) => true,
+            _ => false,
         }
     }
 
-    fn values() -> &'static [Self] {
-        static values: &'static [VariableType] = &[
-            VariableType::RaftMasterProposeType,
-            VariableType::RaftStepMessageType,
-            VariableType::RaftConfigChangeType,
-        ];
-        values
+    // Param is passed by value, moved
+    pub fn set_status(&mut self, v: super::common::Status) {
+        self.Type = ::std::option::Option::Some(DeliverResponse_oneof_Type::status(v))
     }
 
-    fn enum_descriptor_static() -> &'static ::protobuf::reflect::EnumDescriptor {
-        static mut descriptor: ::protobuf::lazy::Lazy<::protobuf::reflect::EnumDescriptor> = ::protobuf::lazy::Lazy {
+    // .proto.Block block = 2;
+
+
+    pub fn get_block(&self) -> &super::block::Block {
+        match self.Type {
+            ::std::option::Option::Some(DeliverResponse_oneof_Type::block(ref v)) => v,
+            _ => super::block::Block::default_instance(),
+        }
+    }
+    pub fn clear_block(&mut self) {
+        self.Type = ::std::option::Option::None;
+    }
+
+    pub fn has_block(&self) -> bool {
+        match self.Type {
+            ::std::option::Option::Some(DeliverResponse_oneof_Type::block(..)) => true,
+            _ => false,
+        }
+    }
+
+    // Param is passed by value, moved
+    pub fn set_block(&mut self, v: super::block::Block) {
+        self.Type = ::std::option::Option::Some(DeliverResponse_oneof_Type::block(v))
+    }
+
+    // Mutable pointer to the field.
+    pub fn mut_block(&mut self) -> &mut super::block::Block {
+        if let ::std::option::Option::Some(DeliverResponse_oneof_Type::block(_)) = self.Type {
+        } else {
+            self.Type = ::std::option::Option::Some(DeliverResponse_oneof_Type::block(super::block::Block::new()));
+        }
+        match self.Type {
+            ::std::option::Option::Some(DeliverResponse_oneof_Type::block(ref mut v)) => v,
+            _ => panic!(),
+        }
+    }
+
+    // Take field
+    pub fn take_block(&mut self) -> super::block::Block {
+        if self.has_block() {
+            match self.Type.take() {
+                ::std::option::Option::Some(DeliverResponse_oneof_Type::block(v)) => v,
+                _ => panic!(),
+            }
+        } else {
+            super::block::Block::new()
+        }
+    }
+}
+
+impl ::protobuf::Message for DeliverResponse {
+    fn is_initialized(&self) -> bool {
+        if let Some(DeliverResponse_oneof_Type::block(ref v)) = self.Type {
+            if !v.is_initialized() {
+                return false;
+            }
+        }
+        true
+    }
+
+    fn merge_from(&mut self, is: &mut ::protobuf::CodedInputStream) -> ::protobuf::ProtobufResult<()> {
+        while !is.eof()? {
+            let (field_number, wire_type) = is.read_tag_unpack()?;
+            match field_number {
+                1 => {
+                    if wire_type != ::protobuf::wire_format::WireTypeVarint {
+                        return ::std::result::Result::Err(::protobuf::rt::unexpected_wire_type(wire_type));
+                    }
+                    self.Type = ::std::option::Option::Some(DeliverResponse_oneof_Type::status(is.read_enum()?));
+                },
+                2 => {
+                    if wire_type != ::protobuf::wire_format::WireTypeLengthDelimited {
+                        return ::std::result::Result::Err(::protobuf::rt::unexpected_wire_type(wire_type));
+                    }
+                    self.Type = ::std::option::Option::Some(DeliverResponse_oneof_Type::block(is.read_message()?));
+                },
+                _ => {
+                    ::protobuf::rt::read_unknown_or_skip_group(field_number, wire_type, is, self.mut_unknown_fields())?;
+                },
+            };
+        }
+        ::std::result::Result::Ok(())
+    }
+
+    // Compute sizes of nested messages
+    #[allow(unused_variables)]
+    fn compute_size(&self) -> u32 {
+        let mut my_size = 0;
+        if let ::std::option::Option::Some(ref v) = self.Type {
+            match v {
+                &DeliverResponse_oneof_Type::status(v) => {
+                    my_size += ::protobuf::rt::enum_size(1, v);
+                },
+                &DeliverResponse_oneof_Type::block(ref v) => {
+                    let len = v.compute_size();
+                    my_size += 1 + ::protobuf::rt::compute_raw_varint32_size(len) + len;
+                },
+            };
+        }
+        my_size += ::protobuf::rt::unknown_fields_size(self.get_unknown_fields());
+        self.cached_size.set(my_size);
+        my_size
+    }
+
+    fn write_to_with_cached_sizes(&self, os: &mut ::protobuf::CodedOutputStream) -> ::protobuf::ProtobufResult<()> {
+        if let ::std::option::Option::Some(ref v) = self.Type {
+            match v {
+                &DeliverResponse_oneof_Type::status(v) => {
+                    os.write_enum(1, v.value())?;
+                },
+                &DeliverResponse_oneof_Type::block(ref v) => {
+                    os.write_tag(2, ::protobuf::wire_format::WireTypeLengthDelimited)?;
+                    os.write_raw_varint32(v.get_cached_size())?;
+                    v.write_to_with_cached_sizes(os)?;
+                },
+            };
+        }
+        os.write_unknown_fields(self.get_unknown_fields())?;
+        ::std::result::Result::Ok(())
+    }
+
+    fn get_cached_size(&self) -> u32 {
+        self.cached_size.get()
+    }
+
+    fn get_unknown_fields(&self) -> &::protobuf::UnknownFields {
+        &self.unknown_fields
+    }
+
+    fn mut_unknown_fields(&mut self) -> &mut ::protobuf::UnknownFields {
+        &mut self.unknown_fields
+    }
+
+    fn as_any(&self) -> &dyn (::std::any::Any) {
+        self as &dyn (::std::any::Any)
+    }
+    fn as_any_mut(&mut self) -> &mut dyn (::std::any::Any) {
+        self as &mut dyn (::std::any::Any)
+    }
+    fn into_any(self: Box<Self>) -> ::std::boxed::Box<dyn (::std::any::Any)> {
+        self
+    }
+
+    fn descriptor(&self) -> &'static ::protobuf::reflect::MessageDescriptor {
+        Self::descriptor_static()
+    }
+
+    fn new() -> DeliverResponse {
+        DeliverResponse::new()
+    }
+
+    fn descriptor_static() -> &'static ::protobuf::reflect::MessageDescriptor {
+        static mut descriptor: ::protobuf::lazy::Lazy<::protobuf::reflect::MessageDescriptor> = ::protobuf::lazy::Lazy {
             lock: ::protobuf::lazy::ONCE_INIT,
-            ptr: 0 as *const ::protobuf::reflect::EnumDescriptor,
+            ptr: 0 as *const ::protobuf::reflect::MessageDescriptor,
         };
         unsafe {
             descriptor.get(|| {
-                ::protobuf::reflect::EnumDescriptor::new("VariableType", file_descriptor_proto())
+                let mut fields = ::std::vec::Vec::new();
+                fields.push(::protobuf::reflect::accessor::make_singular_enum_accessor::<_, super::common::Status>(
+                    "status",
+                    DeliverResponse::has_status,
+                    DeliverResponse::get_status,
+                ));
+                fields.push(::protobuf::reflect::accessor::make_singular_message_accessor::<_, super::block::Block>(
+                    "block",
+                    DeliverResponse::has_block,
+                    DeliverResponse::get_block,
+                ));
+                ::protobuf::reflect::MessageDescriptor::new::<DeliverResponse>(
+                    "DeliverResponse",
+                    fields,
+                    file_descriptor_proto()
+                )
             })
+        }
+    }
+
+    fn default_instance() -> &'static DeliverResponse {
+        static mut instance: ::protobuf::lazy::Lazy<DeliverResponse> = ::protobuf::lazy::Lazy {
+            lock: ::protobuf::lazy::ONCE_INIT,
+            ptr: 0 as *const DeliverResponse,
+        };
+        unsafe {
+            instance.get(DeliverResponse::new)
         }
     }
 }
 
-impl ::std::marker::Copy for VariableType {
-}
-
-impl ::std::default::Default for VariableType {
-    fn default() -> Self {
-        VariableType::RaftMasterProposeType
+impl ::protobuf::Clear for DeliverResponse {
+    fn clear(&mut self) {
+        self.Type = ::std::option::Option::None;
+        self.Type = ::std::option::Option::None;
+        self.unknown_fields.clear();
     }
 }
 
-impl ::protobuf::reflect::ProtobufValue for VariableType {
+impl ::std::fmt::Debug for DeliverResponse {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        ::protobuf::text_format::fmt(self, f)
+    }
+}
+
+impl ::protobuf::reflect::ProtobufValue for DeliverResponse {
     fn as_ref(&self) -> ::protobuf::reflect::ProtobufValueRef {
-        ::protobuf::reflect::ProtobufValueRef::Enum(self.descriptor())
+        ::protobuf::reflect::ProtobufValueRef::Message(self)
     }
 }
 
 static file_descriptor_proto_data: &'static [u8] = b"\
-    \n\x0fconsensus.proto\x12\x05proto\x1a\x0ccommon.proto\"P\n\x0fDynamicVa\
-    riable\x12#\n\x02vt\x18\x01\x20\x01(\x0e2\x13.proto.VariableTypeR\x02vt\
-    \x12\x18\n\x07payload\x18\x02\x20\x01(\x0cR\x07payload\"N\n\x11Broadcast\
-    Response\x12%\n\x06status\x18\x01\x20\x01(\x0e2\r.proto.StatusR\x06statu\
-    s\x12\x12\n\x04info\x18\x02\x20\x01(\tR\x04info*\\\n\x0cVariableType\x12\
-    \x19\n\x15RaftMasterProposeType\x10\0\x12\x17\n\x13RaftStepMessageType\
-    \x10\x01\x12\x18\n\x14RaftConfigChangeType\x10\x022T\n\x0fAtomicBroadcas\
-    t\x12A\n\tBroadcast\x12\x14.proto.ChannelHeader\x1a\x18.proto.BroadcastR\
-    esponse\"\0(\x010\x012<\n\tConsensus\x12/\n\tBroadcast\x12\x0f.proto.Env\
-    elope\x1a\x0f.proto.Envelope\"\0b\x06proto3\
+    \n\x0fconsensus.proto\x12\x05proto\x1a\x0ccommon.proto\x1a\x0bblock.prot\
+    o\"N\n\x11BroadcastResponse\x12%\n\x06status\x18\x01\x20\x01(\x0e2\r.pro\
+    to.StatusR\x06status\x12\x12\n\x04info\x18\x02\x20\x01(\tR\x04info\"h\n\
+    \x0fDeliverResponse\x12'\n\x06status\x18\x01\x20\x01(\x0e2\r.proto.Statu\
+    sH\0R\x06status\x12$\n\x05block\x18\x02\x20\x01(\x0b2\x0c.proto.BlockH\0\
+    R\x05blockB\x06\n\x04Type2\x8e\x01\n\x0fAtomicBroadcast\x12A\n\tBroadcas\
+    t\x12\x14.proto.ChannelHeader\x1a\x18.proto.BroadcastResponse\"\0(\x010\
+    \x01\x128\n\x07Deliver\x12\x0f.proto.Envelope\x1a\x16.proto.DeliverRespo\
+    nse\"\0(\x010\x01b\x06proto3\
 ";
 
 static mut file_descriptor_proto_lazy: ::protobuf::lazy::Lazy<::protobuf::descriptor::FileDescriptorProto> = ::protobuf::lazy::Lazy {

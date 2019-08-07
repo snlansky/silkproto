@@ -1,3 +1,5 @@
+use raft::eraftpb;
+
 pub mod block;
 pub mod common;
 pub mod consensus;

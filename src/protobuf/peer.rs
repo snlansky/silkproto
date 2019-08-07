@@ -27,149 +27,69 @@ use protobuf::ProtobufEnum as ProtobufEnum_imported_for_functions;
 const _PROTOBUF_VERSION_CHECK: () = ::protobuf::VERSION_2_8_0;
 
 #[derive(PartialEq,Clone,Default)]
-pub struct Message {
+pub struct TypeMessage {
     // message fields
-    pub field_type: Message_Type,
-    pub Chain: ::std::string::String,
-    pub from: ::std::string::String,
-    pub Target: ::protobuf::RepeatedField<::std::string::String>,
-    pub Payload: ::std::vec::Vec<u8>,
+    pub field_type: i32,
+    pub data: ::std::vec::Vec<u8>,
     // special fields
     pub unknown_fields: ::protobuf::UnknownFields,
     pub cached_size: ::protobuf::CachedSize,
 }
 
-impl<'a> ::std::default::Default for &'a Message {
-    fn default() -> &'a Message {
-        <Message as ::protobuf::Message>::default_instance()
+impl<'a> ::std::default::Default for &'a TypeMessage {
+    fn default() -> &'a TypeMessage {
+        <TypeMessage as ::protobuf::Message>::default_instance()
     }
 }
 
-impl Message {
-    pub fn new() -> Message {
+impl TypeMessage {
+    pub fn new() -> TypeMessage {
         ::std::default::Default::default()
     }
 
-    // .proto.Message.Type type = 1;
+    // int32 type = 1;
 
 
-    pub fn get_field_type(&self) -> Message_Type {
+    pub fn get_field_type(&self) -> i32 {
         self.field_type
     }
     pub fn clear_field_type(&mut self) {
-        self.field_type = Message_Type::PING;
+        self.field_type = 0;
     }
 
     // Param is passed by value, moved
-    pub fn set_field_type(&mut self, v: Message_Type) {
+    pub fn set_field_type(&mut self, v: i32) {
         self.field_type = v;
     }
 
-    // string Chain = 2;
+    // bytes data = 2;
 
 
-    pub fn get_Chain(&self) -> &str {
-        &self.Chain
+    pub fn get_data(&self) -> &[u8] {
+        &self.data
     }
-    pub fn clear_Chain(&mut self) {
-        self.Chain.clear();
+    pub fn clear_data(&mut self) {
+        self.data.clear();
     }
 
     // Param is passed by value, moved
-    pub fn set_Chain(&mut self, v: ::std::string::String) {
-        self.Chain = v;
+    pub fn set_data(&mut self, v: ::std::vec::Vec<u8>) {
+        self.data = v;
     }
 
     // Mutable pointer to the field.
     // If field is not initialized, it is initialized with default value first.
-    pub fn mut_Chain(&mut self) -> &mut ::std::string::String {
-        &mut self.Chain
+    pub fn mut_data(&mut self) -> &mut ::std::vec::Vec<u8> {
+        &mut self.data
     }
 
     // Take field
-    pub fn take_Chain(&mut self) -> ::std::string::String {
-        ::std::mem::replace(&mut self.Chain, ::std::string::String::new())
-    }
-
-    // string from = 3;
-
-
-    pub fn get_from(&self) -> &str {
-        &self.from
-    }
-    pub fn clear_from(&mut self) {
-        self.from.clear();
-    }
-
-    // Param is passed by value, moved
-    pub fn set_from(&mut self, v: ::std::string::String) {
-        self.from = v;
-    }
-
-    // Mutable pointer to the field.
-    // If field is not initialized, it is initialized with default value first.
-    pub fn mut_from(&mut self) -> &mut ::std::string::String {
-        &mut self.from
-    }
-
-    // Take field
-    pub fn take_from(&mut self) -> ::std::string::String {
-        ::std::mem::replace(&mut self.from, ::std::string::String::new())
-    }
-
-    // repeated string Target = 4;
-
-
-    pub fn get_Target(&self) -> &[::std::string::String] {
-        &self.Target
-    }
-    pub fn clear_Target(&mut self) {
-        self.Target.clear();
-    }
-
-    // Param is passed by value, moved
-    pub fn set_Target(&mut self, v: ::protobuf::RepeatedField<::std::string::String>) {
-        self.Target = v;
-    }
-
-    // Mutable pointer to the field.
-    pub fn mut_Target(&mut self) -> &mut ::protobuf::RepeatedField<::std::string::String> {
-        &mut self.Target
-    }
-
-    // Take field
-    pub fn take_Target(&mut self) -> ::protobuf::RepeatedField<::std::string::String> {
-        ::std::mem::replace(&mut self.Target, ::protobuf::RepeatedField::new())
-    }
-
-    // bytes Payload = 5;
-
-
-    pub fn get_Payload(&self) -> &[u8] {
-        &self.Payload
-    }
-    pub fn clear_Payload(&mut self) {
-        self.Payload.clear();
-    }
-
-    // Param is passed by value, moved
-    pub fn set_Payload(&mut self, v: ::std::vec::Vec<u8>) {
-        self.Payload = v;
-    }
-
-    // Mutable pointer to the field.
-    // If field is not initialized, it is initialized with default value first.
-    pub fn mut_Payload(&mut self) -> &mut ::std::vec::Vec<u8> {
-        &mut self.Payload
-    }
-
-    // Take field
-    pub fn take_Payload(&mut self) -> ::std::vec::Vec<u8> {
-        ::std::mem::replace(&mut self.Payload, ::std::vec::Vec::new())
+    pub fn take_data(&mut self) -> ::std::vec::Vec<u8> {
+        ::std::mem::replace(&mut self.data, ::std::vec::Vec::new())
     }
 }
 
-impl ::protobuf::Message for Message {
+impl ::protobuf::Message for TypeMessage {
     fn is_initialized(&self) -> bool {
         true
     }
@@ -179,19 +99,14 @@ impl ::protobuf::Message for Message {
             let (field_number, wire_type) = is.read_tag_unpack()?;
             match field_number {
                 1 => {
-                    if wire_type == ::protobuf::wire_format::WireTypeVarint {self.field_type = is.read_enum()?;} else {return ::std::result::Result::Err(::protobuf::rt::unexpected_wire_type(wire_type));}
+                    if wire_type != ::protobuf::wire_format::WireTypeVarint {
+                        return ::std::result::Result::Err(::protobuf::rt::unexpected_wire_type(wire_type));
+                    }
+                    let tmp = is.read_int32()?;
+                    self.field_type = tmp;
                 },
                 2 => {
-                    ::protobuf::rt::read_singular_proto3_string_into(wire_type, is, &mut self.Chain)?;
-                },
-                3 => {
-                    ::protobuf::rt::read_singular_proto3_string_into(wire_type, is, &mut self.from)?;
-                },
-                4 => {
-                    ::protobuf::rt::read_repeated_string_into(wire_type, is, &mut self.Target)?;
-                },
-                5 => {
-                    ::protobuf::rt::read_singular_proto3_bytes_into(wire_type, is, &mut self.Payload)?;
+                    ::protobuf::rt::read_singular_proto3_bytes_into(wire_type, is, &mut self.data)?;
                 },
                 _ => {
                     ::protobuf::rt::read_unknown_or_skip_group(field_number, wire_type, is, self.mut_unknown_fields())?;
@@ -205,20 +120,11 @@ impl ::protobuf::Message for Message {
     #[allow(unused_variables)]
     fn compute_size(&self) -> u32 {
         let mut my_size = 0;
-        if self.field_type != Message_Type::PING {
-            my_size += ::protobuf::rt::enum_size(1, self.field_type);
+        if self.field_type != 0 {
+            my_size += ::protobuf::rt::value_size(1, self.field_type, ::protobuf::wire_format::WireTypeVarint);
         }
-        if !self.Chain.is_empty() {
-            my_size += ::protobuf::rt::string_size(2, &self.Chain);
-        }
-        if !self.from.is_empty() {
-            my_size += ::protobuf::rt::string_size(3, &self.from);
-        }
-        for value in &self.Target {
-            my_size += ::protobuf::rt::string_size(4, &value);
-        };
-        if !self.Payload.is_empty() {
-            my_size += ::protobuf::rt::bytes_size(5, &self.Payload);
+        if !self.data.is_empty() {
+            my_size += ::protobuf::rt::bytes_size(2, &self.data);
         }
         my_size += ::protobuf::rt::unknown_fields_size(self.get_unknown_fields());
         self.cached_size.set(my_size);
@@ -226,20 +132,11 @@ impl ::protobuf::Message for Message {
     }
 
     fn write_to_with_cached_sizes(&self, os: &mut ::protobuf::CodedOutputStream) -> ::protobuf::ProtobufResult<()> {
-        if self.field_type != Message_Type::PING {
-            os.write_enum(1, self.field_type.value())?;
+        if self.field_type != 0 {
+            os.write_int32(1, self.field_type)?;
         }
-        if !self.Chain.is_empty() {
-            os.write_string(2, &self.Chain)?;
-        }
-        if !self.from.is_empty() {
-            os.write_string(3, &self.from)?;
-        }
-        for v in &self.Target {
-            os.write_string(4, &v)?;
-        };
-        if !self.Payload.is_empty() {
-            os.write_bytes(5, &self.Payload)?;
+        if !self.data.is_empty() {
+            os.write_bytes(2, &self.data)?;
         }
         os.write_unknown_fields(self.get_unknown_fields())?;
         ::std::result::Result::Ok(())
@@ -271,8 +168,8 @@ impl ::protobuf::Message for Message {
         Self::descriptor_static()
     }
 
-    fn new() -> Message {
-        Message::new()
+    fn new() -> TypeMessage {
+        TypeMessage::new()
     }
 
     fn descriptor_static() -> &'static ::protobuf::reflect::MessageDescriptor {
@@ -283,33 +180,18 @@ impl ::protobuf::Message for Message {
         unsafe {
             descriptor.get(|| {
                 let mut fields = ::std::vec::Vec::new();
-                fields.push(::protobuf::reflect::accessor::make_simple_field_accessor::<_, ::protobuf::types::ProtobufTypeEnum<Message_Type>>(
+                fields.push(::protobuf::reflect::accessor::make_simple_field_accessor::<_, ::protobuf::types::ProtobufTypeInt32>(
                     "type",
-                    |m: &Message| { &m.field_type },
-                    |m: &mut Message| { &mut m.field_type },
-                ));
-                fields.push(::protobuf::reflect::accessor::make_simple_field_accessor::<_, ::protobuf::types::ProtobufTypeString>(
-                    "Chain",
-                    |m: &Message| { &m.Chain },
-                    |m: &mut Message| { &mut m.Chain },
-                ));
-                fields.push(::protobuf::reflect::accessor::make_simple_field_accessor::<_, ::protobuf::types::ProtobufTypeString>(
-                    "from",
-                    |m: &Message| { &m.from },
-                    |m: &mut Message| { &mut m.from },
-                ));
-                fields.push(::protobuf::reflect::accessor::make_repeated_field_accessor::<_, ::protobuf::types::ProtobufTypeString>(
-                    "Target",
-                    |m: &Message| { &m.Target },
-                    |m: &mut Message| { &mut m.Target },
+                    |m: &TypeMessage| { &m.field_type },
+                    |m: &mut TypeMessage| { &mut m.field_type },
                 ));
                 fields.push(::protobuf::reflect::accessor::make_simple_field_accessor::<_, ::protobuf::types::ProtobufTypeBytes>(
-                    "Payload",
-                    |m: &Message| { &m.Payload },
-                    |m: &mut Message| { &mut m.Payload },
+                    "data",
+                    |m: &TypeMessage| { &m.data },
+                    |m: &mut TypeMessage| { &mut m.data },
                 ));
-                ::protobuf::reflect::MessageDescriptor::new::<Message>(
-                    "Message",
+                ::protobuf::reflect::MessageDescriptor::new::<TypeMessage>(
+                    "TypeMessage",
                     fields,
                     file_descriptor_proto()
                 )
@@ -317,110 +199,415 @@ impl ::protobuf::Message for Message {
         }
     }
 
-    fn default_instance() -> &'static Message {
-        static mut instance: ::protobuf::lazy::Lazy<Message> = ::protobuf::lazy::Lazy {
+    fn default_instance() -> &'static TypeMessage {
+        static mut instance: ::protobuf::lazy::Lazy<TypeMessage> = ::protobuf::lazy::Lazy {
             lock: ::protobuf::lazy::ONCE_INIT,
-            ptr: 0 as *const Message,
+            ptr: 0 as *const TypeMessage,
         };
         unsafe {
-            instance.get(Message::new)
+            instance.get(TypeMessage::new)
         }
     }
 }
 
-impl ::protobuf::Clear for Message {
+impl ::protobuf::Clear for TypeMessage {
     fn clear(&mut self) {
-        self.field_type = Message_Type::PING;
-        self.Chain.clear();
-        self.from.clear();
-        self.Target.clear();
-        self.Payload.clear();
+        self.field_type = 0;
+        self.data.clear();
         self.unknown_fields.clear();
     }
 }
 
-impl ::std::fmt::Debug for Message {
+impl ::std::fmt::Debug for TypeMessage {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         ::protobuf::text_format::fmt(self, f)
     }
 }
 
-impl ::protobuf::reflect::ProtobufValue for Message {
+impl ::protobuf::reflect::ProtobufValue for TypeMessage {
     fn as_ref(&self) -> ::protobuf::reflect::ProtobufValueRef {
         ::protobuf::reflect::ProtobufValueRef::Message(self)
     }
 }
 
-#[derive(Clone,PartialEq,Eq,Debug,Hash)]
-pub enum Message_Type {
-    PING = 0,
-    PONG = 1,
-    DATA = 2,
+#[derive(PartialEq,Clone,Default)]
+pub struct NetMessage {
+    // message oneof groups
+    pub Type: ::std::option::Option<NetMessage_oneof_Type>,
+    // special fields
+    pub unknown_fields: ::protobuf::UnknownFields,
+    pub cached_size: ::protobuf::CachedSize,
 }
 
-impl ::protobuf::ProtobufEnum for Message_Type {
-    fn value(&self) -> i32 {
-        *self as i32
+impl<'a> ::std::default::Default for &'a NetMessage {
+    fn default() -> &'a NetMessage {
+        <NetMessage as ::protobuf::Message>::default_instance()
+    }
+}
+
+#[derive(Clone,PartialEq,Debug)]
+pub enum NetMessage_oneof_Type {
+    tmsg(TypeMessage),
+    cc(super::eraftpb::ConfChange),
+    msg(super::eraftpb::Message),
+}
+
+impl NetMessage {
+    pub fn new() -> NetMessage {
+        ::std::default::Default::default()
     }
 
-    fn from_i32(value: i32) -> ::std::option::Option<Message_Type> {
-        match value {
-            0 => ::std::option::Option::Some(Message_Type::PING),
-            1 => ::std::option::Option::Some(Message_Type::PONG),
-            2 => ::std::option::Option::Some(Message_Type::DATA),
-            _ => ::std::option::Option::None
+    // .proto.TypeMessage tmsg = 1;
+
+
+    pub fn get_tmsg(&self) -> &TypeMessage {
+        match self.Type {
+            ::std::option::Option::Some(NetMessage_oneof_Type::tmsg(ref v)) => v,
+            _ => TypeMessage::default_instance(),
+        }
+    }
+    pub fn clear_tmsg(&mut self) {
+        self.Type = ::std::option::Option::None;
+    }
+
+    pub fn has_tmsg(&self) -> bool {
+        match self.Type {
+            ::std::option::Option::Some(NetMessage_oneof_Type::tmsg(..)) => true,
+            _ => false,
         }
     }
 
-    fn values() -> &'static [Self] {
-        static values: &'static [Message_Type] = &[
-            Message_Type::PING,
-            Message_Type::PONG,
-            Message_Type::DATA,
-        ];
-        values
+    // Param is passed by value, moved
+    pub fn set_tmsg(&mut self, v: TypeMessage) {
+        self.Type = ::std::option::Option::Some(NetMessage_oneof_Type::tmsg(v))
     }
 
-    fn enum_descriptor_static() -> &'static ::protobuf::reflect::EnumDescriptor {
-        static mut descriptor: ::protobuf::lazy::Lazy<::protobuf::reflect::EnumDescriptor> = ::protobuf::lazy::Lazy {
+    // Mutable pointer to the field.
+    pub fn mut_tmsg(&mut self) -> &mut TypeMessage {
+        if let ::std::option::Option::Some(NetMessage_oneof_Type::tmsg(_)) = self.Type {
+        } else {
+            self.Type = ::std::option::Option::Some(NetMessage_oneof_Type::tmsg(TypeMessage::new()));
+        }
+        match self.Type {
+            ::std::option::Option::Some(NetMessage_oneof_Type::tmsg(ref mut v)) => v,
+            _ => panic!(),
+        }
+    }
+
+    // Take field
+    pub fn take_tmsg(&mut self) -> TypeMessage {
+        if self.has_tmsg() {
+            match self.Type.take() {
+                ::std::option::Option::Some(NetMessage_oneof_Type::tmsg(v)) => v,
+                _ => panic!(),
+            }
+        } else {
+            TypeMessage::new()
+        }
+    }
+
+    // .eraftpb.ConfChange cc = 2;
+
+
+    pub fn get_cc(&self) -> &super::eraftpb::ConfChange {
+        match self.Type {
+            ::std::option::Option::Some(NetMessage_oneof_Type::cc(ref v)) => v,
+            _ => super::eraftpb::ConfChange::default_instance(),
+        }
+    }
+    pub fn clear_cc(&mut self) {
+        self.Type = ::std::option::Option::None;
+    }
+
+    pub fn has_cc(&self) -> bool {
+        match self.Type {
+            ::std::option::Option::Some(NetMessage_oneof_Type::cc(..)) => true,
+            _ => false,
+        }
+    }
+
+    // Param is passed by value, moved
+    pub fn set_cc(&mut self, v: super::eraftpb::ConfChange) {
+        self.Type = ::std::option::Option::Some(NetMessage_oneof_Type::cc(v))
+    }
+
+    // Mutable pointer to the field.
+    pub fn mut_cc(&mut self) -> &mut super::eraftpb::ConfChange {
+        if let ::std::option::Option::Some(NetMessage_oneof_Type::cc(_)) = self.Type {
+        } else {
+            self.Type = ::std::option::Option::Some(NetMessage_oneof_Type::cc(super::eraftpb::ConfChange::new()));
+        }
+        match self.Type {
+            ::std::option::Option::Some(NetMessage_oneof_Type::cc(ref mut v)) => v,
+            _ => panic!(),
+        }
+    }
+
+    // Take field
+    pub fn take_cc(&mut self) -> super::eraftpb::ConfChange {
+        if self.has_cc() {
+            match self.Type.take() {
+                ::std::option::Option::Some(NetMessage_oneof_Type::cc(v)) => v,
+                _ => panic!(),
+            }
+        } else {
+            super::eraftpb::ConfChange::new()
+        }
+    }
+
+    // .eraftpb.Message msg = 3;
+
+
+    pub fn get_msg(&self) -> &super::eraftpb::Message {
+        match self.Type {
+            ::std::option::Option::Some(NetMessage_oneof_Type::msg(ref v)) => v,
+            _ => super::eraftpb::Message::default_instance(),
+        }
+    }
+    pub fn clear_msg(&mut self) {
+        self.Type = ::std::option::Option::None;
+    }
+
+    pub fn has_msg(&self) -> bool {
+        match self.Type {
+            ::std::option::Option::Some(NetMessage_oneof_Type::msg(..)) => true,
+            _ => false,
+        }
+    }
+
+    // Param is passed by value, moved
+    pub fn set_msg(&mut self, v: super::eraftpb::Message) {
+        self.Type = ::std::option::Option::Some(NetMessage_oneof_Type::msg(v))
+    }
+
+    // Mutable pointer to the field.
+    pub fn mut_msg(&mut self) -> &mut super::eraftpb::Message {
+        if let ::std::option::Option::Some(NetMessage_oneof_Type::msg(_)) = self.Type {
+        } else {
+            self.Type = ::std::option::Option::Some(NetMessage_oneof_Type::msg(super::eraftpb::Message::new()));
+        }
+        match self.Type {
+            ::std::option::Option::Some(NetMessage_oneof_Type::msg(ref mut v)) => v,
+            _ => panic!(),
+        }
+    }
+
+    // Take field
+    pub fn take_msg(&mut self) -> super::eraftpb::Message {
+        if self.has_msg() {
+            match self.Type.take() {
+                ::std::option::Option::Some(NetMessage_oneof_Type::msg(v)) => v,
+                _ => panic!(),
+            }
+        } else {
+            super::eraftpb::Message::new()
+        }
+    }
+}
+
+impl ::protobuf::Message for NetMessage {
+    fn is_initialized(&self) -> bool {
+        if let Some(NetMessage_oneof_Type::tmsg(ref v)) = self.Type {
+            if !v.is_initialized() {
+                return false;
+            }
+        }
+        if let Some(NetMessage_oneof_Type::cc(ref v)) = self.Type {
+            if !v.is_initialized() {
+                return false;
+            }
+        }
+        if let Some(NetMessage_oneof_Type::msg(ref v)) = self.Type {
+            if !v.is_initialized() {
+                return false;
+            }
+        }
+        true
+    }
+
+    fn merge_from(&mut self, is: &mut ::protobuf::CodedInputStream) -> ::protobuf::ProtobufResult<()> {
+        while !is.eof()? {
+            let (field_number, wire_type) = is.read_tag_unpack()?;
+            match field_number {
+                1 => {
+                    if wire_type != ::protobuf::wire_format::WireTypeLengthDelimited {
+                        return ::std::result::Result::Err(::protobuf::rt::unexpected_wire_type(wire_type));
+                    }
+                    self.Type = ::std::option::Option::Some(NetMessage_oneof_Type::tmsg(is.read_message()?));
+                },
+                2 => {
+                    if wire_type != ::protobuf::wire_format::WireTypeLengthDelimited {
+                        return ::std::result::Result::Err(::protobuf::rt::unexpected_wire_type(wire_type));
+                    }
+                    self.Type = ::std::option::Option::Some(NetMessage_oneof_Type::cc(is.read_message()?));
+                },
+                3 => {
+                    if wire_type != ::protobuf::wire_format::WireTypeLengthDelimited {
+                        return ::std::result::Result::Err(::protobuf::rt::unexpected_wire_type(wire_type));
+                    }
+                    self.Type = ::std::option::Option::Some(NetMessage_oneof_Type::msg(is.read_message()?));
+                },
+                _ => {
+                    ::protobuf::rt::read_unknown_or_skip_group(field_number, wire_type, is, self.mut_unknown_fields())?;
+                },
+            };
+        }
+        ::std::result::Result::Ok(())
+    }
+
+    // Compute sizes of nested messages
+    #[allow(unused_variables)]
+    fn compute_size(&self) -> u32 {
+        let mut my_size = 0;
+        if let ::std::option::Option::Some(ref v) = self.Type {
+            match v {
+                &NetMessage_oneof_Type::tmsg(ref v) => {
+                    let len = v.compute_size();
+                    my_size += 1 + ::protobuf::rt::compute_raw_varint32_size(len) + len;
+                },
+                &NetMessage_oneof_Type::cc(ref v) => {
+                    let len = v.compute_size();
+                    my_size += 1 + ::protobuf::rt::compute_raw_varint32_size(len) + len;
+                },
+                &NetMessage_oneof_Type::msg(ref v) => {
+                    let len = v.compute_size();
+                    my_size += 1 + ::protobuf::rt::compute_raw_varint32_size(len) + len;
+                },
+            };
+        }
+        my_size += ::protobuf::rt::unknown_fields_size(self.get_unknown_fields());
+        self.cached_size.set(my_size);
+        my_size
+    }
+
+    fn write_to_with_cached_sizes(&self, os: &mut ::protobuf::CodedOutputStream) -> ::protobuf::ProtobufResult<()> {
+        if let ::std::option::Option::Some(ref v) = self.Type {
+            match v {
+                &NetMessage_oneof_Type::tmsg(ref v) => {
+                    os.write_tag(1, ::protobuf::wire_format::WireTypeLengthDelimited)?;
+                    os.write_raw_varint32(v.get_cached_size())?;
+                    v.write_to_with_cached_sizes(os)?;
+                },
+                &NetMessage_oneof_Type::cc(ref v) => {
+                    os.write_tag(2, ::protobuf::wire_format::WireTypeLengthDelimited)?;
+                    os.write_raw_varint32(v.get_cached_size())?;
+                    v.write_to_with_cached_sizes(os)?;
+                },
+                &NetMessage_oneof_Type::msg(ref v) => {
+                    os.write_tag(3, ::protobuf::wire_format::WireTypeLengthDelimited)?;
+                    os.write_raw_varint32(v.get_cached_size())?;
+                    v.write_to_with_cached_sizes(os)?;
+                },
+            };
+        }
+        os.write_unknown_fields(self.get_unknown_fields())?;
+        ::std::result::Result::Ok(())
+    }
+
+    fn get_cached_size(&self) -> u32 {
+        self.cached_size.get()
+    }
+
+    fn get_unknown_fields(&self) -> &::protobuf::UnknownFields {
+        &self.unknown_fields
+    }
+
+    fn mut_unknown_fields(&mut self) -> &mut ::protobuf::UnknownFields {
+        &mut self.unknown_fields
+    }
+
+    fn as_any(&self) -> &dyn (::std::any::Any) {
+        self as &dyn (::std::any::Any)
+    }
+    fn as_any_mut(&mut self) -> &mut dyn (::std::any::Any) {
+        self as &mut dyn (::std::any::Any)
+    }
+    fn into_any(self: Box<Self>) -> ::std::boxed::Box<dyn (::std::any::Any)> {
+        self
+    }
+
+    fn descriptor(&self) -> &'static ::protobuf::reflect::MessageDescriptor {
+        Self::descriptor_static()
+    }
+
+    fn new() -> NetMessage {
+        NetMessage::new()
+    }
+
+    fn descriptor_static() -> &'static ::protobuf::reflect::MessageDescriptor {
+        static mut descriptor: ::protobuf::lazy::Lazy<::protobuf::reflect::MessageDescriptor> = ::protobuf::lazy::Lazy {
             lock: ::protobuf::lazy::ONCE_INIT,
-            ptr: 0 as *const ::protobuf::reflect::EnumDescriptor,
+            ptr: 0 as *const ::protobuf::reflect::MessageDescriptor,
         };
         unsafe {
             descriptor.get(|| {
-                ::protobuf::reflect::EnumDescriptor::new("Message_Type", file_descriptor_proto())
+                let mut fields = ::std::vec::Vec::new();
+                fields.push(::protobuf::reflect::accessor::make_singular_message_accessor::<_, TypeMessage>(
+                    "tmsg",
+                    NetMessage::has_tmsg,
+                    NetMessage::get_tmsg,
+                ));
+                fields.push(::protobuf::reflect::accessor::make_singular_message_accessor::<_, super::eraftpb::ConfChange>(
+                    "cc",
+                    NetMessage::has_cc,
+                    NetMessage::get_cc,
+                ));
+                fields.push(::protobuf::reflect::accessor::make_singular_message_accessor::<_, super::eraftpb::Message>(
+                    "msg",
+                    NetMessage::has_msg,
+                    NetMessage::get_msg,
+                ));
+                ::protobuf::reflect::MessageDescriptor::new::<NetMessage>(
+                    "NetMessage",
+                    fields,
+                    file_descriptor_proto()
+                )
             })
+        }
+    }
+
+    fn default_instance() -> &'static NetMessage {
+        static mut instance: ::protobuf::lazy::Lazy<NetMessage> = ::protobuf::lazy::Lazy {
+            lock: ::protobuf::lazy::ONCE_INIT,
+            ptr: 0 as *const NetMessage,
+        };
+        unsafe {
+            instance.get(NetMessage::new)
         }
     }
 }
 
-impl ::std::marker::Copy for Message_Type {
-}
-
-impl ::std::default::Default for Message_Type {
-    fn default() -> Self {
-        Message_Type::PING
+impl ::protobuf::Clear for NetMessage {
+    fn clear(&mut self) {
+        self.Type = ::std::option::Option::None;
+        self.Type = ::std::option::Option::None;
+        self.Type = ::std::option::Option::None;
+        self.unknown_fields.clear();
     }
 }
 
-impl ::protobuf::reflect::ProtobufValue for Message_Type {
+impl ::std::fmt::Debug for NetMessage {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        ::protobuf::text_format::fmt(self, f)
+    }
+}
+
+impl ::protobuf::reflect::ProtobufValue for NetMessage {
     fn as_ref(&self) -> ::protobuf::reflect::ProtobufValueRef {
-        ::protobuf::reflect::ProtobufValueRef::Enum(self.descriptor())
+        ::protobuf::reflect::ProtobufValueRef::Message(self)
     }
 }
 
 static file_descriptor_proto_data: &'static [u8] = b"\
-    \n\npeer.proto\x12\x05proto\x1a\x0ccommon.proto\"\xb4\x01\n\x07Message\
-    \x12'\n\x04type\x18\x01\x20\x01(\x0e2\x13.proto.Message.TypeR\x04type\
-    \x12\x14\n\x05Chain\x18\x02\x20\x01(\tR\x05Chain\x12\x12\n\x04from\x18\
-    \x03\x20\x01(\tR\x04from\x12\x16\n\x06Target\x18\x04\x20\x03(\tR\x06Targ\
-    et\x12\x18\n\x07Payload\x18\x05\x20\x01(\x0cR\x07Payload\"$\n\x04Type\
-    \x12\x08\n\x04PING\x10\0\x12\x08\n\x04PONG\x10\x01\x12\x08\n\x04DATA\x10\
-    \x022I\n\x08Endorser\x12=\n\x0fProcessProposal\x12\x0f.proto.Proposal\
-    \x1a\x17.proto.ProposalResponse\"\021\n\x04Peer\x12)\n\x07Deliver\x12\
-    \x0e.proto.Message\x1a\x0c.proto.Empty\"\02_\n\x03P2P\x12/\n\x07Connect\
-    \x12\x0f.proto.Envelope\x1a\x0f.proto.Envelope\"\00\x01\x12'\n\x04Step\
-    \x12\x0f.proto.Envelope\x1a\x0c.proto.Empty\"\0b\x06proto3\
+    \n\npeer.proto\x12\x05proto\x1a\x0ccommon.proto\x1a\reraftpb.proto\"5\n\
+    \x0bTypeMessage\x12\x12\n\x04type\x18\x01\x20\x01(\x05R\x04type\x12\x12\
+    \n\x04data\x18\x02\x20\x01(\x0cR\x04data\"\x8b\x01\n\nNetMessage\x12(\n\
+    \x04tmsg\x18\x01\x20\x01(\x0b2\x12.proto.TypeMessageH\0R\x04tmsg\x12%\n\
+    \x02cc\x18\x02\x20\x01(\x0b2\x13.eraftpb.ConfChangeH\0R\x02cc\x12$\n\x03\
+    msg\x18\x03\x20\x01(\x0b2\x10.eraftpb.MessageH\0R\x03msgB\x06\n\x04Type2\
+    I\n\x08Endorser\x12=\n\x0fProcessProposal\x12\x0f.proto.Proposal\x1a\x17\
+    .proto.ProposalResponse\"\02<\n\x07Network\x121\n\x07Connect\x12\x0f.pro\
+    to.Envelope\x1a\x0f.proto.Envelope\"\0(\x010\x01b\x06proto3\
 ";
 
 static mut file_descriptor_proto_lazy: ::protobuf::lazy::Lazy<::protobuf::descriptor::FileDescriptorProto> = ::protobuf::lazy::Lazy {

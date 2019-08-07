@@ -5,7 +5,7 @@ jobs:
       - image: circleci/golang:stretch
     environment:
       PROTOC_VERSION: "3.1.0"
-    working_directory: /go/src/github.com/pingcap/kvproto
+    working_directory: /go/src/github.com/snlansky/silkproto
     steps:
       - checkout
       - run:

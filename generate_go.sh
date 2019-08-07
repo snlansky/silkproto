@@ -39,7 +39,7 @@ if [ -z $GOPATH ]; then
     exit 1
 fi
 
-GO_PREFIX_PATH=github.com/pingcap/kvproto/pkg
+GO_PREFIX_PATH=github.com/snlansky/silkproto/pkg
 export PATH=$(pwd)/_tools/bin:$GOPATH/bin:$PATH
 
 echo "install tools..."
@@ -84,7 +84,7 @@ function gen() {
     cd ../../proto
 }
 
-#gen ../include/eraftpb.proto
+gen ../include/eraftpb.proto
 for file in `ls *.proto`
     do
     gen $file
