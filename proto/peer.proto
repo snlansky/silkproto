@@ -30,8 +30,8 @@ message TypeMessage {
 
 message NetMessage {
     oneof Type {
-        TypeMessage tmsg = 1;
-        eraftpb.ConfChange cc = 2;
-        eraftpb.Message msg = 3;
+        TypeMessage type_message = 1;
+        eraftpb.ConfChange raft_config_change = 2;
+        eraftpb.Message raft_message = 3;
     }
 }
