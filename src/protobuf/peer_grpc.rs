@@ -70,9 +70,9 @@ pub fn create_endorser<S: Endorser + Send + Clone + 'static>(s: S) -> ::grpcio::
     builder.build()
 }
 
-const METHOD_NETWORK_CONNECT: ::grpcio::Method<super::common::Envelope, super::common::Envelope> = ::grpcio::Method {
-    ty: ::grpcio::MethodType::Duplex,
-    name: "/proto.Network/Connect",
+const METHOD_NETWORK_BROADCAST: ::grpcio::Method<super::common::Envelope, super::common::Empty> = ::grpcio::Method {
+    ty: ::grpcio::MethodType::Unary,
+    name: "/proto.Network/Broadcast",
     req_mar: ::grpcio::Marshaller { ser: ::grpcio::pb_ser, de: ::grpcio::pb_de },
     resp_mar: ::grpcio::Marshaller { ser: ::grpcio::pb_ser, de: ::grpcio::pb_de },
 };
@@ -89,12 +89,20 @@ impl NetworkClient {
         }
     }
 
-    pub fn connect_opt(&self, opt: ::grpcio::CallOption) -> ::grpcio::Result<(::grpcio::ClientDuplexSender<super::common::Envelope>, ::grpcio::ClientDuplexReceiver<super::common::Envelope>)> {
-        self.client.duplex_streaming(&METHOD_NETWORK_CONNECT, opt)
+    pub fn broadcast_opt(&self, req: &super::common::Envelope, opt: ::grpcio::CallOption) -> ::grpcio::Result<super::common::Empty> {
+        self.client.unary_call(&METHOD_NETWORK_BROADCAST, req, opt)
     }
 
-    pub fn connect(&self) -> ::grpcio::Result<(::grpcio::ClientDuplexSender<super::common::Envelope>, ::grpcio::ClientDuplexReceiver<super::common::Envelope>)> {
-        self.connect_opt(::grpcio::CallOption::default())
+    pub fn broadcast(&self, req: &super::common::Envelope) -> ::grpcio::Result<super::common::Empty> {
+        self.broadcast_opt(req, ::grpcio::CallOption::default())
+    }
+
+    pub fn broadcast_async_opt(&self, req: &super::common::Envelope, opt: ::grpcio::CallOption) -> ::grpcio::Result<::grpcio::ClientUnaryReceiver<super::common::Empty>> {
+        self.client.unary_call_async(&METHOD_NETWORK_BROADCAST, req, opt)
+    }
+
+    pub fn broadcast_async(&self, req: &super::common::Envelope) -> ::grpcio::Result<::grpcio::ClientUnaryReceiver<super::common::Empty>> {
+        self.broadcast_async_opt(req, ::grpcio::CallOption::default())
     }
     pub fn spawn<F>(&self, f: F) where F: ::futures::Future<Item = (), Error = ()> + Send + 'static {
         self.client.spawn(f)
@@ -102,14 +110,14 @@ impl NetworkClient {
 }
 
 pub trait Network {
-    fn connect(&mut self, ctx: ::grpcio::RpcContext, stream: ::grpcio::RequestStream<super::common::Envelope>, sink: ::grpcio::DuplexSink<super::common::Envelope>);
+    fn broadcast(&mut self, ctx: ::grpcio::RpcContext, req: super::common::Envelope, sink: ::grpcio::UnarySink<super::common::Empty>);
 }
 
 pub fn create_network<S: Network + Send + Clone + 'static>(s: S) -> ::grpcio::Service {
     let mut builder = ::grpcio::ServiceBuilder::new();
     let mut instance = s.clone();
-    builder = builder.add_duplex_streaming_handler(&METHOD_NETWORK_CONNECT, move |ctx, req, resp| {
-        instance.connect(ctx, req, resp)
+    builder = builder.add_unary_handler(&METHOD_NETWORK_BROADCAST, move |ctx, req, resp| {
+        instance.broadcast(ctx, req, resp)
     });
     builder.build()
 }

@@ -11,7 +11,7 @@ service Endorser {
 
 
 service Network {
-    rpc Connect (stream Envelope) returns (stream Envelope) {}
+    rpc Broadcast (Envelope) returns (Empty) {}
 }
 
 /*

@@ -606,8 +606,8 @@ static file_descriptor_proto_data: &'static [u8] = b"\
     \x02cc\x18\x02\x20\x01(\x0b2\x13.eraftpb.ConfChangeH\0R\x02cc\x12$\n\x03\
     msg\x18\x03\x20\x01(\x0b2\x10.eraftpb.MessageH\0R\x03msgB\x06\n\x04Type2\
     I\n\x08Endorser\x12=\n\x0fProcessProposal\x12\x0f.proto.Proposal\x1a\x17\
-    .proto.ProposalResponse\"\02<\n\x07Network\x121\n\x07Connect\x12\x0f.pro\
-    to.Envelope\x1a\x0f.proto.Envelope\"\0(\x010\x01b\x06proto3\
+    .proto.ProposalResponse\"\027\n\x07Network\x12,\n\tBroadcast\x12\x0f.pro\
+    to.Envelope\x1a\x0c.proto.Empty\"\0b\x06proto3\
 ";
 
 static mut file_descriptor_proto_lazy: ::protobuf::lazy::Lazy<::protobuf::descriptor::FileDescriptorProto> = ::protobuf::lazy::Lazy {
