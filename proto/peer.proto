@@ -16,22 +16,13 @@ service Network {
 
 /*
 |\_ Envelope
-    \_ NetworkMessage
-        \_ TypeMessage
-        \_ eraftpb.ConfChange
-        \_ eraftpb.Message
-
+    \_ NetMessage
 */
-
-message TypeMessage {
-    int32 type = 1;
-    bytes data = 2;
-}
 
 message NetMessage {
     oneof Type {
-        TypeMessage type_message = 1;
-        eraftpb.ConfChange raft_config_change = 2;
+        Proposal proposal = 1;
+        eraftpb.ConfChange config_change = 2;
         eraftpb.Message raft_message = 3;
     }
 }
