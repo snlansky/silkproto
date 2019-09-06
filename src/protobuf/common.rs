@@ -356,8 +356,8 @@ pub struct ChannelHeader {
     pub version: i32,
     pub timestamp: ::protobuf::SingularPtrField<Timestamp>,
     pub channel_id: ::std::string::String,
+    pub contract: ::std::string::String,
     pub tx_id: ::std::string::String,
-    pub tls_cert_hash: ::std::vec::Vec<u8>,
     // special fields
     pub unknown_fields: ::protobuf::UnknownFields,
     pub cached_size: ::protobuf::CachedSize,
@@ -463,7 +463,33 @@ impl ChannelHeader {
         ::std::mem::replace(&mut self.channel_id, ::std::string::String::new())
     }
 
-    // string tx_id = 5;
+    // string contract = 5;
+
+
+    pub fn get_contract(&self) -> &str {
+        &self.contract
+    }
+    pub fn clear_contract(&mut self) {
+        self.contract.clear();
+    }
+
+    // Param is passed by value, moved
+    pub fn set_contract(&mut self, v: ::std::string::String) {
+        self.contract = v;
+    }
+
+    // Mutable pointer to the field.
+    // If field is not initialized, it is initialized with default value first.
+    pub fn mut_contract(&mut self) -> &mut ::std::string::String {
+        &mut self.contract
+    }
+
+    // Take field
+    pub fn take_contract(&mut self) -> ::std::string::String {
+        ::std::mem::replace(&mut self.contract, ::std::string::String::new())
+    }
+
+    // string tx_id = 6;
 
 
     pub fn get_tx_id(&self) -> &str {
@@ -487,32 +513,6 @@ impl ChannelHeader {
     // Take field
     pub fn take_tx_id(&mut self) -> ::std::string::String {
         ::std::mem::replace(&mut self.tx_id, ::std::string::String::new())
-    }
-
-    // bytes tls_cert_hash = 6;
-
-
-    pub fn get_tls_cert_hash(&self) -> &[u8] {
-        &self.tls_cert_hash
-    }
-    pub fn clear_tls_cert_hash(&mut self) {
-        self.tls_cert_hash.clear();
-    }
-
-    // Param is passed by value, moved
-    pub fn set_tls_cert_hash(&mut self, v: ::std::vec::Vec<u8>) {
-        self.tls_cert_hash = v;
-    }
-
-    // Mutable pointer to the field.
-    // If field is not initialized, it is initialized with default value first.
-    pub fn mut_tls_cert_hash(&mut self) -> &mut ::std::vec::Vec<u8> {
-        &mut self.tls_cert_hash
-    }
-
-    // Take field
-    pub fn take_tls_cert_hash(&mut self) -> ::std::vec::Vec<u8> {
-        ::std::mem::replace(&mut self.tls_cert_hash, ::std::vec::Vec::new())
     }
 }
 
@@ -551,10 +551,10 @@ impl ::protobuf::Message for ChannelHeader {
                     ::protobuf::rt::read_singular_proto3_string_into(wire_type, is, &mut self.channel_id)?;
                 },
                 5 => {
-                    ::protobuf::rt::read_singular_proto3_string_into(wire_type, is, &mut self.tx_id)?;
+                    ::protobuf::rt::read_singular_proto3_string_into(wire_type, is, &mut self.contract)?;
                 },
                 6 => {
-                    ::protobuf::rt::read_singular_proto3_bytes_into(wire_type, is, &mut self.tls_cert_hash)?;
+                    ::protobuf::rt::read_singular_proto3_string_into(wire_type, is, &mut self.tx_id)?;
                 },
                 _ => {
                     ::protobuf::rt::read_unknown_or_skip_group(field_number, wire_type, is, self.mut_unknown_fields())?;
@@ -581,11 +581,11 @@ impl ::protobuf::Message for ChannelHeader {
         if !self.channel_id.is_empty() {
             my_size += ::protobuf::rt::string_size(4, &self.channel_id);
         }
-        if !self.tx_id.is_empty() {
-            my_size += ::protobuf::rt::string_size(5, &self.tx_id);
+        if !self.contract.is_empty() {
+            my_size += ::protobuf::rt::string_size(5, &self.contract);
         }
-        if !self.tls_cert_hash.is_empty() {
-            my_size += ::protobuf::rt::bytes_size(6, &self.tls_cert_hash);
+        if !self.tx_id.is_empty() {
+            my_size += ::protobuf::rt::string_size(6, &self.tx_id);
         }
         my_size += ::protobuf::rt::unknown_fields_size(self.get_unknown_fields());
         self.cached_size.set(my_size);
@@ -607,11 +607,11 @@ impl ::protobuf::Message for ChannelHeader {
         if !self.channel_id.is_empty() {
             os.write_string(4, &self.channel_id)?;
         }
-        if !self.tx_id.is_empty() {
-            os.write_string(5, &self.tx_id)?;
+        if !self.contract.is_empty() {
+            os.write_string(5, &self.contract)?;
         }
-        if !self.tls_cert_hash.is_empty() {
-            os.write_bytes(6, &self.tls_cert_hash)?;
+        if !self.tx_id.is_empty() {
+            os.write_string(6, &self.tx_id)?;
         }
         os.write_unknown_fields(self.get_unknown_fields())?;
         ::std::result::Result::Ok(())
@@ -676,14 +676,14 @@ impl ::protobuf::Message for ChannelHeader {
                     |m: &mut ChannelHeader| { &mut m.channel_id },
                 ));
                 fields.push(::protobuf::reflect::accessor::make_simple_field_accessor::<_, ::protobuf::types::ProtobufTypeString>(
+                    "contract",
+                    |m: &ChannelHeader| { &m.contract },
+                    |m: &mut ChannelHeader| { &mut m.contract },
+                ));
+                fields.push(::protobuf::reflect::accessor::make_simple_field_accessor::<_, ::protobuf::types::ProtobufTypeString>(
                     "tx_id",
                     |m: &ChannelHeader| { &m.tx_id },
                     |m: &mut ChannelHeader| { &mut m.tx_id },
-                ));
-                fields.push(::protobuf::reflect::accessor::make_simple_field_accessor::<_, ::protobuf::types::ProtobufTypeBytes>(
-                    "tls_cert_hash",
-                    |m: &ChannelHeader| { &m.tls_cert_hash },
-                    |m: &mut ChannelHeader| { &mut m.tls_cert_hash },
                 ));
                 ::protobuf::reflect::MessageDescriptor::new::<ChannelHeader>(
                     "ChannelHeader",
@@ -711,8 +711,8 @@ impl ::protobuf::Clear for ChannelHeader {
         self.version = 0;
         self.timestamp.clear();
         self.channel_id.clear();
+        self.contract.clear();
         self.tx_id.clear();
-        self.tls_cert_hash.clear();
         self.unknown_fields.clear();
     }
 }
@@ -730,10 +730,667 @@ impl ::protobuf::reflect::ProtobufValue for ChannelHeader {
 }
 
 #[derive(PartialEq,Clone,Default)]
+pub struct SignatureHeader {
+    // message fields
+    pub creator: ::std::vec::Vec<u8>,
+    pub nonce: ::std::vec::Vec<u8>,
+    // special fields
+    pub unknown_fields: ::protobuf::UnknownFields,
+    pub cached_size: ::protobuf::CachedSize,
+}
+
+impl<'a> ::std::default::Default for &'a SignatureHeader {
+    fn default() -> &'a SignatureHeader {
+        <SignatureHeader as ::protobuf::Message>::default_instance()
+    }
+}
+
+impl SignatureHeader {
+    pub fn new() -> SignatureHeader {
+        ::std::default::Default::default()
+    }
+
+    // bytes creator = 1;
+
+
+    pub fn get_creator(&self) -> &[u8] {
+        &self.creator
+    }
+    pub fn clear_creator(&mut self) {
+        self.creator.clear();
+    }
+
+    // Param is passed by value, moved
+    pub fn set_creator(&mut self, v: ::std::vec::Vec<u8>) {
+        self.creator = v;
+    }
+
+    // Mutable pointer to the field.
+    // If field is not initialized, it is initialized with default value first.
+    pub fn mut_creator(&mut self) -> &mut ::std::vec::Vec<u8> {
+        &mut self.creator
+    }
+
+    // Take field
+    pub fn take_creator(&mut self) -> ::std::vec::Vec<u8> {
+        ::std::mem::replace(&mut self.creator, ::std::vec::Vec::new())
+    }
+
+    // bytes nonce = 2;
+
+
+    pub fn get_nonce(&self) -> &[u8] {
+        &self.nonce
+    }
+    pub fn clear_nonce(&mut self) {
+        self.nonce.clear();
+    }
+
+    // Param is passed by value, moved
+    pub fn set_nonce(&mut self, v: ::std::vec::Vec<u8>) {
+        self.nonce = v;
+    }
+
+    // Mutable pointer to the field.
+    // If field is not initialized, it is initialized with default value first.
+    pub fn mut_nonce(&mut self) -> &mut ::std::vec::Vec<u8> {
+        &mut self.nonce
+    }
+
+    // Take field
+    pub fn take_nonce(&mut self) -> ::std::vec::Vec<u8> {
+        ::std::mem::replace(&mut self.nonce, ::std::vec::Vec::new())
+    }
+}
+
+impl ::protobuf::Message for SignatureHeader {
+    fn is_initialized(&self) -> bool {
+        true
+    }
+
+    fn merge_from(&mut self, is: &mut ::protobuf::CodedInputStream) -> ::protobuf::ProtobufResult<()> {
+        while !is.eof()? {
+            let (field_number, wire_type) = is.read_tag_unpack()?;
+            match field_number {
+                1 => {
+                    ::protobuf::rt::read_singular_proto3_bytes_into(wire_type, is, &mut self.creator)?;
+                },
+                2 => {
+                    ::protobuf::rt::read_singular_proto3_bytes_into(wire_type, is, &mut self.nonce)?;
+                },
+                _ => {
+                    ::protobuf::rt::read_unknown_or_skip_group(field_number, wire_type, is, self.mut_unknown_fields())?;
+                },
+            };
+        }
+        ::std::result::Result::Ok(())
+    }
+
+    // Compute sizes of nested messages
+    #[allow(unused_variables)]
+    fn compute_size(&self) -> u32 {
+        let mut my_size = 0;
+        if !self.creator.is_empty() {
+            my_size += ::protobuf::rt::bytes_size(1, &self.creator);
+        }
+        if !self.nonce.is_empty() {
+            my_size += ::protobuf::rt::bytes_size(2, &self.nonce);
+        }
+        my_size += ::protobuf::rt::unknown_fields_size(self.get_unknown_fields());
+        self.cached_size.set(my_size);
+        my_size
+    }
+
+    fn write_to_with_cached_sizes(&self, os: &mut ::protobuf::CodedOutputStream) -> ::protobuf::ProtobufResult<()> {
+        if !self.creator.is_empty() {
+            os.write_bytes(1, &self.creator)?;
+        }
+        if !self.nonce.is_empty() {
+            os.write_bytes(2, &self.nonce)?;
+        }
+        os.write_unknown_fields(self.get_unknown_fields())?;
+        ::std::result::Result::Ok(())
+    }
+
+    fn get_cached_size(&self) -> u32 {
+        self.cached_size.get()
+    }
+
+    fn get_unknown_fields(&self) -> &::protobuf::UnknownFields {
+        &self.unknown_fields
+    }
+
+    fn mut_unknown_fields(&mut self) -> &mut ::protobuf::UnknownFields {
+        &mut self.unknown_fields
+    }
+
+    fn as_any(&self) -> &dyn (::std::any::Any) {
+        self as &dyn (::std::any::Any)
+    }
+    fn as_any_mut(&mut self) -> &mut dyn (::std::any::Any) {
+        self as &mut dyn (::std::any::Any)
+    }
+    fn into_any(self: Box<Self>) -> ::std::boxed::Box<dyn (::std::any::Any)> {
+        self
+    }
+
+    fn descriptor(&self) -> &'static ::protobuf::reflect::MessageDescriptor {
+        Self::descriptor_static()
+    }
+
+    fn new() -> SignatureHeader {
+        SignatureHeader::new()
+    }
+
+    fn descriptor_static() -> &'static ::protobuf::reflect::MessageDescriptor {
+        static mut descriptor: ::protobuf::lazy::Lazy<::protobuf::reflect::MessageDescriptor> = ::protobuf::lazy::Lazy {
+            lock: ::protobuf::lazy::ONCE_INIT,
+            ptr: 0 as *const ::protobuf::reflect::MessageDescriptor,
+        };
+        unsafe {
+            descriptor.get(|| {
+                let mut fields = ::std::vec::Vec::new();
+                fields.push(::protobuf::reflect::accessor::make_simple_field_accessor::<_, ::protobuf::types::ProtobufTypeBytes>(
+                    "creator",
+                    |m: &SignatureHeader| { &m.creator },
+                    |m: &mut SignatureHeader| { &mut m.creator },
+                ));
+                fields.push(::protobuf::reflect::accessor::make_simple_field_accessor::<_, ::protobuf::types::ProtobufTypeBytes>(
+                    "nonce",
+                    |m: &SignatureHeader| { &m.nonce },
+                    |m: &mut SignatureHeader| { &mut m.nonce },
+                ));
+                ::protobuf::reflect::MessageDescriptor::new::<SignatureHeader>(
+                    "SignatureHeader",
+                    fields,
+                    file_descriptor_proto()
+                )
+            })
+        }
+    }
+
+    fn default_instance() -> &'static SignatureHeader {
+        static mut instance: ::protobuf::lazy::Lazy<SignatureHeader> = ::protobuf::lazy::Lazy {
+            lock: ::protobuf::lazy::ONCE_INIT,
+            ptr: 0 as *const SignatureHeader,
+        };
+        unsafe {
+            instance.get(SignatureHeader::new)
+        }
+    }
+}
+
+impl ::protobuf::Clear for SignatureHeader {
+    fn clear(&mut self) {
+        self.creator.clear();
+        self.nonce.clear();
+        self.unknown_fields.clear();
+    }
+}
+
+impl ::std::fmt::Debug for SignatureHeader {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        ::protobuf::text_format::fmt(self, f)
+    }
+}
+
+impl ::protobuf::reflect::ProtobufValue for SignatureHeader {
+    fn as_ref(&self) -> ::protobuf::reflect::ProtobufValueRef {
+        ::protobuf::reflect::ProtobufValueRef::Message(self)
+    }
+}
+
+#[derive(PartialEq,Clone,Default)]
+pub struct Header {
+    // message fields
+    pub channel_header: ::protobuf::SingularPtrField<ChannelHeader>,
+    pub signature_header: ::protobuf::SingularPtrField<SignatureHeader>,
+    // special fields
+    pub unknown_fields: ::protobuf::UnknownFields,
+    pub cached_size: ::protobuf::CachedSize,
+}
+
+impl<'a> ::std::default::Default for &'a Header {
+    fn default() -> &'a Header {
+        <Header as ::protobuf::Message>::default_instance()
+    }
+}
+
+impl Header {
+    pub fn new() -> Header {
+        ::std::default::Default::default()
+    }
+
+    // .proto.ChannelHeader channel_header = 1;
+
+
+    pub fn get_channel_header(&self) -> &ChannelHeader {
+        self.channel_header.as_ref().unwrap_or_else(|| ChannelHeader::default_instance())
+    }
+    pub fn clear_channel_header(&mut self) {
+        self.channel_header.clear();
+    }
+
+    pub fn has_channel_header(&self) -> bool {
+        self.channel_header.is_some()
+    }
+
+    // Param is passed by value, moved
+    pub fn set_channel_header(&mut self, v: ChannelHeader) {
+        self.channel_header = ::protobuf::SingularPtrField::some(v);
+    }
+
+    // Mutable pointer to the field.
+    // If field is not initialized, it is initialized with default value first.
+    pub fn mut_channel_header(&mut self) -> &mut ChannelHeader {
+        if self.channel_header.is_none() {
+            self.channel_header.set_default();
+        }
+        self.channel_header.as_mut().unwrap()
+    }
+
+    // Take field
+    pub fn take_channel_header(&mut self) -> ChannelHeader {
+        self.channel_header.take().unwrap_or_else(|| ChannelHeader::new())
+    }
+
+    // .proto.SignatureHeader signature_header = 2;
+
+
+    pub fn get_signature_header(&self) -> &SignatureHeader {
+        self.signature_header.as_ref().unwrap_or_else(|| SignatureHeader::default_instance())
+    }
+    pub fn clear_signature_header(&mut self) {
+        self.signature_header.clear();
+    }
+
+    pub fn has_signature_header(&self) -> bool {
+        self.signature_header.is_some()
+    }
+
+    // Param is passed by value, moved
+    pub fn set_signature_header(&mut self, v: SignatureHeader) {
+        self.signature_header = ::protobuf::SingularPtrField::some(v);
+    }
+
+    // Mutable pointer to the field.
+    // If field is not initialized, it is initialized with default value first.
+    pub fn mut_signature_header(&mut self) -> &mut SignatureHeader {
+        if self.signature_header.is_none() {
+            self.signature_header.set_default();
+        }
+        self.signature_header.as_mut().unwrap()
+    }
+
+    // Take field
+    pub fn take_signature_header(&mut self) -> SignatureHeader {
+        self.signature_header.take().unwrap_or_else(|| SignatureHeader::new())
+    }
+}
+
+impl ::protobuf::Message for Header {
+    fn is_initialized(&self) -> bool {
+        for v in &self.channel_header {
+            if !v.is_initialized() {
+                return false;
+            }
+        };
+        for v in &self.signature_header {
+            if !v.is_initialized() {
+                return false;
+            }
+        };
+        true
+    }
+
+    fn merge_from(&mut self, is: &mut ::protobuf::CodedInputStream) -> ::protobuf::ProtobufResult<()> {
+        while !is.eof()? {
+            let (field_number, wire_type) = is.read_tag_unpack()?;
+            match field_number {
+                1 => {
+                    ::protobuf::rt::read_singular_message_into(wire_type, is, &mut self.channel_header)?;
+                },
+                2 => {
+                    ::protobuf::rt::read_singular_message_into(wire_type, is, &mut self.signature_header)?;
+                },
+                _ => {
+                    ::protobuf::rt::read_unknown_or_skip_group(field_number, wire_type, is, self.mut_unknown_fields())?;
+                },
+            };
+        }
+        ::std::result::Result::Ok(())
+    }
+
+    // Compute sizes of nested messages
+    #[allow(unused_variables)]
+    fn compute_size(&self) -> u32 {
+        let mut my_size = 0;
+        if let Some(ref v) = self.channel_header.as_ref() {
+            let len = v.compute_size();
+            my_size += 1 + ::protobuf::rt::compute_raw_varint32_size(len) + len;
+        }
+        if let Some(ref v) = self.signature_header.as_ref() {
+            let len = v.compute_size();
+            my_size += 1 + ::protobuf::rt::compute_raw_varint32_size(len) + len;
+        }
+        my_size += ::protobuf::rt::unknown_fields_size(self.get_unknown_fields());
+        self.cached_size.set(my_size);
+        my_size
+    }
+
+    fn write_to_with_cached_sizes(&self, os: &mut ::protobuf::CodedOutputStream) -> ::protobuf::ProtobufResult<()> {
+        if let Some(ref v) = self.channel_header.as_ref() {
+            os.write_tag(1, ::protobuf::wire_format::WireTypeLengthDelimited)?;
+            os.write_raw_varint32(v.get_cached_size())?;
+            v.write_to_with_cached_sizes(os)?;
+        }
+        if let Some(ref v) = self.signature_header.as_ref() {
+            os.write_tag(2, ::protobuf::wire_format::WireTypeLengthDelimited)?;
+            os.write_raw_varint32(v.get_cached_size())?;
+            v.write_to_with_cached_sizes(os)?;
+        }
+        os.write_unknown_fields(self.get_unknown_fields())?;
+        ::std::result::Result::Ok(())
+    }
+
+    fn get_cached_size(&self) -> u32 {
+        self.cached_size.get()
+    }
+
+    fn get_unknown_fields(&self) -> &::protobuf::UnknownFields {
+        &self.unknown_fields
+    }
+
+    fn mut_unknown_fields(&mut self) -> &mut ::protobuf::UnknownFields {
+        &mut self.unknown_fields
+    }
+
+    fn as_any(&self) -> &dyn (::std::any::Any) {
+        self as &dyn (::std::any::Any)
+    }
+    fn as_any_mut(&mut self) -> &mut dyn (::std::any::Any) {
+        self as &mut dyn (::std::any::Any)
+    }
+    fn into_any(self: Box<Self>) -> ::std::boxed::Box<dyn (::std::any::Any)> {
+        self
+    }
+
+    fn descriptor(&self) -> &'static ::protobuf::reflect::MessageDescriptor {
+        Self::descriptor_static()
+    }
+
+    fn new() -> Header {
+        Header::new()
+    }
+
+    fn descriptor_static() -> &'static ::protobuf::reflect::MessageDescriptor {
+        static mut descriptor: ::protobuf::lazy::Lazy<::protobuf::reflect::MessageDescriptor> = ::protobuf::lazy::Lazy {
+            lock: ::protobuf::lazy::ONCE_INIT,
+            ptr: 0 as *const ::protobuf::reflect::MessageDescriptor,
+        };
+        unsafe {
+            descriptor.get(|| {
+                let mut fields = ::std::vec::Vec::new();
+                fields.push(::protobuf::reflect::accessor::make_singular_ptr_field_accessor::<_, ::protobuf::types::ProtobufTypeMessage<ChannelHeader>>(
+                    "channel_header",
+                    |m: &Header| { &m.channel_header },
+                    |m: &mut Header| { &mut m.channel_header },
+                ));
+                fields.push(::protobuf::reflect::accessor::make_singular_ptr_field_accessor::<_, ::protobuf::types::ProtobufTypeMessage<SignatureHeader>>(
+                    "signature_header",
+                    |m: &Header| { &m.signature_header },
+                    |m: &mut Header| { &mut m.signature_header },
+                ));
+                ::protobuf::reflect::MessageDescriptor::new::<Header>(
+                    "Header",
+                    fields,
+                    file_descriptor_proto()
+                )
+            })
+        }
+    }
+
+    fn default_instance() -> &'static Header {
+        static mut instance: ::protobuf::lazy::Lazy<Header> = ::protobuf::lazy::Lazy {
+            lock: ::protobuf::lazy::ONCE_INIT,
+            ptr: 0 as *const Header,
+        };
+        unsafe {
+            instance.get(Header::new)
+        }
+    }
+}
+
+impl ::protobuf::Clear for Header {
+    fn clear(&mut self) {
+        self.channel_header.clear();
+        self.signature_header.clear();
+        self.unknown_fields.clear();
+    }
+}
+
+impl ::std::fmt::Debug for Header {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        ::protobuf::text_format::fmt(self, f)
+    }
+}
+
+impl ::protobuf::reflect::ProtobufValue for Header {
+    fn as_ref(&self) -> ::protobuf::reflect::ProtobufValueRef {
+        ::protobuf::reflect::ProtobufValueRef::Message(self)
+    }
+}
+
+#[derive(PartialEq,Clone,Default)]
+pub struct ContractInput {
+    // message fields
+    pub args: ::protobuf::RepeatedField<::std::vec::Vec<u8>>,
+    pub decorations: ::std::collections::HashMap<::std::string::String, ::std::vec::Vec<u8>>,
+    // special fields
+    pub unknown_fields: ::protobuf::UnknownFields,
+    pub cached_size: ::protobuf::CachedSize,
+}
+
+impl<'a> ::std::default::Default for &'a ContractInput {
+    fn default() -> &'a ContractInput {
+        <ContractInput as ::protobuf::Message>::default_instance()
+    }
+}
+
+impl ContractInput {
+    pub fn new() -> ContractInput {
+        ::std::default::Default::default()
+    }
+
+    // repeated bytes args = 1;
+
+
+    pub fn get_args(&self) -> &[::std::vec::Vec<u8>] {
+        &self.args
+    }
+    pub fn clear_args(&mut self) {
+        self.args.clear();
+    }
+
+    // Param is passed by value, moved
+    pub fn set_args(&mut self, v: ::protobuf::RepeatedField<::std::vec::Vec<u8>>) {
+        self.args = v;
+    }
+
+    // Mutable pointer to the field.
+    pub fn mut_args(&mut self) -> &mut ::protobuf::RepeatedField<::std::vec::Vec<u8>> {
+        &mut self.args
+    }
+
+    // Take field
+    pub fn take_args(&mut self) -> ::protobuf::RepeatedField<::std::vec::Vec<u8>> {
+        ::std::mem::replace(&mut self.args, ::protobuf::RepeatedField::new())
+    }
+
+    // repeated .proto.ContractInput.DecorationsEntry decorations = 2;
+
+
+    pub fn get_decorations(&self) -> &::std::collections::HashMap<::std::string::String, ::std::vec::Vec<u8>> {
+        &self.decorations
+    }
+    pub fn clear_decorations(&mut self) {
+        self.decorations.clear();
+    }
+
+    // Param is passed by value, moved
+    pub fn set_decorations(&mut self, v: ::std::collections::HashMap<::std::string::String, ::std::vec::Vec<u8>>) {
+        self.decorations = v;
+    }
+
+    // Mutable pointer to the field.
+    pub fn mut_decorations(&mut self) -> &mut ::std::collections::HashMap<::std::string::String, ::std::vec::Vec<u8>> {
+        &mut self.decorations
+    }
+
+    // Take field
+    pub fn take_decorations(&mut self) -> ::std::collections::HashMap<::std::string::String, ::std::vec::Vec<u8>> {
+        ::std::mem::replace(&mut self.decorations, ::std::collections::HashMap::new())
+    }
+}
+
+impl ::protobuf::Message for ContractInput {
+    fn is_initialized(&self) -> bool {
+        true
+    }
+
+    fn merge_from(&mut self, is: &mut ::protobuf::CodedInputStream) -> ::protobuf::ProtobufResult<()> {
+        while !is.eof()? {
+            let (field_number, wire_type) = is.read_tag_unpack()?;
+            match field_number {
+                1 => {
+                    ::protobuf::rt::read_repeated_bytes_into(wire_type, is, &mut self.args)?;
+                },
+                2 => {
+                    ::protobuf::rt::read_map_into::<::protobuf::types::ProtobufTypeString, ::protobuf::types::ProtobufTypeBytes>(wire_type, is, &mut self.decorations)?;
+                },
+                _ => {
+                    ::protobuf::rt::read_unknown_or_skip_group(field_number, wire_type, is, self.mut_unknown_fields())?;
+                },
+            };
+        }
+        ::std::result::Result::Ok(())
+    }
+
+    // Compute sizes of nested messages
+    #[allow(unused_variables)]
+    fn compute_size(&self) -> u32 {
+        let mut my_size = 0;
+        for value in &self.args {
+            my_size += ::protobuf::rt::bytes_size(1, &value);
+        };
+        my_size += ::protobuf::rt::compute_map_size::<::protobuf::types::ProtobufTypeString, ::protobuf::types::ProtobufTypeBytes>(2, &self.decorations);
+        my_size += ::protobuf::rt::unknown_fields_size(self.get_unknown_fields());
+        self.cached_size.set(my_size);
+        my_size
+    }
+
+    fn write_to_with_cached_sizes(&self, os: &mut ::protobuf::CodedOutputStream) -> ::protobuf::ProtobufResult<()> {
+        for v in &self.args {
+            os.write_bytes(1, &v)?;
+        };
+        ::protobuf::rt::write_map_with_cached_sizes::<::protobuf::types::ProtobufTypeString, ::protobuf::types::ProtobufTypeBytes>(2, &self.decorations, os)?;
+        os.write_unknown_fields(self.get_unknown_fields())?;
+        ::std::result::Result::Ok(())
+    }
+
+    fn get_cached_size(&self) -> u32 {
+        self.cached_size.get()
+    }
+
+    fn get_unknown_fields(&self) -> &::protobuf::UnknownFields {
+        &self.unknown_fields
+    }
+
+    fn mut_unknown_fields(&mut self) -> &mut ::protobuf::UnknownFields {
+        &mut self.unknown_fields
+    }
+
+    fn as_any(&self) -> &dyn (::std::any::Any) {
+        self as &dyn (::std::any::Any)
+    }
+    fn as_any_mut(&mut self) -> &mut dyn (::std::any::Any) {
+        self as &mut dyn (::std::any::Any)
+    }
+    fn into_any(self: Box<Self>) -> ::std::boxed::Box<dyn (::std::any::Any)> {
+        self
+    }
+
+    fn descriptor(&self) -> &'static ::protobuf::reflect::MessageDescriptor {
+        Self::descriptor_static()
+    }
+
+    fn new() -> ContractInput {
+        ContractInput::new()
+    }
+
+    fn descriptor_static() -> &'static ::protobuf::reflect::MessageDescriptor {
+        static mut descriptor: ::protobuf::lazy::Lazy<::protobuf::reflect::MessageDescriptor> = ::protobuf::lazy::Lazy {
+            lock: ::protobuf::lazy::ONCE_INIT,
+            ptr: 0 as *const ::protobuf::reflect::MessageDescriptor,
+        };
+        unsafe {
+            descriptor.get(|| {
+                let mut fields = ::std::vec::Vec::new();
+                fields.push(::protobuf::reflect::accessor::make_repeated_field_accessor::<_, ::protobuf::types::ProtobufTypeBytes>(
+                    "args",
+                    |m: &ContractInput| { &m.args },
+                    |m: &mut ContractInput| { &mut m.args },
+                ));
+                fields.push(::protobuf::reflect::accessor::make_map_accessor::<_, ::protobuf::types::ProtobufTypeString, ::protobuf::types::ProtobufTypeBytes>(
+                    "decorations",
+                    |m: &ContractInput| { &m.decorations },
+                    |m: &mut ContractInput| { &mut m.decorations },
+                ));
+                ::protobuf::reflect::MessageDescriptor::new::<ContractInput>(
+                    "ContractInput",
+                    fields,
+                    file_descriptor_proto()
+                )
+            })
+        }
+    }
+
+    fn default_instance() -> &'static ContractInput {
+        static mut instance: ::protobuf::lazy::Lazy<ContractInput> = ::protobuf::lazy::Lazy {
+            lock: ::protobuf::lazy::ONCE_INIT,
+            ptr: 0 as *const ContractInput,
+        };
+        unsafe {
+            instance.get(ContractInput::new)
+        }
+    }
+}
+
+impl ::protobuf::Clear for ContractInput {
+    fn clear(&mut self) {
+        self.args.clear();
+        self.decorations.clear();
+        self.unknown_fields.clear();
+    }
+}
+
+impl ::std::fmt::Debug for ContractInput {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        ::protobuf::text_format::fmt(self, f)
+    }
+}
+
+impl ::protobuf::reflect::ProtobufValue for ContractInput {
+    fn as_ref(&self) -> ::protobuf::reflect::ProtobufValueRef {
+        ::protobuf::reflect::ProtobufValueRef::Message(self)
+    }
+}
+
+#[derive(PartialEq,Clone,Default)]
 pub struct Proposal {
     // message fields
-    pub header: ::protobuf::SingularPtrField<ChannelHeader>,
-    pub payload: ::std::vec::Vec<u8>,
+    pub header: ::protobuf::SingularPtrField<Header>,
+    pub input: ::protobuf::SingularPtrField<ContractInput>,
     // special fields
     pub unknown_fields: ::protobuf::UnknownFields,
     pub cached_size: ::protobuf::CachedSize,
@@ -750,11 +1407,11 @@ impl Proposal {
         ::std::default::Default::default()
     }
 
-    // .proto.ChannelHeader header = 2;
+    // .proto.Header header = 1;
 
 
-    pub fn get_header(&self) -> &ChannelHeader {
-        self.header.as_ref().unwrap_or_else(|| ChannelHeader::default_instance())
+    pub fn get_header(&self) -> &Header {
+        self.header.as_ref().unwrap_or_else(|| Header::default_instance())
     }
     pub fn clear_header(&mut self) {
         self.header.clear();
@@ -765,13 +1422,13 @@ impl Proposal {
     }
 
     // Param is passed by value, moved
-    pub fn set_header(&mut self, v: ChannelHeader) {
+    pub fn set_header(&mut self, v: Header) {
         self.header = ::protobuf::SingularPtrField::some(v);
     }
 
     // Mutable pointer to the field.
     // If field is not initialized, it is initialized with default value first.
-    pub fn mut_header(&mut self) -> &mut ChannelHeader {
+    pub fn mut_header(&mut self) -> &mut Header {
         if self.header.is_none() {
             self.header.set_default();
         }
@@ -779,40 +1436,52 @@ impl Proposal {
     }
 
     // Take field
-    pub fn take_header(&mut self) -> ChannelHeader {
-        self.header.take().unwrap_or_else(|| ChannelHeader::new())
+    pub fn take_header(&mut self) -> Header {
+        self.header.take().unwrap_or_else(|| Header::new())
     }
 
-    // bytes payload = 3;
+    // .proto.ContractInput input = 2;
 
 
-    pub fn get_payload(&self) -> &[u8] {
-        &self.payload
+    pub fn get_input(&self) -> &ContractInput {
+        self.input.as_ref().unwrap_or_else(|| ContractInput::default_instance())
     }
-    pub fn clear_payload(&mut self) {
-        self.payload.clear();
+    pub fn clear_input(&mut self) {
+        self.input.clear();
+    }
+
+    pub fn has_input(&self) -> bool {
+        self.input.is_some()
     }
 
     // Param is passed by value, moved
-    pub fn set_payload(&mut self, v: ::std::vec::Vec<u8>) {
-        self.payload = v;
+    pub fn set_input(&mut self, v: ContractInput) {
+        self.input = ::protobuf::SingularPtrField::some(v);
     }
 
     // Mutable pointer to the field.
     // If field is not initialized, it is initialized with default value first.
-    pub fn mut_payload(&mut self) -> &mut ::std::vec::Vec<u8> {
-        &mut self.payload
+    pub fn mut_input(&mut self) -> &mut ContractInput {
+        if self.input.is_none() {
+            self.input.set_default();
+        }
+        self.input.as_mut().unwrap()
     }
 
     // Take field
-    pub fn take_payload(&mut self) -> ::std::vec::Vec<u8> {
-        ::std::mem::replace(&mut self.payload, ::std::vec::Vec::new())
+    pub fn take_input(&mut self) -> ContractInput {
+        self.input.take().unwrap_or_else(|| ContractInput::new())
     }
 }
 
 impl ::protobuf::Message for Proposal {
     fn is_initialized(&self) -> bool {
         for v in &self.header {
+            if !v.is_initialized() {
+                return false;
+            }
+        };
+        for v in &self.input {
             if !v.is_initialized() {
                 return false;
             }
@@ -824,11 +1493,11 @@ impl ::protobuf::Message for Proposal {
         while !is.eof()? {
             let (field_number, wire_type) = is.read_tag_unpack()?;
             match field_number {
-                2 => {
+                1 => {
                     ::protobuf::rt::read_singular_message_into(wire_type, is, &mut self.header)?;
                 },
-                3 => {
-                    ::protobuf::rt::read_singular_proto3_bytes_into(wire_type, is, &mut self.payload)?;
+                2 => {
+                    ::protobuf::rt::read_singular_message_into(wire_type, is, &mut self.input)?;
                 },
                 _ => {
                     ::protobuf::rt::read_unknown_or_skip_group(field_number, wire_type, is, self.mut_unknown_fields())?;
@@ -846,8 +1515,9 @@ impl ::protobuf::Message for Proposal {
             let len = v.compute_size();
             my_size += 1 + ::protobuf::rt::compute_raw_varint32_size(len) + len;
         }
-        if !self.payload.is_empty() {
-            my_size += ::protobuf::rt::bytes_size(3, &self.payload);
+        if let Some(ref v) = self.input.as_ref() {
+            let len = v.compute_size();
+            my_size += 1 + ::protobuf::rt::compute_raw_varint32_size(len) + len;
         }
         my_size += ::protobuf::rt::unknown_fields_size(self.get_unknown_fields());
         self.cached_size.set(my_size);
@@ -856,12 +1526,14 @@ impl ::protobuf::Message for Proposal {
 
     fn write_to_with_cached_sizes(&self, os: &mut ::protobuf::CodedOutputStream) -> ::protobuf::ProtobufResult<()> {
         if let Some(ref v) = self.header.as_ref() {
-            os.write_tag(2, ::protobuf::wire_format::WireTypeLengthDelimited)?;
+            os.write_tag(1, ::protobuf::wire_format::WireTypeLengthDelimited)?;
             os.write_raw_varint32(v.get_cached_size())?;
             v.write_to_with_cached_sizes(os)?;
         }
-        if !self.payload.is_empty() {
-            os.write_bytes(3, &self.payload)?;
+        if let Some(ref v) = self.input.as_ref() {
+            os.write_tag(2, ::protobuf::wire_format::WireTypeLengthDelimited)?;
+            os.write_raw_varint32(v.get_cached_size())?;
+            v.write_to_with_cached_sizes(os)?;
         }
         os.write_unknown_fields(self.get_unknown_fields())?;
         ::std::result::Result::Ok(())
@@ -905,15 +1577,15 @@ impl ::protobuf::Message for Proposal {
         unsafe {
             descriptor.get(|| {
                 let mut fields = ::std::vec::Vec::new();
-                fields.push(::protobuf::reflect::accessor::make_singular_ptr_field_accessor::<_, ::protobuf::types::ProtobufTypeMessage<ChannelHeader>>(
+                fields.push(::protobuf::reflect::accessor::make_singular_ptr_field_accessor::<_, ::protobuf::types::ProtobufTypeMessage<Header>>(
                     "header",
                     |m: &Proposal| { &m.header },
                     |m: &mut Proposal| { &mut m.header },
                 ));
-                fields.push(::protobuf::reflect::accessor::make_simple_field_accessor::<_, ::protobuf::types::ProtobufTypeBytes>(
-                    "payload",
-                    |m: &Proposal| { &m.payload },
-                    |m: &mut Proposal| { &mut m.payload },
+                fields.push(::protobuf::reflect::accessor::make_singular_ptr_field_accessor::<_, ::protobuf::types::ProtobufTypeMessage<ContractInput>>(
+                    "input",
+                    |m: &Proposal| { &m.input },
+                    |m: &mut Proposal| { &mut m.input },
                 ));
                 ::protobuf::reflect::MessageDescriptor::new::<Proposal>(
                     "Proposal",
@@ -938,7 +1610,7 @@ impl ::protobuf::Message for Proposal {
 impl ::protobuf::Clear for Proposal {
     fn clear(&mut self) {
         self.header.clear();
-        self.payload.clear();
+        self.input.clear();
         self.unknown_fields.clear();
     }
 }
@@ -950,6 +1622,217 @@ impl ::std::fmt::Debug for Proposal {
 }
 
 impl ::protobuf::reflect::ProtobufValue for Proposal {
+    fn as_ref(&self) -> ::protobuf::reflect::ProtobufValueRef {
+        ::protobuf::reflect::ProtobufValueRef::Message(self)
+    }
+}
+
+#[derive(PartialEq,Clone,Default)]
+pub struct SignedProposal {
+    // message fields
+    pub proposal_bytes: ::std::vec::Vec<u8>,
+    pub signature: ::std::vec::Vec<u8>,
+    // special fields
+    pub unknown_fields: ::protobuf::UnknownFields,
+    pub cached_size: ::protobuf::CachedSize,
+}
+
+impl<'a> ::std::default::Default for &'a SignedProposal {
+    fn default() -> &'a SignedProposal {
+        <SignedProposal as ::protobuf::Message>::default_instance()
+    }
+}
+
+impl SignedProposal {
+    pub fn new() -> SignedProposal {
+        ::std::default::Default::default()
+    }
+
+    // bytes proposal_bytes = 1;
+
+
+    pub fn get_proposal_bytes(&self) -> &[u8] {
+        &self.proposal_bytes
+    }
+    pub fn clear_proposal_bytes(&mut self) {
+        self.proposal_bytes.clear();
+    }
+
+    // Param is passed by value, moved
+    pub fn set_proposal_bytes(&mut self, v: ::std::vec::Vec<u8>) {
+        self.proposal_bytes = v;
+    }
+
+    // Mutable pointer to the field.
+    // If field is not initialized, it is initialized with default value first.
+    pub fn mut_proposal_bytes(&mut self) -> &mut ::std::vec::Vec<u8> {
+        &mut self.proposal_bytes
+    }
+
+    // Take field
+    pub fn take_proposal_bytes(&mut self) -> ::std::vec::Vec<u8> {
+        ::std::mem::replace(&mut self.proposal_bytes, ::std::vec::Vec::new())
+    }
+
+    // bytes signature = 2;
+
+
+    pub fn get_signature(&self) -> &[u8] {
+        &self.signature
+    }
+    pub fn clear_signature(&mut self) {
+        self.signature.clear();
+    }
+
+    // Param is passed by value, moved
+    pub fn set_signature(&mut self, v: ::std::vec::Vec<u8>) {
+        self.signature = v;
+    }
+
+    // Mutable pointer to the field.
+    // If field is not initialized, it is initialized with default value first.
+    pub fn mut_signature(&mut self) -> &mut ::std::vec::Vec<u8> {
+        &mut self.signature
+    }
+
+    // Take field
+    pub fn take_signature(&mut self) -> ::std::vec::Vec<u8> {
+        ::std::mem::replace(&mut self.signature, ::std::vec::Vec::new())
+    }
+}
+
+impl ::protobuf::Message for SignedProposal {
+    fn is_initialized(&self) -> bool {
+        true
+    }
+
+    fn merge_from(&mut self, is: &mut ::protobuf::CodedInputStream) -> ::protobuf::ProtobufResult<()> {
+        while !is.eof()? {
+            let (field_number, wire_type) = is.read_tag_unpack()?;
+            match field_number {
+                1 => {
+                    ::protobuf::rt::read_singular_proto3_bytes_into(wire_type, is, &mut self.proposal_bytes)?;
+                },
+                2 => {
+                    ::protobuf::rt::read_singular_proto3_bytes_into(wire_type, is, &mut self.signature)?;
+                },
+                _ => {
+                    ::protobuf::rt::read_unknown_or_skip_group(field_number, wire_type, is, self.mut_unknown_fields())?;
+                },
+            };
+        }
+        ::std::result::Result::Ok(())
+    }
+
+    // Compute sizes of nested messages
+    #[allow(unused_variables)]
+    fn compute_size(&self) -> u32 {
+        let mut my_size = 0;
+        if !self.proposal_bytes.is_empty() {
+            my_size += ::protobuf::rt::bytes_size(1, &self.proposal_bytes);
+        }
+        if !self.signature.is_empty() {
+            my_size += ::protobuf::rt::bytes_size(2, &self.signature);
+        }
+        my_size += ::protobuf::rt::unknown_fields_size(self.get_unknown_fields());
+        self.cached_size.set(my_size);
+        my_size
+    }
+
+    fn write_to_with_cached_sizes(&self, os: &mut ::protobuf::CodedOutputStream) -> ::protobuf::ProtobufResult<()> {
+        if !self.proposal_bytes.is_empty() {
+            os.write_bytes(1, &self.proposal_bytes)?;
+        }
+        if !self.signature.is_empty() {
+            os.write_bytes(2, &self.signature)?;
+        }
+        os.write_unknown_fields(self.get_unknown_fields())?;
+        ::std::result::Result::Ok(())
+    }
+
+    fn get_cached_size(&self) -> u32 {
+        self.cached_size.get()
+    }
+
+    fn get_unknown_fields(&self) -> &::protobuf::UnknownFields {
+        &self.unknown_fields
+    }
+
+    fn mut_unknown_fields(&mut self) -> &mut ::protobuf::UnknownFields {
+        &mut self.unknown_fields
+    }
+
+    fn as_any(&self) -> &dyn (::std::any::Any) {
+        self as &dyn (::std::any::Any)
+    }
+    fn as_any_mut(&mut self) -> &mut dyn (::std::any::Any) {
+        self as &mut dyn (::std::any::Any)
+    }
+    fn into_any(self: Box<Self>) -> ::std::boxed::Box<dyn (::std::any::Any)> {
+        self
+    }
+
+    fn descriptor(&self) -> &'static ::protobuf::reflect::MessageDescriptor {
+        Self::descriptor_static()
+    }
+
+    fn new() -> SignedProposal {
+        SignedProposal::new()
+    }
+
+    fn descriptor_static() -> &'static ::protobuf::reflect::MessageDescriptor {
+        static mut descriptor: ::protobuf::lazy::Lazy<::protobuf::reflect::MessageDescriptor> = ::protobuf::lazy::Lazy {
+            lock: ::protobuf::lazy::ONCE_INIT,
+            ptr: 0 as *const ::protobuf::reflect::MessageDescriptor,
+        };
+        unsafe {
+            descriptor.get(|| {
+                let mut fields = ::std::vec::Vec::new();
+                fields.push(::protobuf::reflect::accessor::make_simple_field_accessor::<_, ::protobuf::types::ProtobufTypeBytes>(
+                    "proposal_bytes",
+                    |m: &SignedProposal| { &m.proposal_bytes },
+                    |m: &mut SignedProposal| { &mut m.proposal_bytes },
+                ));
+                fields.push(::protobuf::reflect::accessor::make_simple_field_accessor::<_, ::protobuf::types::ProtobufTypeBytes>(
+                    "signature",
+                    |m: &SignedProposal| { &m.signature },
+                    |m: &mut SignedProposal| { &mut m.signature },
+                ));
+                ::protobuf::reflect::MessageDescriptor::new::<SignedProposal>(
+                    "SignedProposal",
+                    fields,
+                    file_descriptor_proto()
+                )
+            })
+        }
+    }
+
+    fn default_instance() -> &'static SignedProposal {
+        static mut instance: ::protobuf::lazy::Lazy<SignedProposal> = ::protobuf::lazy::Lazy {
+            lock: ::protobuf::lazy::ONCE_INIT,
+            ptr: 0 as *const SignedProposal,
+        };
+        unsafe {
+            instance.get(SignedProposal::new)
+        }
+    }
+}
+
+impl ::protobuf::Clear for SignedProposal {
+    fn clear(&mut self) {
+        self.proposal_bytes.clear();
+        self.signature.clear();
+        self.unknown_fields.clear();
+    }
+}
+
+impl ::std::fmt::Debug for SignedProposal {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        ::protobuf::text_format::fmt(self, f)
+    }
+}
+
+impl ::protobuf::reflect::ProtobufValue for SignedProposal {
     fn as_ref(&self) -> ::protobuf::reflect::ProtobufValueRef {
         ::protobuf::reflect::ProtobufValueRef::Message(self)
     }
@@ -1488,27 +2371,100 @@ impl ::protobuf::reflect::ProtobufValue for Status {
     }
 }
 
+#[derive(Clone,PartialEq,Eq,Debug,Hash)]
+pub enum HeaderType {
+    QUERY = 0,
+    invoke = 1,
+    CONFIG = 2,
+    CONFIG_UPDATE = 3,
+}
+
+impl ::protobuf::ProtobufEnum for HeaderType {
+    fn value(&self) -> i32 {
+        *self as i32
+    }
+
+    fn from_i32(value: i32) -> ::std::option::Option<HeaderType> {
+        match value {
+            0 => ::std::option::Option::Some(HeaderType::QUERY),
+            1 => ::std::option::Option::Some(HeaderType::invoke),
+            2 => ::std::option::Option::Some(HeaderType::CONFIG),
+            3 => ::std::option::Option::Some(HeaderType::CONFIG_UPDATE),
+            _ => ::std::option::Option::None
+        }
+    }
+
+    fn values() -> &'static [Self] {
+        static values: &'static [HeaderType] = &[
+            HeaderType::QUERY,
+            HeaderType::invoke,
+            HeaderType::CONFIG,
+            HeaderType::CONFIG_UPDATE,
+        ];
+        values
+    }
+
+    fn enum_descriptor_static() -> &'static ::protobuf::reflect::EnumDescriptor {
+        static mut descriptor: ::protobuf::lazy::Lazy<::protobuf::reflect::EnumDescriptor> = ::protobuf::lazy::Lazy {
+            lock: ::protobuf::lazy::ONCE_INIT,
+            ptr: 0 as *const ::protobuf::reflect::EnumDescriptor,
+        };
+        unsafe {
+            descriptor.get(|| {
+                ::protobuf::reflect::EnumDescriptor::new("HeaderType", file_descriptor_proto())
+            })
+        }
+    }
+}
+
+impl ::std::marker::Copy for HeaderType {
+}
+
+impl ::std::default::Default for HeaderType {
+    fn default() -> Self {
+        HeaderType::QUERY
+    }
+}
+
+impl ::protobuf::reflect::ProtobufValue for HeaderType {
+    fn as_ref(&self) -> ::protobuf::reflect::ProtobufValueRef {
+        ::protobuf::reflect::ProtobufValueRef::Enum(self.descriptor())
+    }
+}
+
 static file_descriptor_proto_data: &'static [u8] = b"\
     \n\x0ccommon.proto\x12\x05proto\"\x07\n\x05Empty\";\n\tTimestamp\x12\x18\
     \n\x07seconds\x18\x01\x20\x01(\x03R\x07seconds\x12\x14\n\x05nanos\x18\
-    \x02\x20\x01(\x05R\x05nanos\"\xc5\x01\n\rChannelHeader\x12\x12\n\x04type\
+    \x02\x20\x01(\x05R\x05nanos\"\xbd\x01\n\rChannelHeader\x12\x12\n\x04type\
     \x18\x01\x20\x01(\x05R\x04type\x12\x18\n\x07version\x18\x02\x20\x01(\x05\
     R\x07version\x12.\n\ttimestamp\x18\x03\x20\x01(\x0b2\x10.proto.Timestamp\
     R\ttimestamp\x12\x1d\n\nchannel_id\x18\x04\x20\x01(\tR\tchannelId\x12\
-    \x13\n\x05tx_id\x18\x05\x20\x01(\tR\x04txId\x12\"\n\rtls_cert_hash\x18\
-    \x06\x20\x01(\x0cR\x0btlsCertHash\"R\n\x08Proposal\x12,\n\x06header\x18\
-    \x02\x20\x01(\x0b2\x14.proto.ChannelHeaderR\x06header\x12\x18\n\x07paylo\
-    ad\x18\x03\x20\x01(\x0cR\x07payload\"B\n\x08Envelope\x12\x18\n\x07payloa\
-    d\x18\x01\x20\x01(\x0cR\x07payload\x12\x1c\n\tsignature\x18\x02\x20\x01(\
-    \x0cR\tsignature\"^\n\x10ProposalResponse\x12\x16\n\x06status\x18\x01\
-    \x20\x01(\x05R\x06status\x12\x18\n\x07message\x18\x02\x20\x01(\tR\x07mes\
-    sage\x12\x18\n\x07payload\x18\x03\x20\x01(\x0cR\x07payload*\xc0\x01\n\
-    \x06Status\x12\x0b\n\x07UNKNOWN\x10\0\x12\x0c\n\x07SUCCESS\x10\xc8\x01\
-    \x12\x10\n\x0bBAD_REQUEST\x10\x90\x03\x12\x0e\n\tFORBIDDEN\x10\x93\x03\
-    \x12\x0e\n\tNOT_FOUND\x10\x94\x03\x12\x1d\n\x18REQUEST_ENTITY_TOO_LARGE\
-    \x10\x9d\x03\x12\x1a\n\x15INTERNAL_SERVER_ERROR\x10\xf4\x03\x12\x14\n\
+    \x1a\n\x08contract\x18\x05\x20\x01(\tR\x08contract\x12\x13\n\x05tx_id\
+    \x18\x06\x20\x01(\tR\x04txId\"A\n\x0fSignatureHeader\x12\x18\n\x07creato\
+    r\x18\x01\x20\x01(\x0cR\x07creator\x12\x14\n\x05nonce\x18\x02\x20\x01(\
+    \x0cR\x05nonce\"\x88\x01\n\x06Header\x12;\n\x0echannel_header\x18\x01\
+    \x20\x01(\x0b2\x14.proto.ChannelHeaderR\rchannelHeader\x12A\n\x10signatu\
+    re_header\x18\x02\x20\x01(\x0b2\x16.proto.SignatureHeaderR\x0fsignatureH\
+    eader\"\xac\x01\n\rContractInput\x12\x12\n\x04args\x18\x01\x20\x03(\x0cR\
+    \x04args\x12G\n\x0bdecorations\x18\x02\x20\x03(\x0b2%.proto.ContractInpu\
+    t.DecorationsEntryR\x0bdecorations\x1a>\n\x10DecorationsEntry\x12\x10\n\
+    \x03key\x18\x01\x20\x01(\tR\x03key\x12\x14\n\x05value\x18\x02\x20\x01(\
+    \x0cR\x05value:\x028\x01\"]\n\x08Proposal\x12%\n\x06header\x18\x01\x20\
+    \x01(\x0b2\r.proto.HeaderR\x06header\x12*\n\x05input\x18\x02\x20\x01(\
+    \x0b2\x14.proto.ContractInputR\x05input\"U\n\x0eSignedProposal\x12%\n\
+    \x0eproposal_bytes\x18\x01\x20\x01(\x0cR\rproposalBytes\x12\x1c\n\tsigna\
+    ture\x18\x02\x20\x01(\x0cR\tsignature\"B\n\x08Envelope\x12\x18\n\x07payl\
+    oad\x18\x01\x20\x01(\x0cR\x07payload\x12\x1c\n\tsignature\x18\x02\x20\
+    \x01(\x0cR\tsignature\"^\n\x10ProposalResponse\x12\x16\n\x06status\x18\
+    \x01\x20\x01(\x05R\x06status\x12\x18\n\x07message\x18\x02\x20\x01(\tR\
+    \x07message\x12\x18\n\x07payload\x18\x03\x20\x01(\x0cR\x07payload*\xc0\
+    \x01\n\x06Status\x12\x0b\n\x07UNKNOWN\x10\0\x12\x0c\n\x07SUCCESS\x10\xc8\
+    \x01\x12\x10\n\x0bBAD_REQUEST\x10\x90\x03\x12\x0e\n\tFORBIDDEN\x10\x93\
+    \x03\x12\x0e\n\tNOT_FOUND\x10\x94\x03\x12\x1d\n\x18REQUEST_ENTITY_TOO_LA\
+    RGE\x10\x9d\x03\x12\x1a\n\x15INTERNAL_SERVER_ERROR\x10\xf4\x03\x12\x14\n\
     \x0fNOT_IMPLEMENTED\x10\xf5\x03\x12\x18\n\x13SERVICE_UNAVAILABLE\x10\xf7\
-    \x03b\x06proto3\
+    \x03*B\n\nHeaderType\x12\t\n\x05QUERY\x10\0\x12\n\n\x06invoke\x10\x01\
+    \x12\n\n\x06CONFIG\x10\x02\x12\x11\n\rCONFIG_UPDATE\x10\x03b\x06proto3\
 ";
 
 static mut file_descriptor_proto_lazy: ::protobuf::lazy::Lazy<::protobuf::descriptor::FileDescriptorProto> = ::protobuf::lazy::Lazy {

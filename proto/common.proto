@@ -32,23 +32,49 @@ enum Status {
     SERVICE_UNAVAILABLE = 503;
 }
 
+enum HeaderType {
+    QUERY = 0; // Used for messages which query contract
+    invoke = 1; // Used for messages which invoke contract
+    CONFIG = 2; // Used for messages which express the channel config
+    CONFIG_UPDATE = 3; // Used for transactions which update the channel config
+}
+
+// ------------------------------- contract call -------------------------------
 message ChannelHeader {
-    // Header types 0-10000 are reserved and defined by HeaderType
     int32 type = 1;
     int32 version = 2;
     Timestamp timestamp = 3;
     string channel_id = 4;
-    string tx_id = 5;
+    string contract = 5;
+    string tx_id = 6;
+}
 
-    // If mutual TLS is employed, this represents
-    // the hash of the client's TLS certificate
-    bytes tls_cert_hash = 6;
+message SignatureHeader {
+    bytes creator = 1;
+    bytes nonce = 2;
+}
+
+message Header {
+    ChannelHeader channel_header = 1;
+    SignatureHeader signature_header = 2;
+}
+
+message ContractInput {
+    repeated bytes args = 1;
+    map<string, bytes> decorations = 2;
 }
 
 message Proposal {
-    ChannelHeader header = 2;
-    bytes payload = 3;
+    Header header = 1;
+    ContractInput input = 2;
 }
+
+
+message SignedProposal {
+    bytes proposal_bytes = 1;
+    bytes signature = 2;
+}
+// ------------------------------- contract call -------------------------------
 
 message Envelope {
     bytes payload = 1;

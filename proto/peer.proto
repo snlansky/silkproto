@@ -6,7 +6,7 @@ import "eraftpb.proto";
 
 // process message from client
 service Endorser {
-    rpc ProcessProposal(Proposal) returns (ProposalResponse) {}
+    rpc ProcessProposal(SignedProposal) returns (ProposalResponse) {}
 }
 
 

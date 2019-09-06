@@ -18,7 +18,7 @@
 #![allow(unused_imports)]
 #![allow(unused_results)]
 
-const METHOD_ENDORSER_PROCESS_PROPOSAL: ::grpcio::Method<super::common::Proposal, super::common::ProposalResponse> = ::grpcio::Method {
+const METHOD_ENDORSER_PROCESS_PROPOSAL: ::grpcio::Method<super::common::SignedProposal, super::common::ProposalResponse> = ::grpcio::Method {
     ty: ::grpcio::MethodType::Unary,
     name: "/proto.Endorser/ProcessProposal",
     req_mar: ::grpcio::Marshaller { ser: ::grpcio::pb_ser, de: ::grpcio::pb_de },
@@ -37,19 +37,19 @@ impl EndorserClient {
         }
     }
 
-    pub fn process_proposal_opt(&self, req: &super::common::Proposal, opt: ::grpcio::CallOption) -> ::grpcio::Result<super::common::ProposalResponse> {
+    pub fn process_proposal_opt(&self, req: &super::common::SignedProposal, opt: ::grpcio::CallOption) -> ::grpcio::Result<super::common::ProposalResponse> {
         self.client.unary_call(&METHOD_ENDORSER_PROCESS_PROPOSAL, req, opt)
     }
 
-    pub fn process_proposal(&self, req: &super::common::Proposal) -> ::grpcio::Result<super::common::ProposalResponse> {
+    pub fn process_proposal(&self, req: &super::common::SignedProposal) -> ::grpcio::Result<super::common::ProposalResponse> {
         self.process_proposal_opt(req, ::grpcio::CallOption::default())
     }
 
-    pub fn process_proposal_async_opt(&self, req: &super::common::Proposal, opt: ::grpcio::CallOption) -> ::grpcio::Result<::grpcio::ClientUnaryReceiver<super::common::ProposalResponse>> {
+    pub fn process_proposal_async_opt(&self, req: &super::common::SignedProposal, opt: ::grpcio::CallOption) -> ::grpcio::Result<::grpcio::ClientUnaryReceiver<super::common::ProposalResponse>> {
         self.client.unary_call_async(&METHOD_ENDORSER_PROCESS_PROPOSAL, req, opt)
     }
 
-    pub fn process_proposal_async(&self, req: &super::common::Proposal) -> ::grpcio::Result<::grpcio::ClientUnaryReceiver<super::common::ProposalResponse>> {
+    pub fn process_proposal_async(&self, req: &super::common::SignedProposal) -> ::grpcio::Result<::grpcio::ClientUnaryReceiver<super::common::ProposalResponse>> {
         self.process_proposal_async_opt(req, ::grpcio::CallOption::default())
     }
     pub fn spawn<F>(&self, f: F) where F: ::futures::Future<Item = (), Error = ()> + Send + 'static {
@@ -58,7 +58,7 @@ impl EndorserClient {
 }
 
 pub trait Endorser {
-    fn process_proposal(&mut self, ctx: ::grpcio::RpcContext, req: super::common::Proposal, sink: ::grpcio::UnarySink<super::common::ProposalResponse>);
+    fn process_proposal(&mut self, ctx: ::grpcio::RpcContext, req: super::common::SignedProposal, sink: ::grpcio::UnarySink<super::common::ProposalResponse>);
 }
 
 pub fn create_endorser<S: Endorser + Send + Clone + 'static>(s: S) -> ::grpcio::Service {

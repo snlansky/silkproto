@@ -391,10 +391,10 @@ static file_descriptor_proto_data: &'static [u8] = b"\
     \x01\n\nNetMessage\x12\x14\n\x04data\x18\x01\x20\x01(\x0cH\0R\x04data\
     \x12:\n\rconfig_change\x18\x02\x20\x01(\x0b2\x13.eraftpb.ConfChangeH\0R\
     \x0cconfigChange\x125\n\x0craft_message\x18\x03\x20\x01(\x0b2\x10.eraftp\
-    b.MessageH\0R\x0braftMessageB\x06\n\x04Type2I\n\x08Endorser\x12=\n\x0fPr\
-    ocessProposal\x12\x0f.proto.Proposal\x1a\x17.proto.ProposalResponse\"\02\
-    7\n\x07Network\x12,\n\tBroadcast\x12\x0f.proto.Envelope\x1a\x0c.proto.Em\
-    pty\"\0b\x06proto3\
+    b.MessageH\0R\x0braftMessageB\x06\n\x04Type2O\n\x08Endorser\x12C\n\x0fPr\
+    ocessProposal\x12\x15.proto.SignedProposal\x1a\x17.proto.ProposalRespons\
+    e\"\027\n\x07Network\x12,\n\tBroadcast\x12\x0f.proto.Envelope\x1a\x0c.pr\
+    oto.Empty\"\0b\x06proto3\
 ";
 
 static mut file_descriptor_proto_lazy: ::protobuf::lazy::Lazy<::protobuf::descriptor::FileDescriptorProto> = ::protobuf::lazy::Lazy {
