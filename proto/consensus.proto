@@ -3,6 +3,7 @@ package proto;
 
 import "common.proto";
 import "block.proto";
+import "eraftpb.proto";
 
 
 message BroadcastResponse {
@@ -22,4 +23,23 @@ message DeliverResponse {
 service AtomicBroadcast {
     rpc Broadcast(stream ChannelHeader) returns (stream BroadcastResponse) {}
     rpc Deliver(stream Envelope) returns (stream DeliverResponse) {}
+}
+
+
+// consensus node to node communication
+service Consensus {
+    rpc Exchange (stream Envelope) returns (stream Envelope) {}
+}
+
+/*
+|\_ Envelope
+    \_ NetMessage
+*/
+
+message NetMessage {
+    oneof Type {
+        bytes data = 1;
+        eraftpb.ConfChange config_change = 2;
+        eraftpb.Message raft_message = 3;
+    }
 }

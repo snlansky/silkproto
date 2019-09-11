@@ -81,3 +81,47 @@ pub fn create_atomic_broadcast<S: AtomicBroadcast + Send + Clone + 'static>(s: S
     });
     builder.build()
 }
+
+const METHOD_CONSENSUS_EXCHANGE: ::grpcio::Method<super::common::Envelope, super::common::Envelope> = ::grpcio::Method {
+    ty: ::grpcio::MethodType::Duplex,
+    name: "/proto.Consensus/Exchange",
+    req_mar: ::grpcio::Marshaller { ser: ::grpcio::pb_ser, de: ::grpcio::pb_de },
+    resp_mar: ::grpcio::Marshaller { ser: ::grpcio::pb_ser, de: ::grpcio::pb_de },
+};
+
+#[derive(Clone)]
+pub struct ConsensusClient {
+    client: ::grpcio::Client,
+}
+
+impl ConsensusClient {
+    pub fn new(channel: ::grpcio::Channel) -> Self {
+        ConsensusClient {
+            client: ::grpcio::Client::new(channel),
+        }
+    }
+
+    pub fn exchange_opt(&self, opt: ::grpcio::CallOption) -> ::grpcio::Result<(::grpcio::ClientDuplexSender<super::common::Envelope>, ::grpcio::ClientDuplexReceiver<super::common::Envelope>)> {
+        self.client.duplex_streaming(&METHOD_CONSENSUS_EXCHANGE, opt)
+    }
+
+    pub fn exchange(&self) -> ::grpcio::Result<(::grpcio::ClientDuplexSender<super::common::Envelope>, ::grpcio::ClientDuplexReceiver<super::common::Envelope>)> {
+        self.exchange_opt(::grpcio::CallOption::default())
+    }
+    pub fn spawn<F>(&self, f: F) where F: ::futures::Future<Item = (), Error = ()> + Send + 'static {
+        self.client.spawn(f)
+    }
+}
+
+pub trait Consensus {
+    fn exchange(&mut self, ctx: ::grpcio::RpcContext, stream: ::grpcio::RequestStream<super::common::Envelope>, sink: ::grpcio::DuplexSink<super::common::Envelope>);
+}
+
+pub fn create_consensus<S: Consensus + Send + Clone + 'static>(s: S) -> ::grpcio::Service {
+    let mut builder = ::grpcio::ServiceBuilder::new();
+    let mut instance = s.clone();
+    builder = builder.add_duplex_streaming_handler(&METHOD_CONSENSUS_EXCHANGE, move |ctx, req, resp| {
+        instance.exchange(ctx, req, resp)
+    });
+    builder.build()
+}

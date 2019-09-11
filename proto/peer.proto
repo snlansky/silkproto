@@ -2,27 +2,8 @@ syntax = "proto3";
 package proto;
 
 import "common.proto";
-import "eraftpb.proto";
 
 // process message from client
 service Endorser {
     rpc ProcessProposal(SignedProposal) returns (ProposalResponse) {}
-}
-
-
-service Network {
-    rpc Broadcast (Envelope) returns (Empty) {}
-}
-
-/*
-|\_ Envelope
-    \_ NetMessage
-*/
-
-message NetMessage {
-    oneof Type {
-        bytes data = 1;
-        eraftpb.ConfChange config_change = 2;
-        eraftpb.Message raft_message = 3;
-    }
 }
