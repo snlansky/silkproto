@@ -856,11 +856,11 @@ static file_descriptor_proto_data: &'static [u8] = b"\
     e\x12\x14\n\x04data\x18\x01\x20\x01(\x0cH\0R\x04data\x12:\n\rconfig_chan\
     ge\x18\x02\x20\x01(\x0b2\x13.eraftpb.ConfChangeH\0R\x0cconfigChange\x125\
     \n\x0craft_message\x18\x03\x20\x01(\x0b2\x10.eraftpb.MessageH\0R\x0braft\
-    MessageB\x06\n\x04Type2\x8e\x01\n\x0fAtomicBroadcast\x12A\n\tBroadcast\
-    \x12\x14.proto.ChannelHeader\x1a\x18.proto.BroadcastResponse\"\0(\x010\
-    \x01\x128\n\x07Deliver\x12\x0f.proto.Envelope\x1a\x16.proto.DeliverRespo\
-    nse\"\0(\x010\x012?\n\tConsensus\x122\n\x08Exchange\x12\x0f.proto.Envelo\
-    pe\x1a\x0f.proto.Envelope\"\0(\x010\x01b\x06proto3\
+    MessageB\x06\n\x04Type2\x8a\x01\n\x0fAtomicBroadcast\x12=\n\tBroadcast\
+    \x12\x14.proto.ChannelHeader\x1a\x18.proto.BroadcastResponse\"\0\x128\n\
+    \x07Deliver\x12\x0f.proto.Envelope\x1a\x16.proto.DeliverResponse\"\0(\
+    \x010\x012?\n\tConsensus\x122\n\x08Exchange\x12\x0f.proto.Envelope\x1a\
+    \x0f.proto.Envelope\"\0(\x010\x01b\x06proto3\
 ";
 
 static mut file_descriptor_proto_lazy: ::protobuf::lazy::Lazy<::protobuf::descriptor::FileDescriptorProto> = ::protobuf::lazy::Lazy {

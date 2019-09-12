@@ -19,7 +19,7 @@
 #![allow(unused_results)]
 
 const METHOD_ATOMIC_BROADCAST_BROADCAST: ::grpcio::Method<super::common::ChannelHeader, super::consensus::BroadcastResponse> = ::grpcio::Method {
-    ty: ::grpcio::MethodType::Duplex,
+    ty: ::grpcio::MethodType::Unary,
     name: "/proto.AtomicBroadcast/Broadcast",
     req_mar: ::grpcio::Marshaller { ser: ::grpcio::pb_ser, de: ::grpcio::pb_de },
     resp_mar: ::grpcio::Marshaller { ser: ::grpcio::pb_ser, de: ::grpcio::pb_de },
@@ -44,12 +44,20 @@ impl AtomicBroadcastClient {
         }
     }
 
-    pub fn broadcast_opt(&self, opt: ::grpcio::CallOption) -> ::grpcio::Result<(::grpcio::ClientDuplexSender<super::common::ChannelHeader>, ::grpcio::ClientDuplexReceiver<super::consensus::BroadcastResponse>)> {
-        self.client.duplex_streaming(&METHOD_ATOMIC_BROADCAST_BROADCAST, opt)
+    pub fn broadcast_opt(&self, req: &super::common::ChannelHeader, opt: ::grpcio::CallOption) -> ::grpcio::Result<super::consensus::BroadcastResponse> {
+        self.client.unary_call(&METHOD_ATOMIC_BROADCAST_BROADCAST, req, opt)
     }
 
-    pub fn broadcast(&self) -> ::grpcio::Result<(::grpcio::ClientDuplexSender<super::common::ChannelHeader>, ::grpcio::ClientDuplexReceiver<super::consensus::BroadcastResponse>)> {
-        self.broadcast_opt(::grpcio::CallOption::default())
+    pub fn broadcast(&self, req: &super::common::ChannelHeader) -> ::grpcio::Result<super::consensus::BroadcastResponse> {
+        self.broadcast_opt(req, ::grpcio::CallOption::default())
+    }
+
+    pub fn broadcast_async_opt(&self, req: &super::common::ChannelHeader, opt: ::grpcio::CallOption) -> ::grpcio::Result<::grpcio::ClientUnaryReceiver<super::consensus::BroadcastResponse>> {
+        self.client.unary_call_async(&METHOD_ATOMIC_BROADCAST_BROADCAST, req, opt)
+    }
+
+    pub fn broadcast_async(&self, req: &super::common::ChannelHeader) -> ::grpcio::Result<::grpcio::ClientUnaryReceiver<super::consensus::BroadcastResponse>> {
+        self.broadcast_async_opt(req, ::grpcio::CallOption::default())
     }
 
     pub fn deliver_opt(&self, opt: ::grpcio::CallOption) -> ::grpcio::Result<(::grpcio::ClientDuplexSender<super::common::Envelope>, ::grpcio::ClientDuplexReceiver<super::consensus::DeliverResponse>)> {
@@ -65,14 +73,14 @@ impl AtomicBroadcastClient {
 }
 
 pub trait AtomicBroadcast {
-    fn broadcast(&mut self, ctx: ::grpcio::RpcContext, stream: ::grpcio::RequestStream<super::common::ChannelHeader>, sink: ::grpcio::DuplexSink<super::consensus::BroadcastResponse>);
+    fn broadcast(&mut self, ctx: ::grpcio::RpcContext, req: super::common::ChannelHeader, sink: ::grpcio::UnarySink<super::consensus::BroadcastResponse>);
     fn deliver(&mut self, ctx: ::grpcio::RpcContext, stream: ::grpcio::RequestStream<super::common::Envelope>, sink: ::grpcio::DuplexSink<super::consensus::DeliverResponse>);
 }
 
 pub fn create_atomic_broadcast<S: AtomicBroadcast + Send + Clone + 'static>(s: S) -> ::grpcio::Service {
     let mut builder = ::grpcio::ServiceBuilder::new();
     let mut instance = s.clone();
-    builder = builder.add_duplex_streaming_handler(&METHOD_ATOMIC_BROADCAST_BROADCAST, move |ctx, req, resp| {
+    builder = builder.add_unary_handler(&METHOD_ATOMIC_BROADCAST_BROADCAST, move |ctx, req, resp| {
         instance.broadcast(ctx, req, resp)
     });
     let mut instance = s.clone();

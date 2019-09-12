@@ -21,7 +21,7 @@ message DeliverResponse {
 }
 
 service AtomicBroadcast {
-    rpc Broadcast(stream ChannelHeader) returns (stream BroadcastResponse) {}
+    rpc Broadcast(ChannelHeader) returns (BroadcastResponse) {}
     rpc Deliver(stream Envelope) returns (stream DeliverResponse) {}
 }
 
