@@ -21,7 +21,7 @@ message DeliverResponse {
 }
 
 service AtomicBroadcast {
-    rpc Broadcast(ChannelHeader) returns (BroadcastResponse) {}
+    rpc Broadcast(Block) returns (BroadcastResponse) {}
     rpc Deliver(stream Envelope) returns (stream DeliverResponse) {}
 }
 
@@ -36,7 +36,7 @@ service Consensus {
     \_ NetMessage
 */
 
-message NetMessage {
+message ConsensusMessage {
     oneof Type {
         bytes data = 1;
         eraftpb.ConfChange config_change = 2;

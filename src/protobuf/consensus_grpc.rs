@@ -18,7 +18,7 @@
 #![allow(unused_imports)]
 #![allow(unused_results)]
 
-const METHOD_ATOMIC_BROADCAST_BROADCAST: ::grpcio::Method<super::common::ChannelHeader, super::consensus::BroadcastResponse> = ::grpcio::Method {
+const METHOD_ATOMIC_BROADCAST_BROADCAST: ::grpcio::Method<super::block::Block, super::consensus::BroadcastResponse> = ::grpcio::Method {
     ty: ::grpcio::MethodType::Unary,
     name: "/proto.AtomicBroadcast/Broadcast",
     req_mar: ::grpcio::Marshaller { ser: ::grpcio::pb_ser, de: ::grpcio::pb_de },
@@ -44,19 +44,19 @@ impl AtomicBroadcastClient {
         }
     }
 
-    pub fn broadcast_opt(&self, req: &super::common::ChannelHeader, opt: ::grpcio::CallOption) -> ::grpcio::Result<super::consensus::BroadcastResponse> {
+    pub fn broadcast_opt(&self, req: &super::block::Block, opt: ::grpcio::CallOption) -> ::grpcio::Result<super::consensus::BroadcastResponse> {
         self.client.unary_call(&METHOD_ATOMIC_BROADCAST_BROADCAST, req, opt)
     }
 
-    pub fn broadcast(&self, req: &super::common::ChannelHeader) -> ::grpcio::Result<super::consensus::BroadcastResponse> {
+    pub fn broadcast(&self, req: &super::block::Block) -> ::grpcio::Result<super::consensus::BroadcastResponse> {
         self.broadcast_opt(req, ::grpcio::CallOption::default())
     }
 
-    pub fn broadcast_async_opt(&self, req: &super::common::ChannelHeader, opt: ::grpcio::CallOption) -> ::grpcio::Result<::grpcio::ClientUnaryReceiver<super::consensus::BroadcastResponse>> {
+    pub fn broadcast_async_opt(&self, req: &super::block::Block, opt: ::grpcio::CallOption) -> ::grpcio::Result<::grpcio::ClientUnaryReceiver<super::consensus::BroadcastResponse>> {
         self.client.unary_call_async(&METHOD_ATOMIC_BROADCAST_BROADCAST, req, opt)
     }
 
-    pub fn broadcast_async(&self, req: &super::common::ChannelHeader) -> ::grpcio::Result<::grpcio::ClientUnaryReceiver<super::consensus::BroadcastResponse>> {
+    pub fn broadcast_async(&self, req: &super::block::Block) -> ::grpcio::Result<::grpcio::ClientUnaryReceiver<super::consensus::BroadcastResponse>> {
         self.broadcast_async_opt(req, ::grpcio::CallOption::default())
     }
 
@@ -73,7 +73,7 @@ impl AtomicBroadcastClient {
 }
 
 pub trait AtomicBroadcast {
-    fn broadcast(&mut self, ctx: ::grpcio::RpcContext, req: super::common::ChannelHeader, sink: ::grpcio::UnarySink<super::consensus::BroadcastResponse>);
+    fn broadcast(&mut self, ctx: ::grpcio::RpcContext, req: super::block::Block, sink: ::grpcio::UnarySink<super::consensus::BroadcastResponse>);
     fn deliver(&mut self, ctx: ::grpcio::RpcContext, stream: ::grpcio::RequestStream<super::common::Envelope>, sink: ::grpcio::DuplexSink<super::consensus::DeliverResponse>);
 }
 
