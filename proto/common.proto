@@ -33,13 +33,13 @@ enum Status {
 }
 
 enum HeaderType {
-    QUERY = 0; // Used for messages which query contract
-    invoke = 1; // Used for messages which invoke contract
+    QUERY = 0; // Used for messages which query contract.proto
+    invoke = 1; // Used for messages which invoke contract.proto
     CONFIG = 2; // Used for messages which express the channel config
     CONFIG_UPDATE = 3; // Used for transactions which update the channel config
 }
 
-// ------------------------------- contract call -------------------------------
+// ------------------------------- contract.proto call -------------------------------
 message ChannelHeader {
     int32 type = 1;
     int32 version = 2;
@@ -74,7 +74,7 @@ message SignedProposal {
     bytes proposal_bytes = 1;
     bytes signature = 2;
 }
-// ------------------------------- contract call -------------------------------
+// ------------------------------- contract.proto call -------------------------------
 
 message Envelope {
     bytes payload = 1;

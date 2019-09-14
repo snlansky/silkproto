@@ -1,45 +1,57 @@
 syntax = "proto3";
 package proto;
 
-import "common.proto";
-import "block.proto";
-import "eraftpb.proto";
-
-
-message BroadcastResponse {
-    // Status code, which may be used to programatically respond to success/failure
-    Status status = 1;
-    // Info string which may contain additional information about the status returned
-    string info = 2;
+// All information about a block that is relevant to consensus
+message ConsensusBlock {
+    bytes block_id = 1;
+    bytes previous_id = 2;
+    // The id of peer that signed this block
+    bytes signer_id = 3;
+    uint64 block_num = 4;
+    bytes payload = 5;
+    // A summary of the contents of the block
+    bytes summary = 6;
 }
 
-message DeliverResponse {
-    oneof Type {
-        Status status = 1;
-        Block block = 2;
-    }
+// Information about a peer that is relevant to consensus
+message ConsensusPeerInfo {
+    // The unique id for this peer. This can be correlated with the signer id
+    // on consensus blocks.
+    bytes peer_id = 1;
 }
 
-service AtomicBroadcast {
-    rpc Broadcast(Block) returns (BroadcastResponse) {}
-    rpc Deliver(stream Envelope) returns (stream DeliverResponse) {}
+// A new block was received and passed initial consensus validation
+message ConsensusNotifyBlockNew {
+    ConsensusBlock block = 1;
 }
 
-
-// consensus node to node communication
-service Consensus {
-    rpc Exchange (stream Envelope) returns (stream Envelope) {}
+// This block can be committed successfully
+message ConsensusNotifyBlockValid {
+    bytes block_id = 1;
 }
 
-/*
-|\_ Envelope
-    \_ NetMessage
-*/
-
-message ConsensusMessage {
-    oneof Type {
-        bytes data = 1;
-        eraftpb.ConfChange config_change = 2;
-        eraftpb.Message raft_message = 3;
-    }
+// This block cannot be committed successfully
+message ConsensusNotifyBlockInvalid {
+    bytes block_id = 1;
 }
+
+// This block has been committed
+message ConsensusNotifyBlockCommit {
+    bytes block_id = 1;
+}
+
+// The engine has been activated
+message ConsensusNotifyEngineActivated {
+    // Startup Info
+    ConsensusBlock chain_head = 1;
+    repeated ConsensusPeerInfo peers = 2;
+    ConsensusPeerInfo local_peer_info = 3;
+}
+
+// The engine has been deactivated
+message ConsensusNotifyEngineDeactivated {}
+
+// Confirm that the notification was received. The validator message
+// correlation id is used to determine which notification this is an ack for.
+message ConsensusNotifyAck {}
+

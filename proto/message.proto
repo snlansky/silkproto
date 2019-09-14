@@ -1,0 +1,36 @@
+syntax = "proto3";
+package proto;
+
+message Message {
+    enum MessageType {
+        DEFAULT = 0;
+
+        // Consensus notification messages
+        CONSENSUS_NOTIFY_PEER_CONNECTED = 900;
+        CONSENSUS_NOTIFY_PEER_DISCONNECTED = 901;
+        CONSENSUS_NOTIFY_PEER_MESSAGE = 902;
+
+        CONSENSUS_NOTIFY_BLOCK_NEW = 903;
+        CONSENSUS_NOTIFY_BLOCK_VALID = 904;
+        CONSENSUS_NOTIFY_BLOCK_INVALID = 905;
+        CONSENSUS_NOTIFY_BLOCK_COMMIT = 906;
+    }
+
+    MessageType message_type = 1;
+
+    // The identifier used to correlate response messages to their related
+    // request messages.  correlation_id should be set to a random string
+    // for messages which are not responses to previously sent messages.  For
+    // response messages, correlation_id should be set to the same string as
+    // contained in the request message.
+    string correlation_id = 2;
+
+    // The content of the message, defined by message_type.  In many
+    // cases, this data has been serialized with Protocol Buffers
+    bytes content = 3;
+}
+
+
+service Component {
+    rpc Notify (stream Message) returns (stream Message) {}
+}
