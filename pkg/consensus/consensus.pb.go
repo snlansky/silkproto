@@ -9,16 +9,6 @@ import (
 	"math"
 
 	proto "github.com/golang/protobuf/proto"
-
-	block "github.com/snlansky/silkproto/pkg/block"
-
-	common "github.com/snlansky/silkproto/pkg/common"
-
-	eraftpb "github.com/snlansky/silkproto/pkg/eraftpb"
-
-	context "golang.org/x/net/context"
-
-	grpc "google.golang.org/grpc"
 )
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -32,28 +22,33 @@ var _ = math.Inf
 // proto package needs to be updated.
 const _ = proto.ProtoPackageIsVersion2 // please upgrade the proto package
 
-type BroadcastResponse struct {
-	// Status code, which may be used to programatically respond to success/failure
-	Status common.Status `protobuf:"varint,1,opt,name=status,proto3,enum=proto.Status" json:"status,omitempty"`
-	// Info string which may contain additional information about the status returned
-	Info                 string   `protobuf:"bytes,2,opt,name=info,proto3" json:"info,omitempty"`
+// All information about a block that is relevant to consensus
+type ConsensusBlock struct {
+	BlockId    []byte `protobuf:"bytes,1,opt,name=block_id,json=blockId,proto3" json:"block_id,omitempty"`
+	PreviousId []byte `protobuf:"bytes,2,opt,name=previous_id,json=previousId,proto3" json:"previous_id,omitempty"`
+	// The id of peer that signed this block
+	SignerId []byte `protobuf:"bytes,3,opt,name=signer_id,json=signerId,proto3" json:"signer_id,omitempty"`
+	BlockNum uint64 `protobuf:"varint,4,opt,name=block_num,json=blockNum,proto3" json:"block_num,omitempty"`
+	Payload  []byte `protobuf:"bytes,5,opt,name=payload,proto3" json:"payload,omitempty"`
+	// A summary of the contents of the block
+	Summary              []byte   `protobuf:"bytes,6,opt,name=summary,proto3" json:"summary,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
 }
 
-func (m *BroadcastResponse) Reset()         { *m = BroadcastResponse{} }
-func (m *BroadcastResponse) String() string { return proto.CompactTextString(m) }
-func (*BroadcastResponse) ProtoMessage()    {}
-func (*BroadcastResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_consensus_b2b76a6be1da6b98, []int{0}
+func (m *ConsensusBlock) Reset()         { *m = ConsensusBlock{} }
+func (m *ConsensusBlock) String() string { return proto.CompactTextString(m) }
+func (*ConsensusBlock) ProtoMessage()    {}
+func (*ConsensusBlock) Descriptor() ([]byte, []int) {
+	return fileDescriptor_consensus_6dbf80fb586bfae0, []int{0}
 }
-func (m *BroadcastResponse) XXX_Unmarshal(b []byte) error {
+func (m *ConsensusBlock) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *BroadcastResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *ConsensusBlock) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	if deterministic {
-		return xxx_messageInfo_BroadcastResponse.Marshal(b, m, deterministic)
+		return xxx_messageInfo_ConsensusBlock.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
 		n, err := m.MarshalTo(b)
@@ -63,54 +58,82 @@ func (m *BroadcastResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, e
 		return b[:n], nil
 	}
 }
-func (dst *BroadcastResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_BroadcastResponse.Merge(dst, src)
+func (dst *ConsensusBlock) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ConsensusBlock.Merge(dst, src)
 }
-func (m *BroadcastResponse) XXX_Size() int {
+func (m *ConsensusBlock) XXX_Size() int {
 	return m.Size()
 }
-func (m *BroadcastResponse) XXX_DiscardUnknown() {
-	xxx_messageInfo_BroadcastResponse.DiscardUnknown(m)
+func (m *ConsensusBlock) XXX_DiscardUnknown() {
+	xxx_messageInfo_ConsensusBlock.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_BroadcastResponse proto.InternalMessageInfo
+var xxx_messageInfo_ConsensusBlock proto.InternalMessageInfo
 
-func (m *BroadcastResponse) GetStatus() common.Status {
+func (m *ConsensusBlock) GetBlockId() []byte {
 	if m != nil {
-		return m.Status
+		return m.BlockId
 	}
-	return common.Status_UNKNOWN
+	return nil
 }
 
-func (m *BroadcastResponse) GetInfo() string {
+func (m *ConsensusBlock) GetPreviousId() []byte {
 	if m != nil {
-		return m.Info
+		return m.PreviousId
 	}
-	return ""
+	return nil
 }
 
-type DeliverResponse struct {
-	// Types that are valid to be assigned to Type:
-	//	*DeliverResponse_Status
-	//	*DeliverResponse_Block
-	Type                 isDeliverResponse_Type `protobuf_oneof:"Type"`
-	XXX_NoUnkeyedLiteral struct{}               `json:"-"`
-	XXX_unrecognized     []byte                 `json:"-"`
-	XXX_sizecache        int32                  `json:"-"`
+func (m *ConsensusBlock) GetSignerId() []byte {
+	if m != nil {
+		return m.SignerId
+	}
+	return nil
 }
 
-func (m *DeliverResponse) Reset()         { *m = DeliverResponse{} }
-func (m *DeliverResponse) String() string { return proto.CompactTextString(m) }
-func (*DeliverResponse) ProtoMessage()    {}
-func (*DeliverResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_consensus_b2b76a6be1da6b98, []int{1}
+func (m *ConsensusBlock) GetBlockNum() uint64 {
+	if m != nil {
+		return m.BlockNum
+	}
+	return 0
 }
-func (m *DeliverResponse) XXX_Unmarshal(b []byte) error {
+
+func (m *ConsensusBlock) GetPayload() []byte {
+	if m != nil {
+		return m.Payload
+	}
+	return nil
+}
+
+func (m *ConsensusBlock) GetSummary() []byte {
+	if m != nil {
+		return m.Summary
+	}
+	return nil
+}
+
+// Information about a peer that is relevant to consensus
+type ConsensusPeerInfo struct {
+	// The unique id for this peer. This can be correlated with the signer id
+	// on consensus blocks.
+	PeerId               []byte   `protobuf:"bytes,1,opt,name=peer_id,json=peerId,proto3" json:"peer_id,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *ConsensusPeerInfo) Reset()         { *m = ConsensusPeerInfo{} }
+func (m *ConsensusPeerInfo) String() string { return proto.CompactTextString(m) }
+func (*ConsensusPeerInfo) ProtoMessage()    {}
+func (*ConsensusPeerInfo) Descriptor() ([]byte, []int) {
+	return fileDescriptor_consensus_6dbf80fb586bfae0, []int{1}
+}
+func (m *ConsensusPeerInfo) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *DeliverResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *ConsensusPeerInfo) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	if deterministic {
-		return xxx_messageInfo_DeliverResponse.Marshal(b, m, deterministic)
+		return xxx_messageInfo_ConsensusPeerInfo.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
 		n, err := m.MarshalTo(b)
@@ -120,147 +143,45 @@ func (m *DeliverResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, err
 		return b[:n], nil
 	}
 }
-func (dst *DeliverResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_DeliverResponse.Merge(dst, src)
+func (dst *ConsensusPeerInfo) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ConsensusPeerInfo.Merge(dst, src)
 }
-func (m *DeliverResponse) XXX_Size() int {
+func (m *ConsensusPeerInfo) XXX_Size() int {
 	return m.Size()
 }
-func (m *DeliverResponse) XXX_DiscardUnknown() {
-	xxx_messageInfo_DeliverResponse.DiscardUnknown(m)
+func (m *ConsensusPeerInfo) XXX_DiscardUnknown() {
+	xxx_messageInfo_ConsensusPeerInfo.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_DeliverResponse proto.InternalMessageInfo
+var xxx_messageInfo_ConsensusPeerInfo proto.InternalMessageInfo
 
-type isDeliverResponse_Type interface {
-	isDeliverResponse_Type()
-	MarshalTo([]byte) (int, error)
-	Size() int
-}
-
-type DeliverResponse_Status struct {
-	Status common.Status `protobuf:"varint,1,opt,name=status,proto3,enum=proto.Status,oneof"`
-}
-type DeliverResponse_Block struct {
-	Block *block.Block `protobuf:"bytes,2,opt,name=block,oneof"`
-}
-
-func (*DeliverResponse_Status) isDeliverResponse_Type() {}
-func (*DeliverResponse_Block) isDeliverResponse_Type()  {}
-
-func (m *DeliverResponse) GetType() isDeliverResponse_Type {
+func (m *ConsensusPeerInfo) GetPeerId() []byte {
 	if m != nil {
-		return m.Type
+		return m.PeerId
 	}
 	return nil
 }
 
-func (m *DeliverResponse) GetStatus() common.Status {
-	if x, ok := m.GetType().(*DeliverResponse_Status); ok {
-		return x.Status
-	}
-	return common.Status_UNKNOWN
+// A new block was received and passed initial consensus validation
+type ConsensusNotifyBlockNew struct {
+	Block                *ConsensusBlock `protobuf:"bytes,1,opt,name=block" json:"block,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}        `json:"-"`
+	XXX_unrecognized     []byte          `json:"-"`
+	XXX_sizecache        int32           `json:"-"`
 }
 
-func (m *DeliverResponse) GetBlock() *block.Block {
-	if x, ok := m.GetType().(*DeliverResponse_Block); ok {
-		return x.Block
-	}
-	return nil
+func (m *ConsensusNotifyBlockNew) Reset()         { *m = ConsensusNotifyBlockNew{} }
+func (m *ConsensusNotifyBlockNew) String() string { return proto.CompactTextString(m) }
+func (*ConsensusNotifyBlockNew) ProtoMessage()    {}
+func (*ConsensusNotifyBlockNew) Descriptor() ([]byte, []int) {
+	return fileDescriptor_consensus_6dbf80fb586bfae0, []int{2}
 }
-
-// XXX_OneofFuncs is for the internal use of the proto package.
-func (*DeliverResponse) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
-	return _DeliverResponse_OneofMarshaler, _DeliverResponse_OneofUnmarshaler, _DeliverResponse_OneofSizer, []interface{}{
-		(*DeliverResponse_Status)(nil),
-		(*DeliverResponse_Block)(nil),
-	}
-}
-
-func _DeliverResponse_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
-	m := msg.(*DeliverResponse)
-	// Type
-	switch x := m.Type.(type) {
-	case *DeliverResponse_Status:
-		_ = b.EncodeVarint(1<<3 | proto.WireVarint)
-		_ = b.EncodeVarint(uint64(x.Status))
-	case *DeliverResponse_Block:
-		_ = b.EncodeVarint(2<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.Block); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("DeliverResponse.Type has unexpected type %T", x)
-	}
-	return nil
-}
-
-func _DeliverResponse_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error) {
-	m := msg.(*DeliverResponse)
-	switch tag {
-	case 1: // Type.status
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.Type = &DeliverResponse_Status{common.Status(x)}
-		return true, err
-	case 2: // Type.block
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(block.Block)
-		err := b.DecodeMessage(msg)
-		m.Type = &DeliverResponse_Block{msg}
-		return true, err
-	default:
-		return false, nil
-	}
-}
-
-func _DeliverResponse_OneofSizer(msg proto.Message) (n int) {
-	m := msg.(*DeliverResponse)
-	// Type
-	switch x := m.Type.(type) {
-	case *DeliverResponse_Status:
-		n += 1 // tag and wire
-		n += proto.SizeVarint(uint64(x.Status))
-	case *DeliverResponse_Block:
-		s := proto.Size(x.Block)
-		n += 1 // tag and wire
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	return n
-}
-
-type NetMessage struct {
-	// Types that are valid to be assigned to Type:
-	//	*NetMessage_Data
-	//	*NetMessage_ConfigChange
-	//	*NetMessage_RaftMessage
-	Type                 isNetMessage_Type `protobuf_oneof:"Type"`
-	XXX_NoUnkeyedLiteral struct{}          `json:"-"`
-	XXX_unrecognized     []byte            `json:"-"`
-	XXX_sizecache        int32             `json:"-"`
-}
-
-func (m *NetMessage) Reset()         { *m = NetMessage{} }
-func (m *NetMessage) String() string { return proto.CompactTextString(m) }
-func (*NetMessage) ProtoMessage()    {}
-func (*NetMessage) Descriptor() ([]byte, []int) {
-	return fileDescriptor_consensus_b2b76a6be1da6b98, []int{2}
-}
-func (m *NetMessage) XXX_Unmarshal(b []byte) error {
+func (m *ConsensusNotifyBlockNew) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *NetMessage) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *ConsensusNotifyBlockNew) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	if deterministic {
-		return xxx_messageInfo_NetMessage.Marshal(b, m, deterministic)
+		return xxx_messageInfo_ConsensusNotifyBlockNew.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
 		n, err := m.MarshalTo(b)
@@ -270,427 +191,327 @@ func (m *NetMessage) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 		return b[:n], nil
 	}
 }
-func (dst *NetMessage) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_NetMessage.Merge(dst, src)
+func (dst *ConsensusNotifyBlockNew) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ConsensusNotifyBlockNew.Merge(dst, src)
 }
-func (m *NetMessage) XXX_Size() int {
+func (m *ConsensusNotifyBlockNew) XXX_Size() int {
 	return m.Size()
 }
-func (m *NetMessage) XXX_DiscardUnknown() {
-	xxx_messageInfo_NetMessage.DiscardUnknown(m)
+func (m *ConsensusNotifyBlockNew) XXX_DiscardUnknown() {
+	xxx_messageInfo_ConsensusNotifyBlockNew.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_NetMessage proto.InternalMessageInfo
+var xxx_messageInfo_ConsensusNotifyBlockNew proto.InternalMessageInfo
 
-type isNetMessage_Type interface {
-	isNetMessage_Type()
-	MarshalTo([]byte) (int, error)
-	Size() int
-}
-
-type NetMessage_Data struct {
-	Data []byte `protobuf:"bytes,1,opt,name=data,proto3,oneof"`
-}
-type NetMessage_ConfigChange struct {
-	ConfigChange *eraftpb.ConfChange `protobuf:"bytes,2,opt,name=config_change,json=configChange,oneof"`
-}
-type NetMessage_RaftMessage struct {
-	RaftMessage *eraftpb.Message `protobuf:"bytes,3,opt,name=raft_message,json=raftMessage,oneof"`
-}
-
-func (*NetMessage_Data) isNetMessage_Type()         {}
-func (*NetMessage_ConfigChange) isNetMessage_Type() {}
-func (*NetMessage_RaftMessage) isNetMessage_Type()  {}
-
-func (m *NetMessage) GetType() isNetMessage_Type {
+func (m *ConsensusNotifyBlockNew) GetBlock() *ConsensusBlock {
 	if m != nil {
-		return m.Type
+		return m.Block
 	}
 	return nil
 }
 
-func (m *NetMessage) GetData() []byte {
-	if x, ok := m.GetType().(*NetMessage_Data); ok {
-		return x.Data
+// This block can be committed successfully
+type ConsensusNotifyBlockValid struct {
+	BlockId              []byte   `protobuf:"bytes,1,opt,name=block_id,json=blockId,proto3" json:"block_id,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *ConsensusNotifyBlockValid) Reset()         { *m = ConsensusNotifyBlockValid{} }
+func (m *ConsensusNotifyBlockValid) String() string { return proto.CompactTextString(m) }
+func (*ConsensusNotifyBlockValid) ProtoMessage()    {}
+func (*ConsensusNotifyBlockValid) Descriptor() ([]byte, []int) {
+	return fileDescriptor_consensus_6dbf80fb586bfae0, []int{3}
+}
+func (m *ConsensusNotifyBlockValid) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *ConsensusNotifyBlockValid) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_ConsensusNotifyBlockValid.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalTo(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (dst *ConsensusNotifyBlockValid) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ConsensusNotifyBlockValid.Merge(dst, src)
+}
+func (m *ConsensusNotifyBlockValid) XXX_Size() int {
+	return m.Size()
+}
+func (m *ConsensusNotifyBlockValid) XXX_DiscardUnknown() {
+	xxx_messageInfo_ConsensusNotifyBlockValid.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ConsensusNotifyBlockValid proto.InternalMessageInfo
+
+func (m *ConsensusNotifyBlockValid) GetBlockId() []byte {
+	if m != nil {
+		return m.BlockId
 	}
 	return nil
 }
 
-func (m *NetMessage) GetConfigChange() *eraftpb.ConfChange {
-	if x, ok := m.GetType().(*NetMessage_ConfigChange); ok {
-		return x.ConfigChange
+// This block cannot be committed successfully
+type ConsensusNotifyBlockInvalid struct {
+	BlockId              []byte   `protobuf:"bytes,1,opt,name=block_id,json=blockId,proto3" json:"block_id,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *ConsensusNotifyBlockInvalid) Reset()         { *m = ConsensusNotifyBlockInvalid{} }
+func (m *ConsensusNotifyBlockInvalid) String() string { return proto.CompactTextString(m) }
+func (*ConsensusNotifyBlockInvalid) ProtoMessage()    {}
+func (*ConsensusNotifyBlockInvalid) Descriptor() ([]byte, []int) {
+	return fileDescriptor_consensus_6dbf80fb586bfae0, []int{4}
+}
+func (m *ConsensusNotifyBlockInvalid) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *ConsensusNotifyBlockInvalid) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_ConsensusNotifyBlockInvalid.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalTo(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (dst *ConsensusNotifyBlockInvalid) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ConsensusNotifyBlockInvalid.Merge(dst, src)
+}
+func (m *ConsensusNotifyBlockInvalid) XXX_Size() int {
+	return m.Size()
+}
+func (m *ConsensusNotifyBlockInvalid) XXX_DiscardUnknown() {
+	xxx_messageInfo_ConsensusNotifyBlockInvalid.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ConsensusNotifyBlockInvalid proto.InternalMessageInfo
+
+func (m *ConsensusNotifyBlockInvalid) GetBlockId() []byte {
+	if m != nil {
+		return m.BlockId
 	}
 	return nil
 }
 
-func (m *NetMessage) GetRaftMessage() *eraftpb.Message {
-	if x, ok := m.GetType().(*NetMessage_RaftMessage); ok {
-		return x.RaftMessage
+// This block has been committed
+type ConsensusNotifyBlockCommit struct {
+	BlockId              []byte   `protobuf:"bytes,1,opt,name=block_id,json=blockId,proto3" json:"block_id,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *ConsensusNotifyBlockCommit) Reset()         { *m = ConsensusNotifyBlockCommit{} }
+func (m *ConsensusNotifyBlockCommit) String() string { return proto.CompactTextString(m) }
+func (*ConsensusNotifyBlockCommit) ProtoMessage()    {}
+func (*ConsensusNotifyBlockCommit) Descriptor() ([]byte, []int) {
+	return fileDescriptor_consensus_6dbf80fb586bfae0, []int{5}
+}
+func (m *ConsensusNotifyBlockCommit) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *ConsensusNotifyBlockCommit) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_ConsensusNotifyBlockCommit.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalTo(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (dst *ConsensusNotifyBlockCommit) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ConsensusNotifyBlockCommit.Merge(dst, src)
+}
+func (m *ConsensusNotifyBlockCommit) XXX_Size() int {
+	return m.Size()
+}
+func (m *ConsensusNotifyBlockCommit) XXX_DiscardUnknown() {
+	xxx_messageInfo_ConsensusNotifyBlockCommit.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ConsensusNotifyBlockCommit proto.InternalMessageInfo
+
+func (m *ConsensusNotifyBlockCommit) GetBlockId() []byte {
+	if m != nil {
+		return m.BlockId
 	}
 	return nil
 }
 
-// XXX_OneofFuncs is for the internal use of the proto package.
-func (*NetMessage) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
-	return _NetMessage_OneofMarshaler, _NetMessage_OneofUnmarshaler, _NetMessage_OneofSizer, []interface{}{
-		(*NetMessage_Data)(nil),
-		(*NetMessage_ConfigChange)(nil),
-		(*NetMessage_RaftMessage)(nil),
-	}
+// The engine has been activated
+type ConsensusNotifyEngineActivated struct {
+	// Startup Info
+	ChainHead            *ConsensusBlock      `protobuf:"bytes,1,opt,name=chain_head,json=chainHead" json:"chain_head,omitempty"`
+	Peers                []*ConsensusPeerInfo `protobuf:"bytes,2,rep,name=peers" json:"peers,omitempty"`
+	LocalPeerInfo        *ConsensusPeerInfo   `protobuf:"bytes,3,opt,name=local_peer_info,json=localPeerInfo" json:"local_peer_info,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}             `json:"-"`
+	XXX_unrecognized     []byte               `json:"-"`
+	XXX_sizecache        int32                `json:"-"`
 }
 
-func _NetMessage_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
-	m := msg.(*NetMessage)
-	// Type
-	switch x := m.Type.(type) {
-	case *NetMessage_Data:
-		_ = b.EncodeVarint(1<<3 | proto.WireBytes)
-		_ = b.EncodeRawBytes(x.Data)
-	case *NetMessage_ConfigChange:
-		_ = b.EncodeVarint(2<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.ConfigChange); err != nil {
-			return err
+func (m *ConsensusNotifyEngineActivated) Reset()         { *m = ConsensusNotifyEngineActivated{} }
+func (m *ConsensusNotifyEngineActivated) String() string { return proto.CompactTextString(m) }
+func (*ConsensusNotifyEngineActivated) ProtoMessage()    {}
+func (*ConsensusNotifyEngineActivated) Descriptor() ([]byte, []int) {
+	return fileDescriptor_consensus_6dbf80fb586bfae0, []int{6}
+}
+func (m *ConsensusNotifyEngineActivated) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *ConsensusNotifyEngineActivated) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_ConsensusNotifyEngineActivated.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalTo(b)
+		if err != nil {
+			return nil, err
 		}
-	case *NetMessage_RaftMessage:
-		_ = b.EncodeVarint(3<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.RaftMessage); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("NetMessage.Type has unexpected type %T", x)
+		return b[:n], nil
+	}
+}
+func (dst *ConsensusNotifyEngineActivated) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ConsensusNotifyEngineActivated.Merge(dst, src)
+}
+func (m *ConsensusNotifyEngineActivated) XXX_Size() int {
+	return m.Size()
+}
+func (m *ConsensusNotifyEngineActivated) XXX_DiscardUnknown() {
+	xxx_messageInfo_ConsensusNotifyEngineActivated.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ConsensusNotifyEngineActivated proto.InternalMessageInfo
+
+func (m *ConsensusNotifyEngineActivated) GetChainHead() *ConsensusBlock {
+	if m != nil {
+		return m.ChainHead
 	}
 	return nil
 }
 
-func _NetMessage_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error) {
-	m := msg.(*NetMessage)
-	switch tag {
-	case 1: // Type.data
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeRawBytes(true)
-		m.Type = &NetMessage_Data{x}
-		return true, err
-	case 2: // Type.config_change
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(eraftpb.ConfChange)
-		err := b.DecodeMessage(msg)
-		m.Type = &NetMessage_ConfigChange{msg}
-		return true, err
-	case 3: // Type.raft_message
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(eraftpb.Message)
-		err := b.DecodeMessage(msg)
-		m.Type = &NetMessage_RaftMessage{msg}
-		return true, err
-	default:
-		return false, nil
+func (m *ConsensusNotifyEngineActivated) GetPeers() []*ConsensusPeerInfo {
+	if m != nil {
+		return m.Peers
 	}
+	return nil
 }
 
-func _NetMessage_OneofSizer(msg proto.Message) (n int) {
-	m := msg.(*NetMessage)
-	// Type
-	switch x := m.Type.(type) {
-	case *NetMessage_Data:
-		n += 1 // tag and wire
-		n += proto.SizeVarint(uint64(len(x.Data)))
-		n += len(x.Data)
-	case *NetMessage_ConfigChange:
-		s := proto.Size(x.ConfigChange)
-		n += 1 // tag and wire
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *NetMessage_RaftMessage:
-		s := proto.Size(x.RaftMessage)
-		n += 1 // tag and wire
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
+func (m *ConsensusNotifyEngineActivated) GetLocalPeerInfo() *ConsensusPeerInfo {
+	if m != nil {
+		return m.LocalPeerInfo
 	}
-	return n
+	return nil
 }
+
+// The engine has been deactivated
+type ConsensusNotifyEngineDeactivated struct {
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *ConsensusNotifyEngineDeactivated) Reset()         { *m = ConsensusNotifyEngineDeactivated{} }
+func (m *ConsensusNotifyEngineDeactivated) String() string { return proto.CompactTextString(m) }
+func (*ConsensusNotifyEngineDeactivated) ProtoMessage()    {}
+func (*ConsensusNotifyEngineDeactivated) Descriptor() ([]byte, []int) {
+	return fileDescriptor_consensus_6dbf80fb586bfae0, []int{7}
+}
+func (m *ConsensusNotifyEngineDeactivated) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *ConsensusNotifyEngineDeactivated) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_ConsensusNotifyEngineDeactivated.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalTo(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (dst *ConsensusNotifyEngineDeactivated) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ConsensusNotifyEngineDeactivated.Merge(dst, src)
+}
+func (m *ConsensusNotifyEngineDeactivated) XXX_Size() int {
+	return m.Size()
+}
+func (m *ConsensusNotifyEngineDeactivated) XXX_DiscardUnknown() {
+	xxx_messageInfo_ConsensusNotifyEngineDeactivated.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ConsensusNotifyEngineDeactivated proto.InternalMessageInfo
+
+// Confirm that the notification was received. The validator message
+// correlation id is used to determine which notification this is an ack for.
+type ConsensusNotifyAck struct {
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *ConsensusNotifyAck) Reset()         { *m = ConsensusNotifyAck{} }
+func (m *ConsensusNotifyAck) String() string { return proto.CompactTextString(m) }
+func (*ConsensusNotifyAck) ProtoMessage()    {}
+func (*ConsensusNotifyAck) Descriptor() ([]byte, []int) {
+	return fileDescriptor_consensus_6dbf80fb586bfae0, []int{8}
+}
+func (m *ConsensusNotifyAck) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *ConsensusNotifyAck) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_ConsensusNotifyAck.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalTo(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (dst *ConsensusNotifyAck) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ConsensusNotifyAck.Merge(dst, src)
+}
+func (m *ConsensusNotifyAck) XXX_Size() int {
+	return m.Size()
+}
+func (m *ConsensusNotifyAck) XXX_DiscardUnknown() {
+	xxx_messageInfo_ConsensusNotifyAck.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ConsensusNotifyAck proto.InternalMessageInfo
 
 func init() {
-	proto.RegisterType((*BroadcastResponse)(nil), "proto.BroadcastResponse")
-	proto.RegisterType((*DeliverResponse)(nil), "proto.DeliverResponse")
-	proto.RegisterType((*NetMessage)(nil), "proto.NetMessage")
+	proto.RegisterType((*ConsensusBlock)(nil), "proto.ConsensusBlock")
+	proto.RegisterType((*ConsensusPeerInfo)(nil), "proto.ConsensusPeerInfo")
+	proto.RegisterType((*ConsensusNotifyBlockNew)(nil), "proto.ConsensusNotifyBlockNew")
+	proto.RegisterType((*ConsensusNotifyBlockValid)(nil), "proto.ConsensusNotifyBlockValid")
+	proto.RegisterType((*ConsensusNotifyBlockInvalid)(nil), "proto.ConsensusNotifyBlockInvalid")
+	proto.RegisterType((*ConsensusNotifyBlockCommit)(nil), "proto.ConsensusNotifyBlockCommit")
+	proto.RegisterType((*ConsensusNotifyEngineActivated)(nil), "proto.ConsensusNotifyEngineActivated")
+	proto.RegisterType((*ConsensusNotifyEngineDeactivated)(nil), "proto.ConsensusNotifyEngineDeactivated")
+	proto.RegisterType((*ConsensusNotifyAck)(nil), "proto.ConsensusNotifyAck")
 }
-
-// Reference imports to suppress errors if they are not otherwise used.
-var _ context.Context
-var _ grpc.ClientConn
-
-// This is a compile-time assertion to ensure that this generated file
-// is compatible with the grpc package it is being compiled against.
-const _ = grpc.SupportPackageIsVersion4
-
-// Client API for AtomicBroadcast service
-
-type AtomicBroadcastClient interface {
-	Broadcast(ctx context.Context, opts ...grpc.CallOption) (AtomicBroadcast_BroadcastClient, error)
-	Deliver(ctx context.Context, opts ...grpc.CallOption) (AtomicBroadcast_DeliverClient, error)
-}
-
-type atomicBroadcastClient struct {
-	cc *grpc.ClientConn
-}
-
-func NewAtomicBroadcastClient(cc *grpc.ClientConn) AtomicBroadcastClient {
-	return &atomicBroadcastClient{cc}
-}
-
-func (c *atomicBroadcastClient) Broadcast(ctx context.Context, opts ...grpc.CallOption) (AtomicBroadcast_BroadcastClient, error) {
-	stream, err := c.cc.NewStream(ctx, &_AtomicBroadcast_serviceDesc.Streams[0], "/proto.AtomicBroadcast/Broadcast", opts...)
-	if err != nil {
-		return nil, err
-	}
-	x := &atomicBroadcastBroadcastClient{stream}
-	return x, nil
-}
-
-type AtomicBroadcast_BroadcastClient interface {
-	Send(*common.ChannelHeader) error
-	Recv() (*BroadcastResponse, error)
-	grpc.ClientStream
-}
-
-type atomicBroadcastBroadcastClient struct {
-	grpc.ClientStream
-}
-
-func (x *atomicBroadcastBroadcastClient) Send(m *common.ChannelHeader) error {
-	return x.ClientStream.SendMsg(m)
-}
-
-func (x *atomicBroadcastBroadcastClient) Recv() (*BroadcastResponse, error) {
-	m := new(BroadcastResponse)
-	if err := x.ClientStream.RecvMsg(m); err != nil {
-		return nil, err
-	}
-	return m, nil
-}
-
-func (c *atomicBroadcastClient) Deliver(ctx context.Context, opts ...grpc.CallOption) (AtomicBroadcast_DeliverClient, error) {
-	stream, err := c.cc.NewStream(ctx, &_AtomicBroadcast_serviceDesc.Streams[1], "/proto.AtomicBroadcast/Deliver", opts...)
-	if err != nil {
-		return nil, err
-	}
-	x := &atomicBroadcastDeliverClient{stream}
-	return x, nil
-}
-
-type AtomicBroadcast_DeliverClient interface {
-	Send(*common.Envelope) error
-	Recv() (*DeliverResponse, error)
-	grpc.ClientStream
-}
-
-type atomicBroadcastDeliverClient struct {
-	grpc.ClientStream
-}
-
-func (x *atomicBroadcastDeliverClient) Send(m *common.Envelope) error {
-	return x.ClientStream.SendMsg(m)
-}
-
-func (x *atomicBroadcastDeliverClient) Recv() (*DeliverResponse, error) {
-	m := new(DeliverResponse)
-	if err := x.ClientStream.RecvMsg(m); err != nil {
-		return nil, err
-	}
-	return m, nil
-}
-
-// Server API for AtomicBroadcast service
-
-type AtomicBroadcastServer interface {
-	Broadcast(AtomicBroadcast_BroadcastServer) error
-	Deliver(AtomicBroadcast_DeliverServer) error
-}
-
-func RegisterAtomicBroadcastServer(s *grpc.Server, srv AtomicBroadcastServer) {
-	s.RegisterService(&_AtomicBroadcast_serviceDesc, srv)
-}
-
-func _AtomicBroadcast_Broadcast_Handler(srv interface{}, stream grpc.ServerStream) error {
-	return srv.(AtomicBroadcastServer).Broadcast(&atomicBroadcastBroadcastServer{stream})
-}
-
-type AtomicBroadcast_BroadcastServer interface {
-	Send(*BroadcastResponse) error
-	Recv() (*common.ChannelHeader, error)
-	grpc.ServerStream
-}
-
-type atomicBroadcastBroadcastServer struct {
-	grpc.ServerStream
-}
-
-func (x *atomicBroadcastBroadcastServer) Send(m *BroadcastResponse) error {
-	return x.ServerStream.SendMsg(m)
-}
-
-func (x *atomicBroadcastBroadcastServer) Recv() (*common.ChannelHeader, error) {
-	m := new(common.ChannelHeader)
-	if err := x.ServerStream.RecvMsg(m); err != nil {
-		return nil, err
-	}
-	return m, nil
-}
-
-func _AtomicBroadcast_Deliver_Handler(srv interface{}, stream grpc.ServerStream) error {
-	return srv.(AtomicBroadcastServer).Deliver(&atomicBroadcastDeliverServer{stream})
-}
-
-type AtomicBroadcast_DeliverServer interface {
-	Send(*DeliverResponse) error
-	Recv() (*common.Envelope, error)
-	grpc.ServerStream
-}
-
-type atomicBroadcastDeliverServer struct {
-	grpc.ServerStream
-}
-
-func (x *atomicBroadcastDeliverServer) Send(m *DeliverResponse) error {
-	return x.ServerStream.SendMsg(m)
-}
-
-func (x *atomicBroadcastDeliverServer) Recv() (*common.Envelope, error) {
-	m := new(common.Envelope)
-	if err := x.ServerStream.RecvMsg(m); err != nil {
-		return nil, err
-	}
-	return m, nil
-}
-
-var _AtomicBroadcast_serviceDesc = grpc.ServiceDesc{
-	ServiceName: "proto.AtomicBroadcast",
-	HandlerType: (*AtomicBroadcastServer)(nil),
-	Methods:     []grpc.MethodDesc{},
-	Streams: []grpc.StreamDesc{
-		{
-			StreamName:    "Broadcast",
-			Handler:       _AtomicBroadcast_Broadcast_Handler,
-			ServerStreams: true,
-			ClientStreams: true,
-		},
-		{
-			StreamName:    "Deliver",
-			Handler:       _AtomicBroadcast_Deliver_Handler,
-			ServerStreams: true,
-			ClientStreams: true,
-		},
-	},
-	Metadata: "consensus.proto",
-}
-
-// Client API for Consensus service
-
-type ConsensusClient interface {
-	Exchange(ctx context.Context, opts ...grpc.CallOption) (Consensus_ExchangeClient, error)
-}
-
-type consensusClient struct {
-	cc *grpc.ClientConn
-}
-
-func NewConsensusClient(cc *grpc.ClientConn) ConsensusClient {
-	return &consensusClient{cc}
-}
-
-func (c *consensusClient) Exchange(ctx context.Context, opts ...grpc.CallOption) (Consensus_ExchangeClient, error) {
-	stream, err := c.cc.NewStream(ctx, &_Consensus_serviceDesc.Streams[0], "/proto.Consensus/Exchange", opts...)
-	if err != nil {
-		return nil, err
-	}
-	x := &consensusExchangeClient{stream}
-	return x, nil
-}
-
-type Consensus_ExchangeClient interface {
-	Send(*common.Envelope) error
-	Recv() (*common.Envelope, error)
-	grpc.ClientStream
-}
-
-type consensusExchangeClient struct {
-	grpc.ClientStream
-}
-
-func (x *consensusExchangeClient) Send(m *common.Envelope) error {
-	return x.ClientStream.SendMsg(m)
-}
-
-func (x *consensusExchangeClient) Recv() (*common.Envelope, error) {
-	m := new(common.Envelope)
-	if err := x.ClientStream.RecvMsg(m); err != nil {
-		return nil, err
-	}
-	return m, nil
-}
-
-// Server API for Consensus service
-
-type ConsensusServer interface {
-	Exchange(Consensus_ExchangeServer) error
-}
-
-func RegisterConsensusServer(s *grpc.Server, srv ConsensusServer) {
-	s.RegisterService(&_Consensus_serviceDesc, srv)
-}
-
-func _Consensus_Exchange_Handler(srv interface{}, stream grpc.ServerStream) error {
-	return srv.(ConsensusServer).Exchange(&consensusExchangeServer{stream})
-}
-
-type Consensus_ExchangeServer interface {
-	Send(*common.Envelope) error
-	Recv() (*common.Envelope, error)
-	grpc.ServerStream
-}
-
-type consensusExchangeServer struct {
-	grpc.ServerStream
-}
-
-func (x *consensusExchangeServer) Send(m *common.Envelope) error {
-	return x.ServerStream.SendMsg(m)
-}
-
-func (x *consensusExchangeServer) Recv() (*common.Envelope, error) {
-	m := new(common.Envelope)
-	if err := x.ServerStream.RecvMsg(m); err != nil {
-		return nil, err
-	}
-	return m, nil
-}
-
-var _Consensus_serviceDesc = grpc.ServiceDesc{
-	ServiceName: "proto.Consensus",
-	HandlerType: (*ConsensusServer)(nil),
-	Methods:     []grpc.MethodDesc{},
-	Streams: []grpc.StreamDesc{
-		{
-			StreamName:    "Exchange",
-			Handler:       _Consensus_Exchange_Handler,
-			ServerStreams: true,
-			ClientStreams: true,
-		},
-	},
-	Metadata: "consensus.proto",
-}
-
-func (m *BroadcastResponse) Marshal() (dAtA []byte, err error) {
+func (m *ConsensusBlock) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalTo(dAtA)
@@ -700,21 +521,45 @@ func (m *BroadcastResponse) Marshal() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *BroadcastResponse) MarshalTo(dAtA []byte) (int, error) {
+func (m *ConsensusBlock) MarshalTo(dAtA []byte) (int, error) {
 	var i int
 	_ = i
 	var l int
 	_ = l
-	if m.Status != 0 {
-		dAtA[i] = 0x8
+	if len(m.BlockId) > 0 {
+		dAtA[i] = 0xa
 		i++
-		i = encodeVarintConsensus(dAtA, i, uint64(m.Status))
+		i = encodeVarintConsensus(dAtA, i, uint64(len(m.BlockId)))
+		i += copy(dAtA[i:], m.BlockId)
 	}
-	if len(m.Info) > 0 {
+	if len(m.PreviousId) > 0 {
 		dAtA[i] = 0x12
 		i++
-		i = encodeVarintConsensus(dAtA, i, uint64(len(m.Info)))
-		i += copy(dAtA[i:], m.Info)
+		i = encodeVarintConsensus(dAtA, i, uint64(len(m.PreviousId)))
+		i += copy(dAtA[i:], m.PreviousId)
+	}
+	if len(m.SignerId) > 0 {
+		dAtA[i] = 0x1a
+		i++
+		i = encodeVarintConsensus(dAtA, i, uint64(len(m.SignerId)))
+		i += copy(dAtA[i:], m.SignerId)
+	}
+	if m.BlockNum != 0 {
+		dAtA[i] = 0x20
+		i++
+		i = encodeVarintConsensus(dAtA, i, uint64(m.BlockNum))
+	}
+	if len(m.Payload) > 0 {
+		dAtA[i] = 0x2a
+		i++
+		i = encodeVarintConsensus(dAtA, i, uint64(len(m.Payload)))
+		i += copy(dAtA[i:], m.Payload)
+	}
+	if len(m.Summary) > 0 {
+		dAtA[i] = 0x32
+		i++
+		i = encodeVarintConsensus(dAtA, i, uint64(len(m.Summary)))
+		i += copy(dAtA[i:], m.Summary)
 	}
 	if m.XXX_unrecognized != nil {
 		i += copy(dAtA[i:], m.XXX_unrecognized)
@@ -722,7 +567,7 @@ func (m *BroadcastResponse) MarshalTo(dAtA []byte) (int, error) {
 	return i, nil
 }
 
-func (m *DeliverResponse) Marshal() (dAtA []byte, err error) {
+func (m *ConsensusPeerInfo) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalTo(dAtA)
@@ -732,17 +577,47 @@ func (m *DeliverResponse) Marshal() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *DeliverResponse) MarshalTo(dAtA []byte) (int, error) {
+func (m *ConsensusPeerInfo) MarshalTo(dAtA []byte) (int, error) {
 	var i int
 	_ = i
 	var l int
 	_ = l
-	if m.Type != nil {
-		nn1, err := m.Type.MarshalTo(dAtA[i:])
+	if len(m.PeerId) > 0 {
+		dAtA[i] = 0xa
+		i++
+		i = encodeVarintConsensus(dAtA, i, uint64(len(m.PeerId)))
+		i += copy(dAtA[i:], m.PeerId)
+	}
+	if m.XXX_unrecognized != nil {
+		i += copy(dAtA[i:], m.XXX_unrecognized)
+	}
+	return i, nil
+}
+
+func (m *ConsensusNotifyBlockNew) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalTo(dAtA)
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *ConsensusNotifyBlockNew) MarshalTo(dAtA []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if m.Block != nil {
+		dAtA[i] = 0xa
+		i++
+		i = encodeVarintConsensus(dAtA, i, uint64(m.Block.Size()))
+		n1, err := m.Block.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += nn1
+		i += n1
 	}
 	if m.XXX_unrecognized != nil {
 		i += copy(dAtA[i:], m.XXX_unrecognized)
@@ -750,28 +625,141 @@ func (m *DeliverResponse) MarshalTo(dAtA []byte) (int, error) {
 	return i, nil
 }
 
-func (m *DeliverResponse_Status) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0x8
-	i++
-	i = encodeVarintConsensus(dAtA, i, uint64(m.Status))
+func (m *ConsensusNotifyBlockValid) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalTo(dAtA)
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *ConsensusNotifyBlockValid) MarshalTo(dAtA []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if len(m.BlockId) > 0 {
+		dAtA[i] = 0xa
+		i++
+		i = encodeVarintConsensus(dAtA, i, uint64(len(m.BlockId)))
+		i += copy(dAtA[i:], m.BlockId)
+	}
+	if m.XXX_unrecognized != nil {
+		i += copy(dAtA[i:], m.XXX_unrecognized)
+	}
 	return i, nil
 }
-func (m *DeliverResponse_Block) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	if m.Block != nil {
-		dAtA[i] = 0x12
+
+func (m *ConsensusNotifyBlockInvalid) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalTo(dAtA)
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *ConsensusNotifyBlockInvalid) MarshalTo(dAtA []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if len(m.BlockId) > 0 {
+		dAtA[i] = 0xa
 		i++
-		i = encodeVarintConsensus(dAtA, i, uint64(m.Block.Size()))
-		n2, err := m.Block.MarshalTo(dAtA[i:])
+		i = encodeVarintConsensus(dAtA, i, uint64(len(m.BlockId)))
+		i += copy(dAtA[i:], m.BlockId)
+	}
+	if m.XXX_unrecognized != nil {
+		i += copy(dAtA[i:], m.XXX_unrecognized)
+	}
+	return i, nil
+}
+
+func (m *ConsensusNotifyBlockCommit) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalTo(dAtA)
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *ConsensusNotifyBlockCommit) MarshalTo(dAtA []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if len(m.BlockId) > 0 {
+		dAtA[i] = 0xa
+		i++
+		i = encodeVarintConsensus(dAtA, i, uint64(len(m.BlockId)))
+		i += copy(dAtA[i:], m.BlockId)
+	}
+	if m.XXX_unrecognized != nil {
+		i += copy(dAtA[i:], m.XXX_unrecognized)
+	}
+	return i, nil
+}
+
+func (m *ConsensusNotifyEngineActivated) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalTo(dAtA)
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *ConsensusNotifyEngineActivated) MarshalTo(dAtA []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if m.ChainHead != nil {
+		dAtA[i] = 0xa
+		i++
+		i = encodeVarintConsensus(dAtA, i, uint64(m.ChainHead.Size()))
+		n2, err := m.ChainHead.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
 		i += n2
 	}
+	if len(m.Peers) > 0 {
+		for _, msg := range m.Peers {
+			dAtA[i] = 0x12
+			i++
+			i = encodeVarintConsensus(dAtA, i, uint64(msg.Size()))
+			n, err := msg.MarshalTo(dAtA[i:])
+			if err != nil {
+				return 0, err
+			}
+			i += n
+		}
+	}
+	if m.LocalPeerInfo != nil {
+		dAtA[i] = 0x1a
+		i++
+		i = encodeVarintConsensus(dAtA, i, uint64(m.LocalPeerInfo.Size()))
+		n3, err := m.LocalPeerInfo.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n3
+	}
+	if m.XXX_unrecognized != nil {
+		i += copy(dAtA[i:], m.XXX_unrecognized)
+	}
 	return i, nil
 }
-func (m *NetMessage) Marshal() (dAtA []byte, err error) {
+
+func (m *ConsensusNotifyEngineDeactivated) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalTo(dAtA)
@@ -781,62 +769,38 @@ func (m *NetMessage) Marshal() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *NetMessage) MarshalTo(dAtA []byte) (int, error) {
+func (m *ConsensusNotifyEngineDeactivated) MarshalTo(dAtA []byte) (int, error) {
 	var i int
 	_ = i
 	var l int
 	_ = l
-	if m.Type != nil {
-		nn3, err := m.Type.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += nn3
-	}
 	if m.XXX_unrecognized != nil {
 		i += copy(dAtA[i:], m.XXX_unrecognized)
 	}
 	return i, nil
 }
 
-func (m *NetMessage_Data) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	if m.Data != nil {
-		dAtA[i] = 0xa
-		i++
-		i = encodeVarintConsensus(dAtA, i, uint64(len(m.Data)))
-		i += copy(dAtA[i:], m.Data)
+func (m *ConsensusNotifyAck) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalTo(dAtA)
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *ConsensusNotifyAck) MarshalTo(dAtA []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if m.XXX_unrecognized != nil {
+		i += copy(dAtA[i:], m.XXX_unrecognized)
 	}
 	return i, nil
 }
-func (m *NetMessage_ConfigChange) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	if m.ConfigChange != nil {
-		dAtA[i] = 0x12
-		i++
-		i = encodeVarintConsensus(dAtA, i, uint64(m.ConfigChange.Size()))
-		n4, err := m.ConfigChange.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n4
-	}
-	return i, nil
-}
-func (m *NetMessage_RaftMessage) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	if m.RaftMessage != nil {
-		dAtA[i] = 0x1a
-		i++
-		i = encodeVarintConsensus(dAtA, i, uint64(m.RaftMessage.Size()))
-		n5, err := m.RaftMessage.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n5
-	}
-	return i, nil
-}
+
 func encodeVarintConsensus(dAtA []byte, offset int, v uint64) int {
 	for v >= 1<<7 {
 		dAtA[offset] = uint8(v&0x7f | 0x80)
@@ -846,13 +810,29 @@ func encodeVarintConsensus(dAtA []byte, offset int, v uint64) int {
 	dAtA[offset] = uint8(v)
 	return offset + 1
 }
-func (m *BroadcastResponse) Size() (n int) {
+func (m *ConsensusBlock) Size() (n int) {
 	var l int
 	_ = l
-	if m.Status != 0 {
-		n += 1 + sovConsensus(uint64(m.Status))
+	l = len(m.BlockId)
+	if l > 0 {
+		n += 1 + l + sovConsensus(uint64(l))
 	}
-	l = len(m.Info)
+	l = len(m.PreviousId)
+	if l > 0 {
+		n += 1 + l + sovConsensus(uint64(l))
+	}
+	l = len(m.SignerId)
+	if l > 0 {
+		n += 1 + l + sovConsensus(uint64(l))
+	}
+	if m.BlockNum != 0 {
+		n += 1 + sovConsensus(uint64(m.BlockNum))
+	}
+	l = len(m.Payload)
+	if l > 0 {
+		n += 1 + l + sovConsensus(uint64(l))
+	}
+	l = len(m.Summary)
 	if l > 0 {
 		n += 1 + l + sovConsensus(uint64(l))
 	}
@@ -862,11 +842,12 @@ func (m *BroadcastResponse) Size() (n int) {
 	return n
 }
 
-func (m *DeliverResponse) Size() (n int) {
+func (m *ConsensusPeerInfo) Size() (n int) {
 	var l int
 	_ = l
-	if m.Type != nil {
-		n += m.Type.Size()
+	l = len(m.PeerId)
+	if l > 0 {
+		n += 1 + l + sovConsensus(uint64(l))
 	}
 	if m.XXX_unrecognized != nil {
 		n += len(m.XXX_unrecognized)
@@ -874,26 +855,25 @@ func (m *DeliverResponse) Size() (n int) {
 	return n
 }
 
-func (m *DeliverResponse_Status) Size() (n int) {
-	var l int
-	_ = l
-	n += 1 + sovConsensus(uint64(m.Status))
-	return n
-}
-func (m *DeliverResponse_Block) Size() (n int) {
+func (m *ConsensusNotifyBlockNew) Size() (n int) {
 	var l int
 	_ = l
 	if m.Block != nil {
 		l = m.Block.Size()
 		n += 1 + l + sovConsensus(uint64(l))
 	}
+	if m.XXX_unrecognized != nil {
+		n += len(m.XXX_unrecognized)
+	}
 	return n
 }
-func (m *NetMessage) Size() (n int) {
+
+func (m *ConsensusNotifyBlockValid) Size() (n int) {
 	var l int
 	_ = l
-	if m.Type != nil {
-		n += m.Type.Size()
+	l = len(m.BlockId)
+	if l > 0 {
+		n += 1 + l + sovConsensus(uint64(l))
 	}
 	if m.XXX_unrecognized != nil {
 		n += len(m.XXX_unrecognized)
@@ -901,30 +881,69 @@ func (m *NetMessage) Size() (n int) {
 	return n
 }
 
-func (m *NetMessage_Data) Size() (n int) {
+func (m *ConsensusNotifyBlockInvalid) Size() (n int) {
 	var l int
 	_ = l
-	if m.Data != nil {
-		l = len(m.Data)
+	l = len(m.BlockId)
+	if l > 0 {
 		n += 1 + l + sovConsensus(uint64(l))
+	}
+	if m.XXX_unrecognized != nil {
+		n += len(m.XXX_unrecognized)
 	}
 	return n
 }
-func (m *NetMessage_ConfigChange) Size() (n int) {
+
+func (m *ConsensusNotifyBlockCommit) Size() (n int) {
 	var l int
 	_ = l
-	if m.ConfigChange != nil {
-		l = m.ConfigChange.Size()
+	l = len(m.BlockId)
+	if l > 0 {
 		n += 1 + l + sovConsensus(uint64(l))
+	}
+	if m.XXX_unrecognized != nil {
+		n += len(m.XXX_unrecognized)
 	}
 	return n
 }
-func (m *NetMessage_RaftMessage) Size() (n int) {
+
+func (m *ConsensusNotifyEngineActivated) Size() (n int) {
 	var l int
 	_ = l
-	if m.RaftMessage != nil {
-		l = m.RaftMessage.Size()
+	if m.ChainHead != nil {
+		l = m.ChainHead.Size()
 		n += 1 + l + sovConsensus(uint64(l))
+	}
+	if len(m.Peers) > 0 {
+		for _, e := range m.Peers {
+			l = e.Size()
+			n += 1 + l + sovConsensus(uint64(l))
+		}
+	}
+	if m.LocalPeerInfo != nil {
+		l = m.LocalPeerInfo.Size()
+		n += 1 + l + sovConsensus(uint64(l))
+	}
+	if m.XXX_unrecognized != nil {
+		n += len(m.XXX_unrecognized)
+	}
+	return n
+}
+
+func (m *ConsensusNotifyEngineDeactivated) Size() (n int) {
+	var l int
+	_ = l
+	if m.XXX_unrecognized != nil {
+		n += len(m.XXX_unrecognized)
+	}
+	return n
+}
+
+func (m *ConsensusNotifyAck) Size() (n int) {
+	var l int
+	_ = l
+	if m.XXX_unrecognized != nil {
+		n += len(m.XXX_unrecognized)
 	}
 	return n
 }
@@ -942,7 +961,7 @@ func sovConsensus(x uint64) (n int) {
 func sozConsensus(x uint64) (n int) {
 	return sovConsensus(uint64((x << 1) ^ uint64((int64(x) >> 63))))
 }
-func (m *BroadcastResponse) Unmarshal(dAtA []byte) error {
+func (m *ConsensusBlock) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -965,36 +984,17 @@ func (m *BroadcastResponse) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: BroadcastResponse: wiretype end group for non-group")
+			return fmt.Errorf("proto: ConsensusBlock: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: BroadcastResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: ConsensusBlock: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		case 1:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Status", wireType)
-			}
-			m.Status = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowConsensus
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.Status |= (common.Status(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 2:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Info", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field BlockId", wireType)
 			}
-			var stringLen uint64
+			var byteLen int
 			for shift := uint(0); ; shift += 7 {
 				if shift >= 64 {
 					return ErrIntOverflowConsensus
@@ -1004,20 +1004,165 @@ func (m *BroadcastResponse) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
+				byteLen |= (int(b) & 0x7F) << shift
 				if b < 0x80 {
 					break
 				}
 			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
+			if byteLen < 0 {
 				return ErrInvalidLengthConsensus
 			}
-			postIndex := iNdEx + intStringLen
+			postIndex := iNdEx + byteLen
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.Info = string(dAtA[iNdEx:postIndex])
+			m.BlockId = append(m.BlockId[:0], dAtA[iNdEx:postIndex]...)
+			if m.BlockId == nil {
+				m.BlockId = []byte{}
+			}
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field PreviousId", wireType)
+			}
+			var byteLen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowConsensus
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				byteLen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if byteLen < 0 {
+				return ErrInvalidLengthConsensus
+			}
+			postIndex := iNdEx + byteLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.PreviousId = append(m.PreviousId[:0], dAtA[iNdEx:postIndex]...)
+			if m.PreviousId == nil {
+				m.PreviousId = []byte{}
+			}
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field SignerId", wireType)
+			}
+			var byteLen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowConsensus
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				byteLen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if byteLen < 0 {
+				return ErrInvalidLengthConsensus
+			}
+			postIndex := iNdEx + byteLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.SignerId = append(m.SignerId[:0], dAtA[iNdEx:postIndex]...)
+			if m.SignerId == nil {
+				m.SignerId = []byte{}
+			}
+			iNdEx = postIndex
+		case 4:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field BlockNum", wireType)
+			}
+			m.BlockNum = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowConsensus
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.BlockNum |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 5:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Payload", wireType)
+			}
+			var byteLen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowConsensus
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				byteLen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if byteLen < 0 {
+				return ErrInvalidLengthConsensus
+			}
+			postIndex := iNdEx + byteLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Payload = append(m.Payload[:0], dAtA[iNdEx:postIndex]...)
+			if m.Payload == nil {
+				m.Payload = []byte{}
+			}
+			iNdEx = postIndex
+		case 6:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Summary", wireType)
+			}
+			var byteLen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowConsensus
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				byteLen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if byteLen < 0 {
+				return ErrInvalidLengthConsensus
+			}
+			postIndex := iNdEx + byteLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Summary = append(m.Summary[:0], dAtA[iNdEx:postIndex]...)
+			if m.Summary == nil {
+				m.Summary = []byte{}
+			}
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
@@ -1041,7 +1186,7 @@ func (m *BroadcastResponse) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *DeliverResponse) Unmarshal(dAtA []byte) error {
+func (m *ConsensusPeerInfo) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -1064,17 +1209,17 @@ func (m *DeliverResponse) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: DeliverResponse: wiretype end group for non-group")
+			return fmt.Errorf("proto: ConsensusPeerInfo: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: DeliverResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: ConsensusPeerInfo: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		case 1:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Status", wireType)
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field PeerId", wireType)
 			}
-			var v common.Status
+			var byteLen int
 			for shift := uint(0); ; shift += 7 {
 				if shift >= 64 {
 					return ErrIntOverflowConsensus
@@ -1084,13 +1229,75 @@ func (m *DeliverResponse) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				v |= (common.Status(b) & 0x7F) << shift
+				byteLen |= (int(b) & 0x7F) << shift
 				if b < 0x80 {
 					break
 				}
 			}
-			m.Type = &DeliverResponse_Status{v}
-		case 2:
+			if byteLen < 0 {
+				return ErrInvalidLengthConsensus
+			}
+			postIndex := iNdEx + byteLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.PeerId = append(m.PeerId[:0], dAtA[iNdEx:postIndex]...)
+			if m.PeerId == nil {
+				m.PeerId = []byte{}
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipConsensus(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthConsensus
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.XXX_unrecognized = append(m.XXX_unrecognized, dAtA[iNdEx:iNdEx+skippy]...)
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *ConsensusNotifyBlockNew) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowConsensus
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= (uint64(b) & 0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: ConsensusNotifyBlockNew: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: ConsensusNotifyBlockNew: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Block", wireType)
 			}
@@ -1116,11 +1323,12 @@ func (m *DeliverResponse) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &block.Block{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+			if m.Block == nil {
+				m.Block = &ConsensusBlock{}
+			}
+			if err := m.Block.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
-			m.Type = &DeliverResponse_Block{v}
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
@@ -1144,7 +1352,7 @@ func (m *DeliverResponse) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *NetMessage) Unmarshal(dAtA []byte) error {
+func (m *ConsensusNotifyBlockValid) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -1167,15 +1375,15 @@ func (m *NetMessage) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: NetMessage: wiretype end group for non-group")
+			return fmt.Errorf("proto: ConsensusNotifyBlockValid: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: NetMessage: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: ConsensusNotifyBlockValid: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		case 1:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Data", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field BlockId", wireType)
 			}
 			var byteLen int
 			for shift := uint(0); ; shift += 7 {
@@ -1199,13 +1407,262 @@ func (m *NetMessage) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := make([]byte, postIndex-iNdEx)
-			copy(v, dAtA[iNdEx:postIndex])
-			m.Type = &NetMessage_Data{v}
+			m.BlockId = append(m.BlockId[:0], dAtA[iNdEx:postIndex]...)
+			if m.BlockId == nil {
+				m.BlockId = []byte{}
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipConsensus(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthConsensus
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.XXX_unrecognized = append(m.XXX_unrecognized, dAtA[iNdEx:iNdEx+skippy]...)
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *ConsensusNotifyBlockInvalid) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowConsensus
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= (uint64(b) & 0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: ConsensusNotifyBlockInvalid: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: ConsensusNotifyBlockInvalid: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field BlockId", wireType)
+			}
+			var byteLen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowConsensus
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				byteLen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if byteLen < 0 {
+				return ErrInvalidLengthConsensus
+			}
+			postIndex := iNdEx + byteLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.BlockId = append(m.BlockId[:0], dAtA[iNdEx:postIndex]...)
+			if m.BlockId == nil {
+				m.BlockId = []byte{}
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipConsensus(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthConsensus
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.XXX_unrecognized = append(m.XXX_unrecognized, dAtA[iNdEx:iNdEx+skippy]...)
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *ConsensusNotifyBlockCommit) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowConsensus
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= (uint64(b) & 0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: ConsensusNotifyBlockCommit: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: ConsensusNotifyBlockCommit: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field BlockId", wireType)
+			}
+			var byteLen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowConsensus
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				byteLen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if byteLen < 0 {
+				return ErrInvalidLengthConsensus
+			}
+			postIndex := iNdEx + byteLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.BlockId = append(m.BlockId[:0], dAtA[iNdEx:postIndex]...)
+			if m.BlockId == nil {
+				m.BlockId = []byte{}
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipConsensus(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthConsensus
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.XXX_unrecognized = append(m.XXX_unrecognized, dAtA[iNdEx:iNdEx+skippy]...)
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *ConsensusNotifyEngineActivated) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowConsensus
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= (uint64(b) & 0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: ConsensusNotifyEngineActivated: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: ConsensusNotifyEngineActivated: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ChainHead", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowConsensus
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthConsensus
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.ChainHead == nil {
+				m.ChainHead = &ConsensusBlock{}
+			}
+			if err := m.ChainHead.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
 			iNdEx = postIndex
 		case 2:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field ConfigChange", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field Peers", wireType)
 			}
 			var msglen int
 			for shift := uint(0); ; shift += 7 {
@@ -1229,15 +1686,14 @@ func (m *NetMessage) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &eraftpb.ConfChange{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+			m.Peers = append(m.Peers, &ConsensusPeerInfo{})
+			if err := m.Peers[len(m.Peers)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
-			m.Type = &NetMessage_ConfigChange{v}
 			iNdEx = postIndex
 		case 3:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field RaftMessage", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field LocalPeerInfo", wireType)
 			}
 			var msglen int
 			for shift := uint(0); ; shift += 7 {
@@ -1261,12 +1717,115 @@ func (m *NetMessage) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &eraftpb.Message{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+			if m.LocalPeerInfo == nil {
+				m.LocalPeerInfo = &ConsensusPeerInfo{}
+			}
+			if err := m.LocalPeerInfo.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
-			m.Type = &NetMessage_RaftMessage{v}
 			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipConsensus(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthConsensus
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.XXX_unrecognized = append(m.XXX_unrecognized, dAtA[iNdEx:iNdEx+skippy]...)
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *ConsensusNotifyEngineDeactivated) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowConsensus
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= (uint64(b) & 0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: ConsensusNotifyEngineDeactivated: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: ConsensusNotifyEngineDeactivated: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		default:
+			iNdEx = preIndex
+			skippy, err := skipConsensus(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthConsensus
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.XXX_unrecognized = append(m.XXX_unrecognized, dAtA[iNdEx:iNdEx+skippy]...)
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *ConsensusNotifyAck) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowConsensus
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= (uint64(b) & 0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: ConsensusNotifyAck: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: ConsensusNotifyAck: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
 		default:
 			iNdEx = preIndex
 			skippy, err := skipConsensus(dAtA[iNdEx:])
@@ -1394,33 +1953,33 @@ var (
 	ErrIntOverflowConsensus   = fmt.Errorf("proto: integer overflow")
 )
 
-func init() { proto.RegisterFile("consensus.proto", fileDescriptor_consensus_b2b76a6be1da6b98) }
+func init() { proto.RegisterFile("consensus.proto", fileDescriptor_consensus_6dbf80fb586bfae0) }
 
-var fileDescriptor_consensus_b2b76a6be1da6b98 = []byte{
-	// 388 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x7c, 0x52, 0xc1, 0xaa, 0xd3, 0x40,
-	0x14, 0xcd, 0x68, 0x5b, 0xed, 0x6d, 0x6a, 0xea, 0x58, 0x24, 0x64, 0x11, 0x4a, 0x50, 0xec, 0xaa,
-	0x48, 0x44, 0x10, 0x37, 0xd2, 0xd4, 0x42, 0x36, 0x76, 0x11, 0xdd, 0x97, 0x69, 0x3a, 0x69, 0x83,
-	0xc9, 0x4c, 0xc8, 0x4c, 0x8b, 0xfe, 0x84, 0x6b, 0x37, 0xfe, 0x8f, 0x4b, 0x3f, 0x41, 0xfa, 0x7e,
-	0xe4, 0x91, 0x99, 0x49, 0x1e, 0xf4, 0xc1, 0x5b, 0x25, 0xe7, 0xdc, 0x73, 0xcf, 0x9d, 0x39, 0x77,
-	0xc0, 0x49, 0x39, 0x13, 0x94, 0x89, 0x93, 0x58, 0x54, 0x35, 0x97, 0x1c, 0xf7, 0xd5, 0xc7, 0xb3,
-	0x53, 0x5e, 0x96, 0x9c, 0x69, 0xd2, 0x1b, 0xed, 0x0a, 0x9e, 0x7e, 0x37, 0x60, 0x4c, 0x6b, 0x92,
-	0xc9, 0x6a, 0xa7, 0x61, 0xb0, 0x81, 0xe7, 0x51, 0xcd, 0xc9, 0x3e, 0x25, 0x42, 0x26, 0x54, 0x54,
-	0x8d, 0x1f, 0x7e, 0x0d, 0x03, 0x21, 0x89, 0x3c, 0x09, 0x17, 0xcd, 0xd0, 0xfc, 0x59, 0x38, 0xd6,
-	0xe2, 0xc5, 0x57, 0x45, 0x26, 0xa6, 0x88, 0x31, 0xf4, 0x72, 0x96, 0x71, 0xf7, 0xd1, 0x0c, 0xcd,
-	0x87, 0x89, 0xfa, 0x0f, 0x8e, 0xe0, 0x7c, 0xa6, 0x45, 0x7e, 0xa6, 0x75, 0xe7, 0xf6, 0xe6, 0x41,
-	0xb7, 0xd8, 0xea, 0xfc, 0x5e, 0x41, 0x5f, 0x9d, 0x54, 0x19, 0x8e, 0x42, 0xdb, 0xe8, 0xa2, 0x86,
-	0x8b, 0xad, 0x44, 0x17, 0xa3, 0x01, 0xf4, 0xbe, 0xfd, 0xac, 0x68, 0xf0, 0x07, 0x01, 0x6c, 0xa8,
-	0xfc, 0x42, 0x85, 0x20, 0x07, 0x8a, 0xa7, 0xd0, 0xdb, 0x13, 0x49, 0xd4, 0x0c, 0x3b, 0xb6, 0x12,
-	0x85, 0xf0, 0x47, 0x18, 0xa7, 0x9c, 0x65, 0xf9, 0x61, 0x9b, 0x1e, 0x09, 0x3b, 0x50, 0x63, 0xfd,
-	0x62, 0xd1, 0xa6, 0xb0, 0xe2, 0x2c, 0x5b, 0xa9, 0x52, 0x6c, 0x25, 0xb6, 0xd6, 0x6a, 0x8c, 0xdf,
-	0x83, 0xdd, 0x88, 0xb6, 0xa5, 0x9e, 0xe0, 0x3e, 0x56, 0xad, 0x93, 0xae, 0xd5, 0x4c, 0x8e, 0xad,
-	0x64, 0xd4, 0x30, 0x06, 0xb6, 0xe7, 0x0b, 0x7f, 0x21, 0x70, 0x96, 0x92, 0x97, 0x79, 0xda, 0x05,
-	0x8c, 0x97, 0x30, 0xbc, 0x03, 0x53, 0x73, 0xbf, 0x66, 0x1c, 0xa3, 0x45, 0x4c, 0xc9, 0x9e, 0xd6,
-	0x9e, 0xdb, 0xde, 0xfa, 0x7a, 0x2b, 0x81, 0x35, 0x47, 0x6f, 0x11, 0xfe, 0x00, 0x4f, 0x4c, 0xc0,
-	0xd8, 0x31, 0xd2, 0x35, 0x3b, 0xd3, 0x82, 0x57, 0xd4, 0x7b, 0x69, 0x88, 0xab, 0x0d, 0xe8, 0xce,
-	0xf0, 0x13, 0x0c, 0x57, 0xed, 0x73, 0xc1, 0x21, 0x3c, 0x5d, 0xff, 0xd0, 0x99, 0xdc, 0xf7, 0xb9,
-	0x26, 0xb4, 0x41, 0x34, 0xf9, 0x7b, 0xf1, 0xd1, 0xbf, 0x8b, 0x8f, 0xfe, 0x5f, 0x7c, 0xf4, 0xfb,
-	0xc6, 0xb7, 0x76, 0x03, 0xa5, 0x7b, 0x77, 0x1b, 0x00, 0x00, 0xff, 0xff, 0x32, 0xca, 0xc8, 0x8c,
-	0x88, 0x02, 0x00, 0x00,
+var fileDescriptor_consensus_6dbf80fb586bfae0 = []byte{
+	// 396 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x84, 0x92, 0xdd, 0xce, 0xd2, 0x30,
+	0x1c, 0xc6, 0xed, 0x0b, 0xe3, 0xe3, 0x8f, 0x8a, 0x36, 0x1a, 0x86, 0x24, 0x73, 0xe9, 0x11, 0x89,
+	0x86, 0x03, 0x34, 0xea, 0xa1, 0x80, 0x1a, 0x77, 0x42, 0xcc, 0x0e, 0x3c, 0x25, 0x65, 0x2d, 0xd0,
+	0xb0, 0xb5, 0xcb, 0x3e, 0x30, 0xdc, 0x89, 0xd7, 0xe2, 0x15, 0x70, 0xe8, 0x25, 0x18, 0xbc, 0x11,
+	0xb3, 0x96, 0x91, 0x48, 0x96, 0xbd, 0x47, 0xf0, 0xf4, 0x79, 0x7e, 0xfd, 0x7f, 0x74, 0xd0, 0x0f,
+	0x94, 0x4c, 0xb9, 0x4c, 0xf3, 0x74, 0x12, 0x27, 0x2a, 0x53, 0xd8, 0xd2, 0x3f, 0xe4, 0x17, 0x82,
+	0xc7, 0x8b, 0xd2, 0x9a, 0x87, 0x2a, 0xd8, 0xe3, 0x21, 0x74, 0xd6, 0xc5, 0x9f, 0x95, 0x60, 0x36,
+	0x72, 0xd1, 0xf8, 0xa1, 0xdf, 0xd6, 0xda, 0x63, 0xf8, 0x25, 0xf4, 0xe2, 0x84, 0x1f, 0x84, 0xca,
+	0xd3, 0xc2, 0xbd, 0xd3, 0x2e, 0x94, 0x47, 0x1e, 0xc3, 0x23, 0xe8, 0xa6, 0x62, 0x2b, 0x79, 0x52,
+	0xd8, 0x0d, 0x6d, 0x77, 0xcc, 0x81, 0x31, 0xcd, 0xc5, 0x32, 0x8f, 0xec, 0xa6, 0x8b, 0xc6, 0x4d,
+	0xdf, 0x54, 0x5a, 0xe6, 0x11, 0xb6, 0xa1, 0x1d, 0xd3, 0x63, 0xa8, 0x28, 0xb3, 0x2d, 0x53, 0xf4,
+	0x22, 0x0b, 0x27, 0xcd, 0xa3, 0x88, 0x26, 0x47, 0xbb, 0x65, 0x9c, 0x8b, 0x24, 0xaf, 0xe1, 0xe9,
+	0xb5, 0xf7, 0x6f, 0x9c, 0x27, 0x9e, 0xdc, 0x28, 0x3c, 0x80, 0x76, 0xcc, 0x4d, 0x03, 0xa6, 0xfb,
+	0x56, 0x21, 0x3d, 0x46, 0xbe, 0xc0, 0xe0, 0x9a, 0x5e, 0xaa, 0x4c, 0x6c, 0x8e, 0x7a, 0xde, 0x25,
+	0xff, 0x81, 0x5f, 0x81, 0xa5, 0x1b, 0xd1, 0x44, 0x6f, 0xfa, 0xdc, 0xec, 0x68, 0xf2, 0xff, 0x62,
+	0x7c, 0x93, 0x21, 0xef, 0x60, 0x58, 0x75, 0xcf, 0x77, 0x1a, 0x0a, 0x56, 0xb3, 0x3c, 0xf2, 0x01,
+	0x46, 0x55, 0x9c, 0x27, 0x0f, 0xf7, 0x91, 0xef, 0xe1, 0x45, 0x15, 0xb9, 0x50, 0x51, 0x24, 0xb2,
+	0x3a, 0xf0, 0x84, 0xc0, 0xb9, 0x21, 0x3f, 0xcb, 0xad, 0x90, 0x7c, 0x16, 0x64, 0xe2, 0x40, 0x33,
+	0xce, 0xf0, 0x5b, 0x80, 0x60, 0x47, 0x85, 0x5c, 0xed, 0x38, 0x65, 0xf5, 0xf3, 0x77, 0x75, 0xf0,
+	0x2b, 0xa7, 0x0c, 0x4f, 0xc0, 0x2a, 0xb6, 0x9a, 0xda, 0x77, 0x6e, 0x63, 0xdc, 0x9b, 0xda, 0xb7,
+	0x40, 0xf9, 0x1a, 0xbe, 0x89, 0xe1, 0x8f, 0xd0, 0x0f, 0x55, 0x40, 0xc3, 0x95, 0x79, 0x1a, 0xb9,
+	0x51, 0xfa, 0xeb, 0xa8, 0x23, 0x1f, 0x69, 0xa0, 0x94, 0x84, 0x80, 0x5b, 0x39, 0xc9, 0x27, 0x4e,
+	0xcb, 0x59, 0xc8, 0x33, 0xc0, 0x37, 0x99, 0x59, 0xb0, 0x9f, 0x3f, 0x39, 0x9d, 0x1d, 0xf4, 0xfb,
+	0xec, 0xa0, 0x3f, 0x67, 0x07, 0xfd, 0xfc, 0xeb, 0x3c, 0x58, 0xb7, 0x74, 0xcd, 0x37, 0xff, 0x02,
+	0x00, 0x00, 0xff, 0xff, 0x91, 0x15, 0x12, 0x62, 0x15, 0x03, 0x00, 0x00,
 }

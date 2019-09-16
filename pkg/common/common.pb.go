@@ -63,7 +63,7 @@ func (x Status) String() string {
 	return proto.EnumName(Status_name, int32(x))
 }
 func (Status) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_common_162c1b76af40bbdc, []int{0}
+	return fileDescriptor_common_08c20f7303013ee1, []int{0}
 }
 
 type HeaderType int32
@@ -92,7 +92,7 @@ func (x HeaderType) String() string {
 	return proto.EnumName(HeaderType_name, int32(x))
 }
 func (HeaderType) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_common_162c1b76af40bbdc, []int{1}
+	return fileDescriptor_common_08c20f7303013ee1, []int{1}
 }
 
 type Empty struct {
@@ -105,7 +105,7 @@ func (m *Empty) Reset()         { *m = Empty{} }
 func (m *Empty) String() string { return proto.CompactTextString(m) }
 func (*Empty) ProtoMessage()    {}
 func (*Empty) Descriptor() ([]byte, []int) {
-	return fileDescriptor_common_162c1b76af40bbdc, []int{0}
+	return fileDescriptor_common_08c20f7303013ee1, []int{0}
 }
 func (m *Empty) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -153,7 +153,7 @@ func (m *Timestamp) Reset()         { *m = Timestamp{} }
 func (m *Timestamp) String() string { return proto.CompactTextString(m) }
 func (*Timestamp) ProtoMessage()    {}
 func (*Timestamp) Descriptor() ([]byte, []int) {
-	return fileDescriptor_common_162c1b76af40bbdc, []int{1}
+	return fileDescriptor_common_08c20f7303013ee1, []int{1}
 }
 func (m *Timestamp) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -196,7 +196,7 @@ func (m *Timestamp) GetNanos() int32 {
 	return 0
 }
 
-// ------------------------------- contract call -------------------------------
+// ------------------------------- contract.proto call -------------------------------
 type ChannelHeader struct {
 	Type                 int32      `protobuf:"varint,1,opt,name=type,proto3" json:"type,omitempty"`
 	Version              int32      `protobuf:"varint,2,opt,name=version,proto3" json:"version,omitempty"`
@@ -213,7 +213,7 @@ func (m *ChannelHeader) Reset()         { *m = ChannelHeader{} }
 func (m *ChannelHeader) String() string { return proto.CompactTextString(m) }
 func (*ChannelHeader) ProtoMessage()    {}
 func (*ChannelHeader) Descriptor() ([]byte, []int) {
-	return fileDescriptor_common_162c1b76af40bbdc, []int{2}
+	return fileDescriptor_common_08c20f7303013ee1, []int{2}
 }
 func (m *ChannelHeader) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -296,7 +296,7 @@ func (m *SignatureHeader) Reset()         { *m = SignatureHeader{} }
 func (m *SignatureHeader) String() string { return proto.CompactTextString(m) }
 func (*SignatureHeader) ProtoMessage()    {}
 func (*SignatureHeader) Descriptor() ([]byte, []int) {
-	return fileDescriptor_common_162c1b76af40bbdc, []int{3}
+	return fileDescriptor_common_08c20f7303013ee1, []int{3}
 }
 func (m *SignatureHeader) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -351,7 +351,7 @@ func (m *Header) Reset()         { *m = Header{} }
 func (m *Header) String() string { return proto.CompactTextString(m) }
 func (*Header) ProtoMessage()    {}
 func (*Header) Descriptor() ([]byte, []int) {
-	return fileDescriptor_common_162c1b76af40bbdc, []int{4}
+	return fileDescriptor_common_08c20f7303013ee1, []int{4}
 }
 func (m *Header) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -406,7 +406,7 @@ func (m *ContractInput) Reset()         { *m = ContractInput{} }
 func (m *ContractInput) String() string { return proto.CompactTextString(m) }
 func (*ContractInput) ProtoMessage()    {}
 func (*ContractInput) Descriptor() ([]byte, []int) {
-	return fileDescriptor_common_162c1b76af40bbdc, []int{5}
+	return fileDescriptor_common_08c20f7303013ee1, []int{5}
 }
 func (m *ContractInput) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -461,7 +461,7 @@ func (m *Proposal) Reset()         { *m = Proposal{} }
 func (m *Proposal) String() string { return proto.CompactTextString(m) }
 func (*Proposal) ProtoMessage()    {}
 func (*Proposal) Descriptor() ([]byte, []int) {
-	return fileDescriptor_common_162c1b76af40bbdc, []int{6}
+	return fileDescriptor_common_08c20f7303013ee1, []int{6}
 }
 func (m *Proposal) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -516,7 +516,7 @@ func (m *SignedProposal) Reset()         { *m = SignedProposal{} }
 func (m *SignedProposal) String() string { return proto.CompactTextString(m) }
 func (*SignedProposal) ProtoMessage()    {}
 func (*SignedProposal) Descriptor() ([]byte, []int) {
-	return fileDescriptor_common_162c1b76af40bbdc, []int{7}
+	return fileDescriptor_common_08c20f7303013ee1, []int{7}
 }
 func (m *SignedProposal) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -571,7 +571,7 @@ func (m *Envelope) Reset()         { *m = Envelope{} }
 func (m *Envelope) String() string { return proto.CompactTextString(m) }
 func (*Envelope) ProtoMessage()    {}
 func (*Envelope) Descriptor() ([]byte, []int) {
-	return fileDescriptor_common_162c1b76af40bbdc, []int{8}
+	return fileDescriptor_common_08c20f7303013ee1, []int{8}
 }
 func (m *Envelope) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -630,7 +630,7 @@ func (m *ProposalResponse) Reset()         { *m = ProposalResponse{} }
 func (m *ProposalResponse) String() string { return proto.CompactTextString(m) }
 func (*ProposalResponse) ProtoMessage()    {}
 func (*ProposalResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_common_162c1b76af40bbdc, []int{9}
+	return fileDescriptor_common_08c20f7303013ee1, []int{9}
 }
 func (m *ProposalResponse) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -2642,9 +2642,9 @@ var (
 	ErrIntOverflowCommon   = fmt.Errorf("proto: integer overflow")
 )
 
-func init() { proto.RegisterFile("common.proto", fileDescriptor_common_162c1b76af40bbdc) }
+func init() { proto.RegisterFile("common.proto", fileDescriptor_common_08c20f7303013ee1) }
 
-var fileDescriptor_common_162c1b76af40bbdc = []byte{
+var fileDescriptor_common_08c20f7303013ee1 = []byte{
 	// 763 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x84, 0x54, 0x41, 0x6b, 0xe3, 0x46,
 	0x14, 0x8e, 0xa2, 0xc8, 0x8e, 0x9e, 0xed, 0x64, 0x3a, 0x9b, 0x2e, 0x22, 0x74, 0x43, 0x10, 0x2c,
