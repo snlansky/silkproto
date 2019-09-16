@@ -18,9 +18,9 @@
 #![allow(unused_imports)]
 #![allow(unused_results)]
 
-const METHOD_COMPONENT_NOTIFY: ::grpcio::Method<super::message::Message, super::message::Message> = ::grpcio::Method {
+const METHOD_COMPONENT_REGISTER: ::grpcio::Method<super::message::Message, super::message::Message> = ::grpcio::Method {
     ty: ::grpcio::MethodType::Duplex,
-    name: "/proto.Component/Notify",
+    name: "/proto.Component/Register",
     req_mar: ::grpcio::Marshaller { ser: ::grpcio::pb_ser, de: ::grpcio::pb_de },
     resp_mar: ::grpcio::Marshaller { ser: ::grpcio::pb_ser, de: ::grpcio::pb_de },
 };
@@ -37,12 +37,12 @@ impl ComponentClient {
         }
     }
 
-    pub fn notify_opt(&self, opt: ::grpcio::CallOption) -> ::grpcio::Result<(::grpcio::ClientDuplexSender<super::message::Message>, ::grpcio::ClientDuplexReceiver<super::message::Message>)> {
-        self.client.duplex_streaming(&METHOD_COMPONENT_NOTIFY, opt)
+    pub fn register_opt(&self, opt: ::grpcio::CallOption) -> ::grpcio::Result<(::grpcio::ClientDuplexSender<super::message::Message>, ::grpcio::ClientDuplexReceiver<super::message::Message>)> {
+        self.client.duplex_streaming(&METHOD_COMPONENT_REGISTER, opt)
     }
 
-    pub fn notify(&self) -> ::grpcio::Result<(::grpcio::ClientDuplexSender<super::message::Message>, ::grpcio::ClientDuplexReceiver<super::message::Message>)> {
-        self.notify_opt(::grpcio::CallOption::default())
+    pub fn register(&self) -> ::grpcio::Result<(::grpcio::ClientDuplexSender<super::message::Message>, ::grpcio::ClientDuplexReceiver<super::message::Message>)> {
+        self.register_opt(::grpcio::CallOption::default())
     }
     pub fn spawn<F>(&self, f: F) where F: ::futures::Future<Item = (), Error = ()> + Send + 'static {
         self.client.spawn(f)
@@ -50,14 +50,14 @@ impl ComponentClient {
 }
 
 pub trait Component {
-    fn notify(&mut self, ctx: ::grpcio::RpcContext, stream: ::grpcio::RequestStream<super::message::Message>, sink: ::grpcio::DuplexSink<super::message::Message>);
+    fn register(&mut self, ctx: ::grpcio::RpcContext, stream: ::grpcio::RequestStream<super::message::Message>, sink: ::grpcio::DuplexSink<super::message::Message>);
 }
 
 pub fn create_component<S: Component + Send + Clone + 'static>(s: S) -> ::grpcio::Service {
     let mut builder = ::grpcio::ServiceBuilder::new();
     let mut instance = s.clone();
-    builder = builder.add_duplex_streaming_handler(&METHOD_COMPONENT_NOTIFY, move |ctx, req, resp| {
-        instance.notify(ctx, req, resp)
+    builder = builder.add_duplex_streaming_handler(&METHOD_COMPONENT_REGISTER, move |ctx, req, resp| {
+        instance.register(ctx, req, resp)
     });
     builder.build()
 }

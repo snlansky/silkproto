@@ -32,5 +32,5 @@ message Message {
 
 
 service Component {
-    rpc Notify (stream Message) returns (stream Message) {}
+    rpc Register (stream Message) returns (stream Message) {}
 }

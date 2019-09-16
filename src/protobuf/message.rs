@@ -351,9 +351,9 @@ static file_descriptor_proto_data: &'static [u8] = b"\
     \"\n\x1dCONSENSUS_NOTIFY_PEER_MESSAGE\x10\x86\x07\x12\x1f\n\x1aCONSENSUS\
     _NOTIFY_BLOCK_NEW\x10\x87\x07\x12!\n\x1cCONSENSUS_NOTIFY_BLOCK_VALID\x10\
     \x88\x07\x12#\n\x1eCONSENSUS_NOTIFY_BLOCK_INVALID\x10\x89\x07\x12\"\n\
-    \x1dCONSENSUS_NOTIFY_BLOCK_COMMIT\x10\x8a\x072;\n\tComponent\x12.\n\x06N\
-    otify\x12\x0e.proto.Message\x1a\x0e.proto.Message\"\0(\x010\x01b\x06prot\
-    o3\
+    \x1dCONSENSUS_NOTIFY_BLOCK_COMMIT\x10\x8a\x072=\n\tComponent\x120\n\x08R\
+    egister\x12\x0e.proto.Message\x1a\x0e.proto.Message\"\0(\x010\x01b\x06pr\
+    oto3\
 ";
 
 static mut file_descriptor_proto_lazy: ::protobuf::lazy::Lazy<::protobuf::descriptor::FileDescriptorProto> = ::protobuf::lazy::Lazy {
