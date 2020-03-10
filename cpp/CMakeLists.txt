@@ -13,8 +13,8 @@ else ()
     set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17")
 endif ()
 
-file(GLOB __tmp RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} kvproto/*.cc kvproto/*.h)
+file(GLOB __tmp RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} silkproto/*.cc silkproto/*.h)
 list(APPEND generated_files ${__tmp})
 
-add_library(kvproto ${generated_files})
-target_include_directories(kvproto PUBLIC ./)
+add_library(silkproto ${generated_files})
+target_include_directories(silkproto PUBLIC ./)

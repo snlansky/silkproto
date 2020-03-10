@@ -1,9 +1,13 @@
-#[cfg(feature = "protobuf-codec")]
-mod protobuf;
-mod text;
+#[allow(dead_code)]
+#[allow(unknown_lints)]
+#[allow(clippy::all)]
+#[allow(renamed_and_removed_lints)]
+#[allow(bare_trait_objects)]
+mod protos {
+    include!(concat!(env!("OUT_DIR"), "/protos/mod.rs"));
 
-#[cfg(feature = "protobuf-codec")]
-pub use crate::protobuf::*;
+}
 
-#[cfg(feature = "prost-codec")]
-pub use crate::prost::*;
+pub use protos::*;
+
+

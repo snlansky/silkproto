@@ -1,4 +1,4 @@
-### Makefile for kvproto
+### Makefile for silkproto
 
 CURDIR := $(shell pwd)
 
@@ -8,16 +8,20 @@ all: go rust c++
 
 init:
 	mkdir -p $(CURDIR)/bin
-go: init
+check: init
+	$(CURDIR)/scripts/check.sh
+go: check
 	# Standalone GOPATH
-	./generate_go.sh
+	$(CURDIR)/scripts/generate_go.sh
+	GO111MODULE=on go mod tidy
 	GO111MODULE=on go build ./pkg/...
 
 rust: init
-	cargo check --features regenerate
+	cargo check
+	cargo check --no-default-features --features prost-codec
 
-c++:
-	./generate_cpp.sh
+c++: check
+	$(CURDIR)/scripts/generate_cpp.sh
 	rm -rf build_cpp && mkdir build_cpp && cd build_cpp && cmake ../cpp && make && cd .. && rm -rf build_cpp
 
 .PHONY: all
